@@ -27,7 +27,7 @@
         </TextBlock>
 
         <!-- Error Message row - converts a boolean that return true or false to visibily. If true visible, if false visible / linked with App.xaml -->
-        <TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+        <TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
                    Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                    Foreground="Red" MaxWidth="300"
                    TextWrapping="Wrap" Margin="0 0 0 20"

@@ -52,8 +52,8 @@ namespace MaryaWPF.ViewModels
             set 
             { 
                 _errorMessage = value;
-                NotifyOfPropertyChange(() => ErrorMessage);
                 NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
             }
         }
 
