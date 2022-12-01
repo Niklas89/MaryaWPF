@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MaryaWPF.Library.Api;
+using MaryaWPF.EventModels;
 
 namespace MaryaWPF.ViewModels
 {
@@ -14,10 +15,12 @@ namespace MaryaWPF.ViewModels
         private string _email;
         private string _password;
         private IAPIHelper _apiHelper;
+        private IEventAggregator _events;
 
-        public LoginViewModel(IAPIHelper apiHelper )
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events )
         {
             _apiHelper = apiHelper;
+            _events = events;
         }
 
         public string Email 
@@ -94,6 +97,9 @@ namespace MaryaWPF.ViewModels
 
                 // Capture more information about the user
                 await _apiHelper.GetLoggedInUserInfo(result.AccessToken);
+
+                // Say that someone logged in
+                await _events.PublishOnUIThreadAsync(new LogOnEvent());
 
             }
             catch (Exception ex)

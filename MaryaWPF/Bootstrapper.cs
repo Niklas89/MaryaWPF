@@ -30,12 +30,13 @@ namespace MaryaWPF
         protected override void Configure()
         {
             // whenever we ask for SimpleContainer the configuration makes sure to get back the instance of _container
-            _container.Instance(_container);
+            _container.Instance(_container)
+            .PerRequest<IBookingEndpoint, BookingEndpoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>() // Singleton : create one instance for the life of the application / for the scope of the container
-                .Singleton<IEventAggregator, EventAggregator>() // everytime we ask for IEventAggregator we get back the same instance used in the whole application
-                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>() // everytime we ask for ILoggedInUserModel we get back the same instance used in the whole application
                 .Singleton<IAPIHelper, APIHelper>();
 
 

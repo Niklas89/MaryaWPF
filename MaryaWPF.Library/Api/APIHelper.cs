@@ -16,7 +16,7 @@ namespace MaryaWPF.Library.Api
     // the APIHelper is active in the whole application (see singleton in Bootstrapper) when it is instanciated
     public class APIHelper : IAPIHelper
     {
-        private HttpClient apiClient;
+        private HttpClient _apiClient;
         private ILoggedInUserModel _loggedInUser;
 
         public APIHelper(ILoggedInUserModel loggedInUser)
@@ -25,14 +25,19 @@ namespace MaryaWPF.Library.Api
             _loggedInUser = loggedInUser;
         }
 
+        public HttpClient ApiClient
+        {
+            get { return _apiClient; }
+        }
+
         private void InitializeClient()
         {
             string api = ConfigurationManager.AppSettings["api"];
 
-            apiClient = new HttpClient();
-            apiClient.BaseAddress = new Uri(api);
-            apiClient.DefaultRequestHeaders.Accept.Clear();
-            apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _apiClient = new HttpClient();
+            _apiClient.BaseAddress = new Uri(api);
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<AuthenticatedUser> Authenticate(string email, string password)
@@ -44,7 +49,7 @@ namespace MaryaWPF.Library.Api
                 new KeyValuePair<string, string>("password", password),
             });
 
-            using (HttpResponseMessage response = await apiClient.PostAsync("auth/login", data))
+            using (HttpResponseMessage response = await _apiClient.PostAsync("auth/login", data))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -71,12 +76,12 @@ namespace MaryaWPF.Library.Api
         // Make sure that we send our credentials with every request
         public async Task GetLoggedInUserInfo(string token)
         {
-            apiClient.DefaultRequestHeaders.Clear();
-            apiClient.DefaultRequestHeaders.Accept.Clear();
-            apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            _apiClient.DefaultRequestHeaders.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-            using (HttpResponseMessage response = await apiClient.GetAsync("admin/profile"))
+            using (HttpResponseMessage response = await _apiClient.GetAsync("admin/profile"))
             {
                 if(response.IsSuccessStatusCode)
                 {
