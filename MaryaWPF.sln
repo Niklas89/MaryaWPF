@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaryaWPF", "MaryaWPF\MaryaWPF.csproj", "{4E6AF68A-EF9E-4DB0-A4EF-146EEA2BF359}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaryaWPF.Library", "MaryaWPF.Library\MaryaWPF.Library.csproj", "{A0ECD496-D1FB-47BB-A50A-E5C50D00FFC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4E6AF68A-EF9E-4DB0-A4EF-146EEA2BF359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E6AF68A-EF9E-4DB0-A4EF-146EEA2BF359}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E6AF68A-EF9E-4DB0-A4EF-146EEA2BF359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0ECD496-D1FB-47BB-A50A-E5C50D00FFC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0ECD496-D1FB-47BB-A50A-E5C50D00FFC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0ECD496-D1FB-47BB-A50A-E5C50D00FFC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0ECD496-D1FB-47BB-A50A-E5C50D00FFC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

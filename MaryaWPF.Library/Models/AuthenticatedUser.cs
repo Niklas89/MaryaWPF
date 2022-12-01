@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaryaWPF.Models
+namespace MaryaWPF.Library.Models
 {
     public class AuthenticatedUser
     {

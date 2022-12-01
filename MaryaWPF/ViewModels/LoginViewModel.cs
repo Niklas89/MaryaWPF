@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MaryaWPF.Library.Api;
 
 namespace MaryaWPF.ViewModels
 {
@@ -90,6 +91,10 @@ namespace MaryaWPF.ViewModels
             {
                 ErrorMessage = "";
                 var result = await _apiHelper.Authenticate(Email, Password);
+
+                // Capture more information about the user
+                await _apiHelper.GetLoggedInUserInfo(result.AccessToken);
+
             }
             catch (Exception ex)
             {

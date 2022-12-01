@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using MaryaWPF.Helpers;
+using MaryaWPF.Library.Api;
+using MaryaWPF.Library.Models;
 using MaryaWPF.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,7 @@ namespace MaryaWPF
             _container
                 .Singleton<IWindowManager, WindowManager>() // Singleton : create one instance for the life of the application / for the scope of the container
                 .Singleton<IEventAggregator, EventAggregator>() // everytime we ask for IEventAggregator we get back the same instance used in the whole application
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IAPIHelper, APIHelper>();
 
 
