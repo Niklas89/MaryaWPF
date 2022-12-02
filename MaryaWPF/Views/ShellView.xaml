@@ -12,6 +12,9 @@
                 <!-- E_xit : ALT + F + X on keyboard to exit an application -->
                 <MenuItem x:Name="ExitApplication" Header="E_xit" />
             </MenuItem>
+            <MenuItem Header="_Partners" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                <MenuItem x:Name="PartnerManagement" Header="Partner_Management" />
+            </MenuItem>
             <MenuItem Header="_Account" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                 <MenuItem x:Name="LogOut" Header="_Log Out" />
             </MenuItem>

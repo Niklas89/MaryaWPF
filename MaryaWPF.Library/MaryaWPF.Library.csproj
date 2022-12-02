@@ -52,10 +52,17 @@
     <Compile Include="Api\BookingEndpoint.cs" />
     <Compile Include="Api\IAPIHelper.cs" />
     <Compile Include="Api\IBookingEndpoint.cs" />
+    <Compile Include="Api\IPartnerEndpoint.cs" />
+    <Compile Include="Api\IServiceEndpoint.cs" />
+    <Compile Include="Api\PartnerEndpoint.cs" />
+    <Compile Include="Api\ServiceEndpoint.cs" />
     <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="Models\BookingModel.cs" />
+    <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\ILoggedInUserModel.cs" />
     <Compile Include="Models\LoggedInUserModel.cs" />
+    <Compile Include="Models\PartnerModel.cs" />
+    <Compile Include="Models\UserPartnerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

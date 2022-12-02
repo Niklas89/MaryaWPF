@@ -1,5 +1,4 @@
 ﻿using MaryaWPF.Library.Models;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace MaryaWPF.Library.Api
 {
-    public class BookingEndpoint : IBookingEndpoint
+    public class PartnerEndpoint : IPartnerEndpoint
     {
-        private IAPIHelper _apiHelper;
+        private readonly IAPIHelper _apiHelper;
 
-        public BookingEndpoint(IAPIHelper apiHelper)
+        public PartnerEndpoint(IAPIHelper apiHelper)
         {
             _apiHelper = apiHelper;
         }
 
-        public async Task<List<BookingModel>> GetAll()
+        public async Task<List<UserPartnerModel>> GetAll()
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/bookings"))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/partners"))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsAsync<List<BookingModel>>();
+                    var result = await response.Content.ReadAsAsync<List<UserPartnerModel>>();
                     return result;
                 }
                 else

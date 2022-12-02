@@ -72,6 +72,11 @@ namespace MaryaWPF.ViewModels
             TryCloseAsync();
         }
 
+        public void PartnerManagement()
+        {
+            ActivateItemAsync(IoC.Get<PartnerDisplayViewModel>());
+        }
+
         public void LogOut()
         {
             _user.ResetUserModel();

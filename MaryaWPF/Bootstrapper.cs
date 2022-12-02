@@ -49,7 +49,9 @@ namespace MaryaWPF
 
             // whenever we ask for SimpleContainer the configuration makes sure to get back the instance of _container
             _container.Instance(_container)
-            .PerRequest<IBookingEndpoint, BookingEndpoint>();
+            .PerRequest<IBookingEndpoint, BookingEndpoint>()
+            .PerRequest<IServiceEndpoint, ServiceEndpoint>()
+            .PerRequest<IPartnerEndpoint, PartnerEndpoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>() // Singleton : create one instance for the life of the application / for the scope of the container
