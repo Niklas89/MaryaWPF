@@ -15,6 +15,7 @@ namespace MaryaWPF.Library.Models
         public string Email { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        // Reset user info when we logout
         public void ResetUserModel()
         {
             Token = "";

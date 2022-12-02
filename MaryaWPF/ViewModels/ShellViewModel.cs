@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using MaryaWPF.EventModels;
+using MaryaWPF.Library.Models;
 
 namespace MaryaWPF.ViewModels
 {
@@ -24,13 +25,15 @@ namespace MaryaWPF.ViewModels
         // private LoginViewModel _loginVM;
         private IEventAggregator _events;
         private DashboardViewModel _dashboardVM;
+        private ILoggedInUserModel _user;
         // private SimpleContainer _container;
 
-        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM)
+        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM, ILoggedInUserModel user)
         {
             _events = events;
             // _loginVM = loginVM;
             _dashboardVM = dashboardVM;
+            _user = user;
             //_container= container;
 
             // send event to every subscriber, even if they aren't listening to that particular type:
@@ -47,6 +50,20 @@ namespace MaryaWPF.ViewModels
             ActivateItemAsync(IoC.Get<LoginViewModel>()); 
         }
 
+        public bool IsLoggedIn
+        {
+            get
+            {
+                bool output = false;
+
+                if (string.IsNullOrWhiteSpace(_user.Token) == false)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
         public void ExitApplication()
         {
             TryCloseAsync();
@@ -54,7 +71,11 @@ namespace MaryaWPF.ViewModels
 
         public void LogOut()
         {
+            _user.ResetUserModel();
+            ActivateItemAsync(IoC.Get<LoginViewModel>());
 
+            // Trigger at logout
+            NotifyOfPropertyChange(() => IsLoggedIn);
         }
 
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
@@ -63,7 +84,10 @@ namespace MaryaWPF.ViewModels
             await ActivateItemAsync(_dashboardVM, cancellationToken);
 
             // Get a new instance of LoginViewModel and place it inside _loginVM, otherwise we'll still have our sensitive information in it (email and pass)
-           // _loginVM = _container.GetInstance<LoginViewModel>(); 
+            // _loginVM = _container.GetInstance<LoginViewModel>(); 
+
+            // Trigger at login
+            NotifyOfPropertyChange(() => IsLoggedIn);
         }
 
         // Example can be deleted - with IHandle<string>
