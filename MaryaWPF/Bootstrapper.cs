@@ -1,7 +1,9 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using MaryaWPF.Helpers;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
+using MaryaWPF.Models;
 using MaryaWPF.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,8 +29,24 @@ namespace MaryaWPF
             "PasswordChanged");
         }
 
+        private IMapper ConfigureAutomapper()
+        {
+            // AutoMapper nuget: map from source to destination model
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<BookingModel, BookingDisplayModel>();
+                // cfg.CreateMap<sourceModel, destinationModel>();
+            });
+
+            var output = config.CreateMapper();
+
+            return output;
+        }
+
         protected override void Configure()
         {
+            _container.Instance(ConfigureAutomapper());
+
             // whenever we ask for SimpleContainer the configuration makes sure to get back the instance of _container
             _container.Instance(_container)
             .PerRequest<IBookingEndpoint, BookingEndpoint>();
