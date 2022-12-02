@@ -24,14 +24,14 @@ namespace MaryaWPF.ViewModels
         // private LoginViewModel _loginVM;
         private IEventAggregator _events;
         private DashboardViewModel _dashboardVM;
-        private SimpleContainer _container;
+        // private SimpleContainer _container;
 
-        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM, SimpleContainer container)
+        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM)
         {
             _events = events;
             // _loginVM = loginVM;
             _dashboardVM = dashboardVM;
-            _container= container;
+            //_container= container;
 
             // send event to every subscriber, even if they aren't listening to that particular type:
             // Tell ShellViewModel to listen to LogOnEvent or string IHandle for example
@@ -42,7 +42,9 @@ namespace MaryaWPF.ViewModels
             // ActivateItemAsync(_loginVM); 
             // We can just ask for an instance of LoginViewModel that way it's fresh every single time (no data left from previously)
             // when we active login this way we won't have our data from previously :
-            ActivateItemAsync(_container.GetInstance<LoginViewModel>()); 
+            // ActivateItemAsync(_container.GetInstance<LoginViewModel>()); 
+            // Easier way to do this with IoC (from Caliburn Micro) : allows us to talk to containers to get instances
+            ActivateItemAsync(IoC.Get<LoginViewModel>()); 
         }
 
         public void ExitApplication()
