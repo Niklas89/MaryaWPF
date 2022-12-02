@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using MaryaWPF.EventModels;
+using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
 
 namespace MaryaWPF.ViewModels
@@ -26,14 +27,16 @@ namespace MaryaWPF.ViewModels
         private IEventAggregator _events;
         private DashboardViewModel _dashboardVM;
         private ILoggedInUserModel _user;
+        private IAPIHelper _apiHelper;
         // private SimpleContainer _container;
 
-        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM, ILoggedInUserModel user)
+        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM, ILoggedInUserModel user, IAPIHelper apiHelper)
         {
             _events = events;
             // _loginVM = loginVM;
             _dashboardVM = dashboardVM;
             _user = user;
+            _apiHelper = apiHelper;
             //_container= container;
 
             // send event to every subscriber, even if they aren't listening to that particular type:
@@ -72,6 +75,7 @@ namespace MaryaWPF.ViewModels
         public void LogOut()
         {
             _user.ResetUserModel();
+            _apiHelper.LogOffUser();
             ActivateItemAsync(IoC.Get<LoginViewModel>());
 
             // Trigger at logout

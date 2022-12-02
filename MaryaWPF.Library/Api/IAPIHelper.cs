@@ -8,6 +8,7 @@ namespace MaryaWPF.Library.Api
     {
         HttpClient ApiClient { get; }
         Task<AuthenticatedUser> Authenticate(string email, string password);
+        void LogOffUser();
         Task GetLoggedInUserInfo(string token);
     }
 }

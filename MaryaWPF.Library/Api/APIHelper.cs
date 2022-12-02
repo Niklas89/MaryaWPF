@@ -72,6 +72,11 @@ namespace MaryaWPF.Library.Api
             }
         }
 
+        public void LogOffUser()
+        {
+            _apiClient.DefaultRequestHeaders.Clear();
+        }
+
         // Add a new header to our request with the access token, with every call made
         // Make sure that we send our credentials with every request
         public async Task GetLoggedInUserInfo(string token)
