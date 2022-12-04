@@ -32,7 +32,7 @@ namespace MaryaWPF.Library.Api
 
         private void InitializeClient()
         {
-            string api = ConfigurationManager.AppSettings["api"];
+            string api = ConfigurationManager.AppSettings["api"]; 
 
             _apiClient = new HttpClient();
             _apiClient.BaseAddress = new Uri(api);
