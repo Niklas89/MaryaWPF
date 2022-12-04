@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MaryaWPF.Library.Api;
 using MaryaWPF.EventModels;
+using System.Threading;
 
 namespace MaryaWPF.ViewModels
 {
@@ -99,7 +100,7 @@ namespace MaryaWPF.ViewModels
                 await _apiHelper.GetLoggedInUserInfo(result.AccessToken);
 
                 // Say that someone logged in
-                await _events.PublishOnUIThreadAsync(new LogOnEvent());
+                await _events.PublishOnUIThreadAsync(new LogOnEvent(), new CancellationToken());
 
             }
             catch (Exception ex)

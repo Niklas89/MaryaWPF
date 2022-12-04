@@ -50,7 +50,7 @@ namespace MaryaWPF.ViewModels
             // when we active login this way we won't have our data from previously :
             // ActivateItemAsync(_container.GetInstance<LoginViewModel>()); 
             // Easier way to do this with IoC (from Caliburn Micro) : allows us to talk to containers to get instances
-            ActivateItemAsync(IoC.Get<LoginViewModel>()); 
+            ActivateItemAsync(IoC.Get<LoginViewModel>(), new CancellationToken()); 
         }
 
         public bool IsLoggedIn
@@ -72,16 +72,16 @@ namespace MaryaWPF.ViewModels
             TryCloseAsync();
         }
 
-        public void PartnerManagement()
+        public async Task PartnerManagement()
         {
-            ActivateItemAsync(IoC.Get<PartnerDisplayViewModel>());
+            await ActivateItemAsync(IoC.Get<PartnerDisplayViewModel>(), new CancellationToken());
         }
 
-        public void LogOut()
+        public async Task LogOut()
         {
             _user.ResetUserModel();
             _apiHelper.LogOffUser();
-            ActivateItemAsync(IoC.Get<LoginViewModel>());
+            await ActivateItemAsync(IoC.Get<LoginViewModel>(), new CancellationToken());
 
             // Trigger at logout
             NotifyOfPropertyChange(() => IsLoggedIn);
