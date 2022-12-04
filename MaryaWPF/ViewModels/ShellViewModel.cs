@@ -25,16 +25,14 @@ namespace MaryaWPF.ViewModels
 
         // private LoginViewModel _loginVM;
         private IEventAggregator _events;
-        private DashboardViewModel _dashboardVM;
         private ILoggedInUserModel _user;
         private IAPIHelper _apiHelper;
         // private SimpleContainer _container;
 
-        public ShellViewModel(IEventAggregator events, DashboardViewModel dashboardVM, ILoggedInUserModel user, IAPIHelper apiHelper)
+        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, IAPIHelper apiHelper)
         {
             _events = events;
             // _loginVM = loginVM;
-            _dashboardVM = dashboardVM;
             _user = user;
             _apiHelper = apiHelper;
             //_container= container;
@@ -90,7 +88,7 @@ namespace MaryaWPF.ViewModels
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
             // Activate Dashboard and close Login, because with Conductor<object> only one item can be activated at a time
-            await ActivateItemAsync(_dashboardVM, cancellationToken);
+            await ActivateItemAsync(IoC.Get<DashboardViewModel>(), cancellationToken);
 
             // Get a new instance of LoginViewModel and place it inside _loginVM, otherwise we'll still have our sensitive information in it (email and pass)
             // _loginVM = _container.GetInstance<LoginViewModel>(); 
