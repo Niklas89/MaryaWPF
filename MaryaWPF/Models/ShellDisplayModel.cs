@@ -11,14 +11,14 @@ namespace MaryaWPF.Models;
 
 public class ShellDisplayModel : INotifyPropertyChanged
 {
-    public string? Title { get; set; }
+    public string Title { get; set; }
     public PackIconKind SelectedIcon { get; set; }
     public PackIconKind UnselectedIcon { get; set; }
-    private object? _notification = null;
+    private object _notification = null;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public object? Notification
+    public object Notification
     {
         get { return _notification; }
          set { SetProperty(ref _notification, value); }
@@ -33,7 +33,7 @@ public class ShellDisplayModel : INotifyPropertyChanged
     /// <param name="propertyName">Name of the property used to notify listeners.  This
     /// value is optional and can be provided automatically when invoked from compilers
     /// that support <see cref="CallerMemberNameAttribute"/>.</param>
-    protected virtual bool SetProperty<T>(ref T member, T value, [CallerMemberName] string? propertyName = null)
+    protected virtual bool SetProperty<T>(ref T member, T value, [CallerMemberName] string propertyName = null)
     {
         if (EqualityComparer<T>.Default.Equals(member, value))
         {
@@ -49,7 +49,7 @@ public class ShellDisplayModel : INotifyPropertyChanged
     /// Notifies listeners that a property value has changed.
     /// </summary>
     /// <param name="propertyName">Name of the property, used to notify listeners.</param>
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 }

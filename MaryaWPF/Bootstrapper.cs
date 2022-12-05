@@ -51,6 +51,7 @@ namespace MaryaWPF
             _container.Instance(_container)
             .PerRequest<IBookingEndpoint, BookingEndpoint>()
             .PerRequest<IServiceEndpoint, ServiceEndpoint>()
+            .PerRequest<IClientEndpoint, ClientEndpoint>()
             .PerRequest<IPartnerEndpoint, PartnerEndpoint>();
 
             _container

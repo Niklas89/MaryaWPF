@@ -83,6 +83,16 @@ namespace MaryaWPF.ViewModels
             await ActivateItemAsync(IoC.Get<PartnerDisplayViewModel>(), new CancellationToken());
         }
 
+        public async Task BookingManagement()
+        {
+            await ActivateItemAsync(IoC.Get<DashboardViewModel>(), new CancellationToken());
+        }
+
+        public async Task ClientManagement()
+        {
+            await ActivateItemAsync(IoC.Get<ClientDisplayViewModel>(), new CancellationToken());
+        }
+
         public async Task LogOut()
         {
             _user.ResetUserModel();

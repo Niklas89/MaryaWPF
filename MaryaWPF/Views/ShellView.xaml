@@ -12,25 +12,27 @@
         FontFamily="{StaticResource MaterialDesignFont}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        Title="ShellView" Height="780" Width="1280">
+        Title="Marya Back-Office" Height="780" Width="1280">
     <DockPanel>
-    
-        <!-- 
+
+
         <Menu DockPanel.Dock="Top" FontSize="18" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-            <MenuItem Header="_File"> -->
-                <!-- E_xit : ALT + F + X on keyboard to exit an application -->
-        <!-- 
-         <MenuItem x:Name="ExitApplication" Header="E_xit" />
+            <MenuItem Header="_Réservations">
+                <MenuItem x:Name="BookingManagement" Header="Liste des réservations" />
             </MenuItem>
-            <MenuItem Header="_Partners">
-                <MenuItem x:Name="PartnerManagement" Header="Partner_Management" />
+            <MenuItem Header="_Partenaires">
+                <MenuItem x:Name="PartnerManagement" Header="Liste des partenaires" />
             </MenuItem>
-            <MenuItem Header="_Account" >
-                <MenuItem x:Name="LogOut" Header="_Log Out" />
+            <MenuItem Header="_Clients">
+                <MenuItem x:Name="ClientManagement" Header="Liste des clients" />
             </MenuItem>
-        </Menu> -->
+            <MenuItem Header="_Compte" >
+                <MenuItem x:Name="LogOut" Header="Déconnecter" />
+            </MenuItem>
+        </Menu>
 
 
+        <!--
         <StackPanel Orientation="Horizontal" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
             <Grid Width="80" Background="#FFFCF3">
                 <Grid.RowDefinitions>
@@ -50,9 +52,10 @@
                                        Height="24"
                                        Kind="PencilOutline" />
                 </Button>
-
+                   -->
 
                 <!-- <ListBox ItemsSource="{Binding MenuList}"> -->
+                <!--
                 <Viewbox Grid.Row="1"
                      Width="80"
                      VerticalAlignment="Top"
@@ -80,7 +83,7 @@
                     </ListBox>
                 </Viewbox>
             </Grid>
-        </StackPanel>
+        </StackPanel> -->
         
         
         <Grid>
