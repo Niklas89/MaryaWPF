@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaryaWPF.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" Background="White" FontSize="24"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -80,6 +81,131 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox> -->
+        
+        
+        <!-- CARD EXAMPLE -->
+        <materialDesign:Card
+  Width="220">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+        Height="140" />
+                    <RowDefinition
+        Height="*" />
+                    <RowDefinition
+        Height="Auto" />
+                    <RowDefinition
+        Height="Auto" />
+                    <RowDefinition
+        Height="Auto" />
+                    <RowDefinition
+        Height="Auto" />
+                </Grid.RowDefinitions>
+                <Image
+      Height="140"
+      Source="Resources/Contact.png"
+      Stretch="UniformToFill" />
+                <Button
+      Grid.Row="0"
+      Margin="0,0,16,-20"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                    <materialDesign:PackIcon
+        Kind="ShareVariant" />
+                </Button>
+                <StackPanel
+      Grid.Row="1"
+      Margin="8,24,8,4">
+                    <TextBlock
+        Margin="0"
+        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+        Text="E.T. the Extra-Terrestrial" />
+                    <Viewbox
+        Height="16"
+        Margin="0,4,0,8"
+        HorizontalAlignment="Left">
+                        <materialDesign:RatingBar
+          Margin="0"
+          Foreground="Gold"
+          Orientation="Horizontal"
+          Value="3" />
+                    </Viewbox>
+                    <TextBlock
+        VerticalAlignment="Center"
+        Style="{StaticResource MaterialDesignBody1TextBlock}"
+        Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."
+        TextWrapping="Wrap" />
+                </StackPanel>
+                <Separator
+      Grid.Row="2"
+      Margin="8,0,8,0"
+      Style="{StaticResource MaterialDesignDarkSeparator}" />
+                <TextBlock
+      Grid.Row="3"
+      Margin="8,4,8,4"
+      Style="{StaticResource MaterialDesignBody2TextBlock}"
+      Text="Tonight's availability" />
+                <Grid
+      Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+          Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon
+        Grid.Column="0"
+        Margin="8,4,4,4"
+        VerticalAlignment="Center"
+        Kind="Clock" />
+                    <ListBox
+        Grid.Column="1"
+        Margin="4,8,8,4"
+        SelectedIndex="0"
+        Style="{StaticResource MaterialDesignToolToggleFlatListBox}">
+                        <ListBox.Resources>
+                            <Style
+            TargetType="{x:Type ListBoxItem}"
+            BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem}">
+                                <Setter
+              Property="Padding"
+              Value="4,6,4,6" />
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ToolTip>
+                            <StackPanel>
+                                <TextBlock
+              Text="MaterialDesignFlatToggleListBox" />
+                                <TextBlock
+              Text="Exclusive selection" />
+                                <TextBlock
+              Text="ListBoxAssist.IsToggle allows more natural toggle behaviour" />
+                            </StackPanel>
+                        </ListBox.ToolTip>
+                        <ListBoxItem>
+                            <TextBlock
+            Text="18:00" />
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <TextBlock
+            Text="19:00" />
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <TextBlock
+            Text="22:00" />
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+                <StackPanel
+      Grid.Row="5">
+                    <Button
+        Margin="8,4,8,8"
+        HorizontalAlignment="Left"
+        Content="RESERVE"
+        Style="{StaticResource MaterialDesignFlatButton}" />
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
 
     </Grid>
 </UserControl>
