@@ -38,7 +38,7 @@
         <TextBlock Grid.Row="2" Grid.Column="1" Margin=" 0 0 0 10">
             Email:
         </TextBlock>
-        <materialDesign:PackIcon Kind="Account" />
+        <!--<materialDesign:PackIcon Kind="Account" />-->
         <TextBox x:Name="Email" Grid.Row="2" Grid.Column="2" MinWidth="350" 
                  Margin=" 0 0 0 10" />
         
@@ -46,7 +46,7 @@
         <TextBlock Grid.Row="3" Grid.Column="1" Margin=" 0 0 0 20">
             Mot de passe:
         </TextBlock>
-        <materialDesign:PackIcon Kind="Account" />
+        <!--<materialDesign:PackIcon Kind="Account" />-->
         <PasswordBox x:Name="Password" Grid.Row="3" Grid.Column="2" MinWidth="350" 
                      Margin=" 0 0 0 20" />
 

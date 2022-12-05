@@ -83,7 +83,7 @@
         </ListBox> -->
         
         
-        <!-- CARD EXAMPLE -->
+        <!-- CARD EXAMPLE
         <materialDesign:Card
   Width="220">
             <Grid>
@@ -205,7 +205,7 @@
         Style="{StaticResource MaterialDesignFlatButton}" />
                 </StackPanel>
             </Grid>
-        </materialDesign:Card>
+        </materialDesign:Card>  -->
 
     </Grid>
 </UserControl>

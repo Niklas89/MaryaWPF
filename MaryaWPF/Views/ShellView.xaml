@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MaryaWPF.Views"
+        xmlns:models="clr-namespace:MaryaWPF.Models"
         mc:Ignorable="d" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -11,94 +12,77 @@
         FontFamily="{StaticResource MaterialDesignFont}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        Title="ShellView" Height="600" Width="1000">
+        Title="ShellView" Height="780" Width="1280">
     <DockPanel>
+    
         <!-- 
-        <Menu DockPanel.Dock="Top" FontSize="18">
+        <Menu DockPanel.Dock="Top" FontSize="18" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
             <MenuItem Header="_File"> -->
                 <!-- E_xit : ALT + F + X on keyboard to exit an application -->
-        <!--   <MenuItem x:Name="ExitApplication" Header="E_xit" />
+        <!-- 
+         <MenuItem x:Name="ExitApplication" Header="E_xit" />
             </MenuItem>
-            <MenuItem Header="_Partners" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <MenuItem Header="_Partners">
                 <MenuItem x:Name="PartnerManagement" Header="Partner_Management" />
             </MenuItem>
-            <MenuItem Header="_Account" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <MenuItem Header="_Account" >
                 <MenuItem x:Name="LogOut" Header="_Log Out" />
             </MenuItem>
         </Menu> -->
-        <Grid
-  Width="80"
-  Background="#FFFCF3">
-            <Grid.RowDefinitions>
-                <RowDefinition
-      Height="auto" />
-                <RowDefinition
-      Height="*" />
-            </Grid.RowDefinitions>
-            <Button
-                Width="56"
-                Height="56"
-                Margin="0,40,0,80"
-                materialDesign:ButtonAssist.CornerRadius="16"
-                Background="#AEF0D6"
-                BorderThickness="0"
-                Foreground="#002117"
-                Style="{StaticResource MaterialDesignFlatMidBgButton}">
-                            <materialDesign:PackIcon
-                  Width="24"
-                  Height="24"
-                  Kind="PencilOutline" />
-                        </Button>
-                        <Viewbox
-                Grid.Row="1"
-                Width="80"
-                VerticalAlignment="Top"
-                Stretch="Uniform">
-                            <ListBox
-                  Grid.Row="1"
-                  ItemsSource="{Binding SampleList}"
-                  SelectedIndex="0">
-                                <ListBox.ItemContainerStyle>
-                                    <Style
-                      TargetType="ListBoxItem"
-                      BasedOn="{StaticResource MaterialDesign3.NavigationRailListBoxItem}">
-                                        <Setter
-                        Property="Background"
-                        Value="#E6E4C0" />
-                                        <Setter
-                        Property="Foreground"
-                        Value="#48473A" />
-                                        <Setter
-                        Property="materialDesign:BadgedAssist.Badge"
-                        Value="{Binding Notification}" />
-                                        <Setter
-                        Property="materialDesign:BadgedAssist.BadgeBackground"
-                        Value="#930006" />
-                                        <Setter
-                        Property="materialDesign:BadgedAssist.BadgeForeground"
-                        Value="#FFDAD4" />
-                                        <Setter
-                        Property="materialDesign:BadgedAssist.IsMiniBadge"
-                        Value="True" />
-                                        <Setter
-                        Property="materialDesign:NavigationRailAssist.SelectedIcon"
-                        Value="{Binding SelectedIcon}" />
-                                        <Setter
-                        Property="materialDesign:NavigationRailAssist.UnselectedIcon"
-                        Value="{Binding UnselectedIcon}" />
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <!-- 
-                                <ListBox.Resources>
-                                    <DataTemplate
-                      DataType="{x:Type Models:MenuDisplayModel}">
-                                        <TextBlock
-                        Text="{Binding Title}" />
-                                    </DataTemplate>
-                                </ListBox.Resources> -->
-                            </ListBox>
-                        </Viewbox>
-                    </Grid>
+
+
+        <StackPanel Orientation="Horizontal" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <Grid Width="80" Background="#FFFCF3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Button Width="56"
+                    Height="56"
+                    Margin="0,40,0,80"
+                    materialDesign:ButtonAssist.CornerRadius="16"
+                    Background="#AEF0D6"
+                    BorderThickness="0"
+                    Foreground="#002117"
+                    Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                    <materialDesign:PackIcon Width="24"
+                                       Height="24"
+                                       Kind="PencilOutline" />
+                </Button>
+
+
+                <!-- <ListBox ItemsSource="{Binding MenuList}"> -->
+                <Viewbox Grid.Row="1"
+                     Width="80"
+                     VerticalAlignment="Top"
+                     Stretch="Uniform">
+                    <ListBox Grid.Row="1"
+                        x:Name="MenuItems"
+                       SelectedIndex="0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesign3.NavigationRailListBoxItem}">
+                                <Setter Property="Background" Value="#E6E4C0" />
+                                <Setter Property="Foreground" Value="#48473A" />
+                                <Setter Property="materialDesign:BadgedAssist.Badge" Value="{Binding Notification}" />
+                                <Setter Property="materialDesign:BadgedAssist.BadgeBackground" Value="#930006" />
+                                <Setter Property="materialDesign:BadgedAssist.BadgeForeground" Value="#FFDAD4" />
+                                <Setter Property="materialDesign:BadgedAssist.IsMiniBadge" Value="True" />
+                                <Setter Property="materialDesign:NavigationRailAssist.SelectedIcon" Value="{Binding SelectedIcon}" />
+                                <Setter Property="materialDesign:NavigationRailAssist.UnselectedIcon" Value="{Binding UnselectedIcon}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.Resources>
+                            <DataTemplate DataType="{x:Type models:ShellDisplayModel}">
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.Resources>
+                    </ListBox>
+                </Viewbox>
+            </Grid>
+        </StackPanel>
+        
+        
         <Grid>
             <ContentControl x:Name="ActiveItem" Margin="20 5 20 20" />
         </Grid>
