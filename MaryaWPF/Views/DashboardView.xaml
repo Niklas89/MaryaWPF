@@ -8,7 +8,7 @@
              mc:Ignorable="d" Background="White" FontSize="24"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!--
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
@@ -25,9 +25,9 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
-            Tableau de bord
+            Réservations
         </TextBlock>
-
+        <!--
         
         <TextBlock Text="Réservations" Grid.Row="1" Grid.Column="0"/>
         <ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
@@ -38,10 +38,18 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox> -->
-
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2" Grid.Row="1" 
+                    Margin="20 0 0 0">
+            <TextBlock x:Name="SelectedBookingId" Margin="0 0 0 10" />
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="ViewBookingDetails" Content="View Details" 
+                        Margin="5 0 0 0"/>
+            </StackPanel>
+        </StackPanel>
+        <!--
         <Grid Name="layer0">
             <DataGrid x:Name="Bookings" AlternatingRowBackground = "LightBlue"  
-                 AlternationCount = "2" AutoGenerateColumns = "False">
+                 AlternationCount = "2" AutoGenerateColumns = "False" SelectedItem="SelectedBooking">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />
                     <DataGridTextColumn Header = "NbHours" Binding = "{Binding NbHours}" />
@@ -52,15 +60,16 @@
                     <DataGridTemplateColumn Header="View">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Name="btnView" Content="View" />
+                                <Button x:Name="ViewBookingDetails" Content="View" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
+        </Grid> -->
 
-        <!-- 
+
+
         <ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
                  MinWidth="150" SelectedItem="{Binding SelectedBooking}">
             <ListBox.ItemTemplate>
@@ -80,9 +89,9 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox> -->
-        
-        
+        </ListBox>
+
+
         <!-- CARD EXAMPLE
         <materialDesign:Card
   Width="220">

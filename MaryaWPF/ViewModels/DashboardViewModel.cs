@@ -8,8 +8,11 @@ using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using MaryaWPF.Views;
 
 namespace MaryaWPF.ViewModels
 {
@@ -18,13 +21,16 @@ namespace MaryaWPF.ViewModels
         IBookingEndpoint _bookingEndpoint;
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
+        private readonly BookingDetailsViewModel _bookingDetails;
         private readonly IWindowManager _window;
 
-        public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status, IWindowManager window)
+        public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status, 
+            IWindowManager window, BookingDetailsViewModel bookingDetails)
         {
             _bookingEndpoint= bookingEndpoint;
             _mapper= mapper;
             _status = status;
+            _bookingDetails = bookingDetails;
             _window = window;
         }
 
@@ -85,6 +91,45 @@ namespace MaryaWPF.ViewModels
                 _bookings = value;
                 NotifyOfPropertyChange(() => Bookings);
             }
+        }
+
+        private BookingDisplayModel _selectedBooking;
+
+        public BookingDisplayModel SelectedBooking
+        {
+            get { return _selectedBooking; }
+            set { 
+                _selectedBooking = value;
+                SelectedBookingId = value.Id;
+                NotifyOfPropertyChange(() => SelectedBooking);
+            }
+        }
+
+        private int _selectedBookingId;
+
+        public int SelectedBookingId
+        {
+            get { return _selectedBookingId; }
+            set { 
+                _selectedBookingId = value;
+                NotifyOfPropertyChange(() => SelectedBookingId);
+            }
+        }
+
+
+        public async Task ViewBookingDetails()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 600;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Détails de la réservation";
+
+            _bookingDetails.UpdateMessage("Description de la réservation", SelectedBooking.Description);
+            await _window.ShowDialogAsync(_bookingDetails, null, settings);
+
         }
     }
 }
