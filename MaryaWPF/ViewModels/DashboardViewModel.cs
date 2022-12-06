@@ -102,6 +102,7 @@ namespace MaryaWPF.ViewModels
                 _selectedBooking = value;
                 SelectedBookingId = value.Id;
                 NotifyOfPropertyChange(() => SelectedBooking);
+                ViewBookingDetails();
             }
         }
 
@@ -117,7 +118,7 @@ namespace MaryaWPF.ViewModels
         }
 
 
-        public async Task ViewBookingDetails()
+        public async void ViewBookingDetails()
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;

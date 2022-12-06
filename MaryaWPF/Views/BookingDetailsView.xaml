@@ -10,6 +10,28 @@
         <StackPanel Orientation="Vertical">
             <TextBlock x:Name="Header" FontSize="20" FontWeight="Bold" Margin="10" />
             <TextBlock x:Name="Message" FontSize="18" Margin="10" />
+
+            <!--<ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
+                 MinWidth="150">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Description}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Price: " FontSize="14"/>
+                                    <TextBlock Text="{Binding TotalPrice, StringFormat='{}{0:C}'}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                    <TextBlock Text="Qty: " FontSize="14"/>
+                                    <TextBlock Text="{Binding AppointmentDate}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>-->
+
             <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
         </StackPanel>
     </Grid>

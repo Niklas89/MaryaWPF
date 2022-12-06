@@ -38,6 +38,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox> -->
+        
+        <!-- BOUTON VIEW BOOKING
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.RowSpan="2" Grid.Row="1" 
                     Margin="20 0 0 0">
             <TextBlock x:Name="SelectedBookingId" Margin="0 0 0 10" />
@@ -45,11 +47,11 @@
                 <Button x:Name="ViewBookingDetails" Content="View Details" 
                         Margin="5 0 0 0"/>
             </StackPanel>
-        </StackPanel>
-        <!--
-        <Grid Name="layer0">
-            <DataGrid x:Name="Bookings" AlternatingRowBackground = "LightBlue"  
-                 AlternationCount = "2" AutoGenerateColumns = "False" SelectedItem="SelectedBooking">
+        </StackPanel> -->
+        
+        
+            <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
+                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />
                     <DataGridTextColumn Header = "NbHours" Binding = "{Binding NbHours}" />
@@ -57,19 +59,37 @@
                     <DataGridTextColumn Header = "Price" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
                     <DataGridTextColumn Header = "ServiceDone" Binding = "{Binding ServiceDone}" />
                     <DataGridTextColumn Header = "IsPaid" Binding = "{Binding IsPaid}" />
-                    <DataGridTemplateColumn Header="View">
+                    <!--<DataGridTemplateColumn Header="View">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="ViewBookingDetails" Content="View" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid> -->
 
 
+        <!--<StackPanel Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3">
+            <StackPanel x:Name="errorForm"></StackPanel>
+            <Label Name="id" Visibility="Hidden"></Label>
+            <Label FontSize="20">Courtier :</Label>
+            <Label>Nom</Label>
+            <TextBox Name="lastnameInput"></TextBox>
+            <Label>Prénom</Label>
+            <TextBox Name="firstnameInput"></TextBox>
+            <Label>E-mail</Label>
+            <TextBox Name="mailInput"></TextBox>
+            <Label>Numéro de téléphone</Label>
+            <TextBox Name="phoneInput"></TextBox>
+            <Label>Budget</Label>
+            <Button Click="updateBroker" Margin="10" HorizontalAlignment="Center">Modifiez</Button>
+            <Button Click="deleteBroker" HorizontalAlignment="Center">Supprimez</Button>
+            <Label FontSize="15" Foreground="Red"  Name="erreurLabel"></Label>
+        </StackPanel>-->
 
+
+        <!-- LISTBOX BOOKING - WORKS AT CLICK TO OPEN WINDOW
         <ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
                  MinWidth="150" SelectedItem="{Binding SelectedBooking}">
             <ListBox.ItemTemplate>
@@ -89,7 +109,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox> -->
 
 
         <!-- CARD EXAMPLE
