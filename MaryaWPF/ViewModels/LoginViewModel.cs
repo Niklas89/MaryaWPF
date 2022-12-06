@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using MaryaWPF.Library.Api;
 using MaryaWPF.EventModels;
 using System.Threading;
+using System.Windows.Input;
 
 namespace MaryaWPF.ViewModels
 {

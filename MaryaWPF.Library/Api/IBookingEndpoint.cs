@@ -7,5 +7,6 @@ namespace MaryaWPF.Library.Api
     public interface IBookingEndpoint
     {
         Task<List<BookingModel>> GetAll();
+        Task RemoveBooking(int bookingId);
     }
 }

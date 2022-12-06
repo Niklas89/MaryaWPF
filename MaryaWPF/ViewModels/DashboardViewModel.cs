@@ -21,8 +21,8 @@ namespace MaryaWPF.ViewModels
         IBookingEndpoint _bookingEndpoint;
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
-        private readonly BookingDetailsViewModel _bookingDetails;
         private readonly IWindowManager _window;
+        private BookingDetailsViewModel _bookingDetails;
 
         public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status, 
             IWindowManager window, BookingDetailsViewModel bookingDetails)
@@ -128,7 +128,7 @@ namespace MaryaWPF.ViewModels
             settings.ResizeMode = ResizeMode.CanResize;
             settings.Title = "Détails de la réservation";
 
-            _bookingDetails.UpdateMessage("Description de la réservation", SelectedBooking.Description);
+            _bookingDetails.UpdateBookingDetails(SelectedBooking);
             await _window.ShowDialogAsync(_bookingDetails, null, settings);
 
         }

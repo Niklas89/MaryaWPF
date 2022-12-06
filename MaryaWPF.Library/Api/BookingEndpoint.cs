@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +29,18 @@ namespace MaryaWPF.Library.Api
                     return result;
                 }
                 else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task RemoveBooking(int bookingId)
+        {
+            BookingModel data = new BookingModel { CancelDate = DateTime.Now };
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<BookingModel>("admin/booking/" + bookingId, data))
+            {
+                if (response.IsSuccessStatusCode == false)
                 {
                     throw new Exception(response.ReasonPhrase);
                 }

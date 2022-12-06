@@ -8,10 +8,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <TextBlock x:Name="Header" FontSize="20" FontWeight="Bold" Margin="10" />
-            <TextBlock x:Name="Message" FontSize="18" Margin="10" />
+            <!--<TextBlock x:Name="Header" FontSize="20" FontWeight="Bold" Margin="10" />
+            <TextBlock x:Name="Message" FontSize="18" Margin="10" />-->
 
-            <!--<ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
+            <ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
                  MinWidth="150">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -30,8 +30,8 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>-->
-
+            </ListBox>
+            <Button x:Name="CancelBooking" Padding="5" Margin="20">Annuler la réservation</Button>
             <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
         </StackPanel>
     </Grid>
