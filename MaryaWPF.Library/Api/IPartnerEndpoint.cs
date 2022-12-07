@@ -7,5 +7,6 @@ namespace MaryaWPF.Library.Api
     public interface IPartnerEndpoint
     {
         Task<List<UserPartnerModel>> GetAll();
+        Task UpdatePartner(UserPartnerModel partner);
     }
 }
