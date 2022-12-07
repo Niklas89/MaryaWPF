@@ -17,6 +17,9 @@
 
 
         <Menu DockPanel.Dock="Top" FontSize="18" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <MenuItem Header="_Dashboard">
+                <MenuItem x:Name="Dashboard" Header="Tableau de bord" />
+            </MenuItem>
             <MenuItem Header="_Réservations">
                 <MenuItem x:Name="BookingManagement" Header="Liste des réservations" />
             </MenuItem>
