@@ -35,6 +35,8 @@ namespace MaryaWPF
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BookingModel, BookingDisplayModel>();
+                cfg.CreateMap<PartnerModel, PartnerDisplayModel>();
+                cfg.CreateMap<UserPartnerModel, UserPartnerDisplayModel>();
                 // cfg.CreateMap<sourceModel, destinationModel>();
             });
 
