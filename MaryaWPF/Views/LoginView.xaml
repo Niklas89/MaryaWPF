@@ -20,41 +20,51 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
-                   HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
-            Formulaire de connexion
-        </TextBlock>
-
-        <!-- Error Message row - converts a boolean that return true or false to visibily. If true visible, if false visible / linked with App.xaml -->
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+            <Image
+              Width="200"
+              Height="200"
+              Source="/Resources/logo1.png"
+              Stretch="UniformToFill" />
+        </Grid>
+        <!--Error Message row - converts a boolean that return true or false to visibily. If true visible, if false visible / linked with App.xaml-->
         <TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
-                   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                   Foreground="Red" MaxWidth="300"
-                   TextWrapping="Wrap" Margin="0 0 0 20"
-                   />
-
-        <!-- Email row -->
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin=" 0 0 0 10">
-            Email:
+                       Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                       Foreground="Red" MaxWidth="300"
+                       TextWrapping="Wrap" Margin="0 0 0 20"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 40"
+                    HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
+                    Connexion
+            </TextBlock>
+            <!--Email row-->
+        <TextBlock Grid.Row="4" Grid.Column="1" Margin=" 0 0 0 10">
+                Email:
         </TextBlock>
-        <!--<materialDesign:PackIcon Kind="Account" />-->
-        <TextBox x:Name="Email" Grid.Row="2" Grid.Column="2" MinWidth="350" 
-                 Margin=" 0 0 0 10" />
         
-        <!-- Password row -->
-        <TextBlock Grid.Row="3" Grid.Column="1" Margin=" 0 0 0 20">
-            Mot de passe:
-        </TextBlock>
-        <!--<materialDesign:PackIcon Kind="Account" />-->
-        <PasswordBox x:Name="Password" Grid.Row="3" Grid.Column="2" MinWidth="350" 
-                     Margin=" 0 0 0 20" />
+        <TextBox x:Name="Email" Grid.Row="4" Grid.Column="2" MinWidth="350" 
+                     Margin=" 40 0 0 20" />
 
-        <!-- Login row -->
-        <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Padding="20 5" 
-                HorizontalAlignment="Center" x:Name="LogIn">
-            Connexion
-        </Button>
-        
+        <!--Password row-->
+        <TextBlock Grid.Row="6" Grid.Column="1" Margin=" 0 0 0 10">
+                Mot de passe:
+        </TextBlock>
+
+        <PasswordBox x:Name="Password" Grid.Row="6" Grid.Column="2" MinWidth="350" 
+                         Margin=" 40 0 0 20" />
+
+        <!--Login row-->
+        <Button
+              Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="50" Padding="80 5" x:Name="LogIn"
+              Content="Connexion"
+              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+              Style="{StaticResource MaterialDesignRaisedDarkButton}"
+              ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" />
+
     </Grid>
 </UserControl>
