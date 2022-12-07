@@ -38,7 +38,8 @@ namespace MaryaWPF.Library.Api
         public async Task RemoveBooking(int bookingId)
         {
             BookingModel data = new BookingModel { CancelDate = DateTime.Now };
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<BookingModel>("admin/booking/" + bookingId, data))
+            string uri = "admin/booking/cancel/" + bookingId;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<BookingModel>(uri, data))
             {
                 if (response.IsSuccessStatusCode == false)
                 {
