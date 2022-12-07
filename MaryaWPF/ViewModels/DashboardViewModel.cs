@@ -100,22 +100,22 @@ namespace MaryaWPF.ViewModels
             get { return _selectedBooking; }
             set { 
                 _selectedBooking = value;
-                SelectedBookingId = value.Id;
+                //SelectedBookingId = value.Id;
                 NotifyOfPropertyChange(() => SelectedBooking);
                 ViewBookingDetails();
             }
         }
 
-        private int _selectedBookingId;
+        //private int _selectedBookingId;
 
-        public int SelectedBookingId
-        {
-            get { return _selectedBookingId; }
-            set { 
-                _selectedBookingId = value;
-                NotifyOfPropertyChange(() => SelectedBookingId);
-            }
-        }
+        //public int SelectedBookingId
+        //{
+        //    get { return _selectedBookingId; }
+        //    set { 
+        //        _selectedBookingId = value;
+        //        NotifyOfPropertyChange(() => SelectedBookingId);
+        //    }
+        //}
 
 
         public async void ViewBookingDetails()
