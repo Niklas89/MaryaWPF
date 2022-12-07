@@ -9,7 +9,7 @@
     <Grid>
         <Grid Name="layer0">
             <DataGrid x:Name="Clients" AlternatingRowBackground = "LightBlue"  
-                 AlternationCount = "2" AutoGenerateColumns = "False">
+                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedClient">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header = "Email" Binding = "{Binding Email}" />
                     <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
@@ -17,13 +17,6 @@
                     <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Client.Phone}" />
                     <DataGridTextColumn Header = "Ville" Binding = "{Binding Client.City}" />
                     <DataGridTextColumn Header = "Code Postal" Binding = "{Binding Client.PostalCode}" />
-                    <DataGridTemplateColumn Header="View">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Name="btnView" Content="View" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
