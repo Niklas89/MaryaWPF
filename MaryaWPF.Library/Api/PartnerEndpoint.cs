@@ -32,5 +32,19 @@ namespace MaryaWPF.Library.Api
                 }
             }
         }
+
+        public async Task UpdatePartner(UserPartnerModel partner)
+        {
+
+            // UserPartnerModel data = new UserPartnerModel { FirstName = partner.FirstName, LastName = partner.LastName };
+            string uri = "admin/partner/" + partner.Id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<UserPartnerModel>(uri, partner))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

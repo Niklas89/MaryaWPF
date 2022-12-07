@@ -20,7 +20,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Price: " FontSize="14"/>
-                                    <TextBlock Text="{Binding TotalPrice, StringFormat='{}{0:C}'}" FontSize="14"/>
+                                    <TextBlock Text="{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" FontSize="14"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
                                     <TextBlock Text="Qty: " FontSize="14"/>

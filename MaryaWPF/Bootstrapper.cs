@@ -37,6 +37,8 @@ namespace MaryaWPF
                 cfg.CreateMap<BookingModel, BookingDisplayModel>();
                 cfg.CreateMap<PartnerModel, PartnerDisplayModel>();
                 cfg.CreateMap<UserPartnerModel, UserPartnerDisplayModel>();
+                cfg.CreateMap<UserPartnerDisplayModel, UserPartnerModel>();
+                cfg.CreateMap<PartnerDisplayModel, PartnerModel>();
                 // cfg.CreateMap<sourceModel, destinationModel>();
             });
 

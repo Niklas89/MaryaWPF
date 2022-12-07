@@ -109,21 +109,8 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _selectedPartner = value;
-                SelectedPartnerId = value.Id;
                 NotifyOfPropertyChange(() => SelectedPartner);
                 ViewPartnerDetails();
-            }
-        }
-
-        private int _selectedPartnerId;
-
-        public int SelectedPartnerId
-        {
-            get { return _selectedPartnerId; }
-            set
-            {
-                _selectedPartnerId = value;
-                NotifyOfPropertyChange(() => SelectedPartnerId);
             }
         }
 
@@ -137,7 +124,7 @@ namespace MaryaWPF.ViewModels
             settings.ResizeMode = ResizeMode.CanResize;
             settings.Title = "Détails du partenaire";
 
-            _partnerDetails.UpdateMessage("Description du partenaire", SelectedPartner.Partner.Phone);
+            _partnerDetails.UpdatePartnerDetails(SelectedPartner);
             await _window.ShowDialogAsync(_partnerDetails, null, settings);
 
         }

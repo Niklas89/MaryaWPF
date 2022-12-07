@@ -7,10 +7,52 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="Header" FontSize="20" FontWeight="Bold" Margin="10" />
-                <TextBlock x:Name="Message" FontSize="18" Margin="10" />
-                <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
-            </StackPanel>
-        </Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="Partners" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" MinHeight="200" 
+                 MinWidth="150">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding FirstName}"/>
+                            <TextBlock Text="{Binding LastName}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Email: "/>
+                                    <TextBlock Text="{Binding Email}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                    <TextBlock Text="Phone: "/>
+                                    <TextBlock Text="{Binding Partner.Phone}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+
+        <ListBox Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
+            <StackPanel Name="errorForm"></StackPanel>
+            <ListBoxItem Content="Prénom" />
+            <TextBox Height="23" Width="150" x:Name="SelectedFirstName" Text="" />
+            <ListBoxItem Content="Nom" />
+            <TextBox Height="23" Width="150" x:Name="SelectedLastName" Text="" />
+            <Button x:Name="Edit">Modifier</Button>
+        </ListBox>
+
+
+        <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
+    </Grid>
 </UserControl>
