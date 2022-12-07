@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
 using MaryaWPF.Models;
@@ -17,12 +18,14 @@ namespace MaryaWPF.ViewModels
     public class PartnerDisplayViewModel : Screen
     {
         private readonly StatusInfoViewModel _status;
+        IMapper _mapper;
+        private PartnerDetailsViewModel _partnerDetails;
         private readonly IWindowManager _window;
-        private readonly IPartnerEndpoint _partnerEndpoint;
-        private readonly IServiceEndpoint _serviceEndpoint;
-        BindingList<UserPartnerModel> _partners;
+        IPartnerEndpoint _partnerEndpoint;
+        IServiceEndpoint _serviceEndpoint;
+        BindingList<UserPartnerDisplayModel> _partners;
 
-        public BindingList<UserPartnerModel> Partners
+        public BindingList<UserPartnerDisplayModel> Partners
         {
             get
             {
@@ -35,12 +38,15 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public PartnerDisplayViewModel(StatusInfoViewModel status, IWindowManager window, IPartnerEndpoint partnerEndpoint, IServiceEndpoint serviceEndpoint)
+        public PartnerDisplayViewModel( PartnerDetailsViewModel partnerDetails, StatusInfoViewModel status, IMapper mapper,
+            IWindowManager window, IPartnerEndpoint partnerEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _status = status;
+            _mapper = mapper;
             _window = window;
             _partnerEndpoint = partnerEndpoint;
             _serviceEndpoint = serviceEndpoint;
+            _partnerDetails = partnerDetails;
         }
 
         // Wait before the View loads
@@ -90,7 +96,50 @@ namespace MaryaWPF.ViewModels
                     }
                 }
             }
-            Partners = new BindingList<UserPartnerModel>(partnerList);
+            // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
+            var partners = _mapper.Map<List<UserPartnerDisplayModel>>(partnerList);
+            Partners = new BindingList<UserPartnerDisplayModel>(partners);
+        }
+
+        private UserPartnerDisplayModel _selectedPartner;
+
+        public UserPartnerDisplayModel SelectedPartner
+        {
+            get { return _selectedPartner; }
+            set
+            {
+                _selectedPartner = value;
+                SelectedPartnerId = value.Id;
+                NotifyOfPropertyChange(() => SelectedPartner);
+                ViewPartnerDetails();
+            }
+        }
+
+        private int _selectedPartnerId;
+
+        public int SelectedPartnerId
+        {
+            get { return _selectedPartnerId; }
+            set
+            {
+                _selectedPartnerId = value;
+                NotifyOfPropertyChange(() => SelectedPartnerId);
+            }
+        }
+
+        public async void ViewPartnerDetails()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 600;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Détails du partenaire";
+
+            _partnerDetails.UpdateMessage("Description du partenaire", SelectedPartner.Partner.Phone);
+            await _window.ShowDialogAsync(_partnerDetails, null, settings);
+
         }
     }
 }
