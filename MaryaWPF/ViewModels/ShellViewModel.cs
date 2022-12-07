@@ -85,6 +85,11 @@ namespace MaryaWPF.ViewModels
 
         public async Task BookingManagement()
         {
+            await ActivateItemAsync(IoC.Get<BookingViewModel>(), new CancellationToken());
+        }
+
+        public async Task Dashboard()
+        {
             await ActivateItemAsync(IoC.Get<DashboardViewModel>(), new CancellationToken());
         }
 
