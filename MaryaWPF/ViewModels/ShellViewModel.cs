@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using AutoMapper;
 using Caliburn.Micro;
+using MaryaWPF.Commands;
 using MaryaWPF.EventModels;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
@@ -34,6 +37,35 @@ namespace MaryaWPF.ViewModels
         private readonly IMapper _mapper;
         // private SimpleContainer _container;
 
+        private ShellDisplayModel _selectedMenuItem;
+
+        public ShellDisplayModel SelectedMenuItem
+        {
+            get { return _selectedMenuItem; }
+            set
+            {
+                _selectedMenuItem = value;
+                NotifyOfPropertyChange(() => SelectedMenuItem);
+                NavigateToSelectedView();
+            }
+        }
+
+        private BindingList<ShellDisplayModel> _menuItems;
+
+        public BindingList<ShellDisplayModel> MenuItems
+        {
+            get { return _menuItems; }
+            set
+            {
+                _menuItems = value;
+                NotifyOfPropertyChange(() => _menuItems);
+            }
+        }
+
+        // Command for the home button click
+        public HomeButtonCommand HomeButtonCommand { get; set; }
+
+
         public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, IAPIHelper apiHelper, IMapper mapper)
         {
             _events = events;
@@ -42,6 +74,8 @@ namespace MaryaWPF.ViewModels
             _apiHelper = apiHelper;
             //_container= container;
             _mapper = mapper;
+
+            HomeButtonCommand = new HomeButtonCommand(this);
 
             // send event to every subscriber, even if they aren't listening to that particular type:
             // Tell ShellViewModel to listen to LogOnEvent or string IHandle for example
@@ -73,31 +107,6 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public void ExitApplication()
-        {
-            TryCloseAsync();
-        }
-
-        public async Task PartnerManagement()
-        {
-            await ActivateItemAsync(IoC.Get<PartnerDisplayViewModel>(), new CancellationToken());
-        }
-
-        public async Task BookingManagement()
-        {
-            await ActivateItemAsync(IoC.Get<BookingViewModel>(), new CancellationToken());
-        }
-
-        public async Task Dashboard()
-        {
-            await ActivateItemAsync(IoC.Get<DashboardViewModel>(), new CancellationToken());
-        }
-
-        public async Task ClientManagement()
-        {
-            await ActivateItemAsync(IoC.Get<ClientDisplayViewModel>(), new CancellationToken());
-        }
-
         public async Task LogOut()
         {
             _user.ResetUserModel();
@@ -126,6 +135,30 @@ namespace MaryaWPF.ViewModels
             throw new NotImplementedException();
         }
 
+
+        // Called in HomeButtonCommand class
+        public async void OnHomeButtonClick()
+        {
+            await ActivateItemAsync(IoC.Get<DashboardViewModel>(), new CancellationToken());
+        }
+
+
+        public async void NavigateToSelectedView()
+        {
+            if (SelectedMenuItem.Title == "Réservations")
+                await ActivateItemAsync(IoC.Get<BookingViewModel>(), new CancellationToken());
+
+            if (SelectedMenuItem.Title == "Partenaires")
+                await ActivateItemAsync(IoC.Get<PartnerDisplayViewModel>(), new CancellationToken());
+
+            if (SelectedMenuItem.Title == "Clients")
+                await ActivateItemAsync(IoC.Get<ClientDisplayViewModel>(), new CancellationToken());
+
+            if (SelectedMenuItem.Title == "Déconnection")
+                await LogOut();
+        }
+
+
         // Menu
         private void LoadMenuItems()
         {
@@ -133,62 +166,44 @@ namespace MaryaWPF.ViewModels
             {
                 new ShellDisplayModel
                 {
-                    Title = "Payment",
-                    SelectedIcon = PackIconKind.CreditCard,
-                    UnselectedIcon = PackIconKind.CreditCardOutline,
-                    Notification = 1
+                    Title = "Réservations",
+                    SelectedIcon = PackIconKind.CalendarClock,
+                    UnselectedIcon = PackIconKind.CalendarClockOutline,
+                    //Notification = 1
                 },
                 new ShellDisplayModel
                 {
-                    Title = "Home",
-                    SelectedIcon = PackIconKind.Home,
-                    UnselectedIcon = PackIconKind.HomeOutline,
+                    Title = "Partenaires",
+                    SelectedIcon = PackIconKind.AccountGroup,
+                    UnselectedIcon = PackIconKind.AccountGroupOutline,
                 },
                 new ShellDisplayModel
                 {
-                    Title = "Special",
-                    SelectedIcon = PackIconKind.Star,
-                    UnselectedIcon = PackIconKind.StarOutline,
+                    Title = "Clients",
+                    SelectedIcon = PackIconKind.AccountCreditCard,
+                    UnselectedIcon = PackIconKind.AccountCreditCardOutline,
                 },
                 new ShellDisplayModel
                 {
-                    Title = "Shared",
-                    SelectedIcon = PackIconKind.Users,
-                    UnselectedIcon = PackIconKind.UsersOutline,
+                    Title = "Activité",
+                    SelectedIcon = PackIconKind.ChartBox,
+                    UnselectedIcon = PackIconKind.ChartBoxOutline,
                 },
                 new ShellDisplayModel
                 {
-                    Title = "Files",
-                    SelectedIcon = PackIconKind.Folder,
-                    UnselectedIcon = PackIconKind.FolderOutline,
-                },
-                new ShellDisplayModel
-                {
-                    Title = "Library",
-                    SelectedIcon = PackIconKind.Bookshelf,
-                    UnselectedIcon = PackIconKind.Bookshelf,
-                },
+                    Title = "Services",
+                    SelectedIcon = PackIconKind.Walk,
+                    UnselectedIcon = PackIconKind.Walk,
+                }
             };
             var items = _mapper.Map<List<ShellDisplayModel>>(menuList);
             MenuItems = new BindingList<ShellDisplayModel>(items);
         }
 
-        private BindingList<ShellDisplayModel> _menuItems;
+        //private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        //=> _menuItems[0].Notification = _menuItems[0].Notification is null ? 1 : null;
 
-        public BindingList<ShellDisplayModel> MenuItems
-        {
-            get { return _menuItems; }
-            set
-            {
-                _menuItems = value;
-                NotifyOfPropertyChange(() => _menuItems);
-            }
-        }
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        => _menuItems[0].Notification = _menuItems[0].Notification is null ? 1 : null;
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-            => _menuItems[0].Notification = _menuItems[0].Notification is null ? "123+" : null;
+        //private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        //    => _menuItems[0].Notification = _menuItems[0].Notification is null ? "123+" : null;
     }
 }
