@@ -46,7 +46,7 @@
         <TextBlock Grid.Row="4" Grid.Column="1" Margin=" 0 0 0 10">
                 Email:
         </TextBlock>
-        
+
         <TextBox x:Name="Email" Grid.Row="4" Grid.Column="2" MinWidth="350" 
                      Margin=" 40 0 0 20" />
 
@@ -55,7 +55,7 @@
                 Mot de passe:
         </TextBlock>
 
-        <PasswordBox x:Name="Password" Grid.Row="6" Grid.Column="2" MinWidth="350" 
+        <PasswordBox x:Name="Password"  Grid.Row="6" Grid.Column="2" MinWidth="350" 
                          Margin=" 40 0 0 20" />
 
         <!--Login row-->
