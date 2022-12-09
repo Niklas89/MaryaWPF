@@ -101,7 +101,7 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _selectedAddress = value;
-                NotifyOfPropertyChange(() => SelectedEmail);
+                NotifyOfPropertyChange(() => SelectedAddress);
             }
         }
 
@@ -150,6 +150,8 @@ namespace MaryaWPF.ViewModels
         public async Task Edit()
         {
             UserClientModel client = _mapper.Map<UserClientModel>(SelectedClient);
+            
+            // Below lines are USEFUL for sending data to clientEndPoint
             client.FirstName = SelectedFirstName;
             client.LastName = SelectedLastName;
             client.Email = SelectedEmail;
@@ -157,6 +159,17 @@ namespace MaryaWPF.ViewModels
             client.Client.Address = SelectedAddress;
             client.Client.PostalCode = SelectedPostalCode;
             client.Client.City = SelectedCity;
+
+            // Below lines are USEFUL for INotifyPropertyChange in UserClientDisplayModel
+            // and in ClientDisplayModel
+            SelectedClient.FirstName = SelectedFirstName;
+            SelectedClient.LastName = SelectedLastName;
+            SelectedClient.Email = SelectedEmail;
+            SelectedClient.Client.Phone = SelectedPhone;
+            SelectedClient.Client.Address = SelectedAddress;
+            SelectedClient.Client.PostalCode = SelectedPostalCode;
+            SelectedClient.Client.City = SelectedCity;
+
             await _clientEndpoint.UpdateClient(client);
         }
 

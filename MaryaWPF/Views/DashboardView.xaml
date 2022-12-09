@@ -22,12 +22,38 @@
                    HorizontalAlignment="Center" FontSize="44" FontFamily="Segoe UI Light">
             Tableau de bord
         </TextBlock>
-
+        <!-- Afficher aussi en gros le total du nb de réservations acceptés du mois courant -->
+        <!-- et le total du nb de réservations en attente du mois courant -->
+        <!-- et le total du nb de réservations sur le mois courant -->
+        <!-- par ex: 126 resa   -   96 acceptés   -   30 en attente   -->
         <TextBlock Grid.Row="1" Grid.Column="1"
                    HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
-            Réservations sur les 12 derniers mois
+            Réservations en attente
         </TextBlock>
-        <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="1" Grid.Column="1"
+        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
+                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />
+                <DataGridTextColumn Header = "NbHours" Binding = "{Binding NbHours}" />
+                <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" />
+                <DataGridTextColumn Header = "Price" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
+                <DataGridTextColumn Header = "ServiceDone" Binding = "{Binding ServiceDone}" />
+                <DataGridTextColumn Header = "IsPaid" Binding = "{Binding IsPaid}" />
+                <DataGridTemplateColumn Header="View">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Rembourser" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="2" Grid.Column="1"
+                   HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
+            Réservations du mois courant (à finir)
+        </TextBlock>
+        <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="2" Grid.Column="1"
                             Series="{Binding BookingsSeriesCollection}" LegendLocation="Bottom">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="Mois" Labels="{Binding BookingsBarLabels}"></lvc:Axis>
@@ -37,20 +63,6 @@
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
 
-        <TextBlock Grid.Row="2" Grid.Column="1"
-                   HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
-            Utilisateurs inscrits sur les 12 derniers mois
-        </TextBlock>
-        <lvc:CartesianChart  Grid.Row="2" Grid.Column="1"
-                            Series="{Binding ClientsPartnersSeriesCollection}" LegendLocation="Bottom">
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Mois" Labels="{Binding ClientsPartnersBarLabels}"></lvc:Axis>
-            </lvc:CartesianChart.AxisX>
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Nombre d'inscrits" LabelFormatter="{Binding ClientsPartnersFormatter}"></lvc:Axis>
-            </lvc:CartesianChart.AxisY>
-
-        </lvc:CartesianChart>
 
     </Grid>
 </UserControl>
