@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -115,12 +116,12 @@ namespace MaryaWPF.ViewModels
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.Height = 600;
-            settings.Width = 600;
+            settings.Width = 750;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
             settings.Title = "Détails du client";
 
-            _clientDetails.UpdateMessage("Description du client", "Test");
+            _clientDetails.UpdateClientDetails(SelectedClient);
             await _window.ShowDialogAsync(_clientDetails, null, settings);
 
         }
