@@ -30,9 +30,7 @@
             <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                   Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
             <materialDesign:ColorZone
-              Padding="16"
-              materialDesign:ElevationAssist.Elevation="Dp4"
-              ClipToBounds="False">
+              Padding="16">
                         <DockPanel>
                         <materialDesign:PopupBox DockPanel.Dock="Right"
                                      PlacementMode="BottomAndAlignRightEdges"
@@ -50,7 +48,7 @@
                                     </Grid.RowDefinitions>
                                     <Button Grid.Row="0" Content="Profil" />
                                     <Separator Grid.Row="1" Grid.ColumnSpan="2"/>
-                                    <Button Grid.Row="2" Grid.Column="0" Content="Déconnection" />
+                                    <Button Grid.Row="2" Grid.Column="0" Content="Déconnection" Command="{Binding Path=LogoutButtonCommand}" />
                                     <materialDesign:PackIcon Margin="0 15 5 0" Grid.Row="2"  Grid.Column="1" Kind="Logout" />
                                 </Grid>
                             </StackPanel>
@@ -61,9 +59,9 @@
                                 <!--<ToggleButton
                     Style="{StaticResource MaterialDesignHamburgerToggleButton}" />-->
                                 <TextBlock
-                    Margin="16,0,0,0"
-                    VerticalAlignment="Center"
-                    Text="Marya Back-Office d'Administration" />
+                                Margin="16,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="Marya Back-Office d'Administration" />
                             </StackPanel>
                         </DockPanel>
             </materialDesign:ColorZone>
@@ -72,10 +70,8 @@
 
         <StackPanel  Grid.Row="1" Grid.Column="0"
             Orientation="Horizontal" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-                <materialDesign:ColorZone
-              materialDesign:ElevationAssist.Elevation="Dp4"
-              ClipToBounds="False">
-                    <Grid Width="80" Height="700">
+                <materialDesign:ColorZone>
+               <Grid Width="80">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -85,9 +81,9 @@
                     Height="56"
                     Margin="0,40,0,80"
                     materialDesign:ButtonAssist.CornerRadius="16"
-                    Background="#AEF0D6"
+                    Background="#015958"
                     BorderThickness="0"
-                    Foreground="#002117"
+                    Foreground="#FFFFFF"
                     Command="{Binding Path=HomeButtonCommand}"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}">
                     <materialDesign:PackIcon Width="24"
