@@ -65,7 +65,7 @@ namespace MaryaWPF.ViewModels
         }
 
         //public string[] BarLabels { get; set; } = new[] { "janvier", "février", "mars", "avril" };
-        public string[] BookingsBarLabels { get; set; } = new string[12];
+        public string[] BookingsBarLabels { get; set; }
 
         //public SeriesCollection SeriesCollection { get; set; }
 
@@ -144,13 +144,23 @@ namespace MaryaWPF.ViewModels
                 .OrderBy(b => b.AppointmentDate).ToList();
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
-            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true).ToList();
+            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
             string bookingsAcceptedTitle = "Réservations acceptés";
-            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false).ToList();
+            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
             string bookingsNotAcceptedTitle = "Réservations en attente";
 
-            ChartValues<double> chartValuesBookingsAccepted = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            ChartValues<double> chartValuesBookingsNotAccepted = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+            BookingsBarLabels = new string[daysOfCurrentMonth];
+
+            ChartValues<double> chartValuesBookingsAccepted = new ChartValues<double>();
+            ChartValues<double> chartValuesBookingsNotAccepted = new ChartValues<double>();
+
+            for(int i = 1; i <= daysOfCurrentMonth; i++)
+            {
+                chartValuesBookingsAccepted.Add(0);
+                chartValuesBookingsNotAccepted.Add(0);
+            }
 
             // Create LineSeries for SeriesCollection for chart values of accepted bookings
             LoadBookingsChart(bookingsAccepted, bookingsAcceptedTitle, chartValuesBookingsAccepted);
@@ -186,15 +196,10 @@ namespace MaryaWPF.ViewModels
 
         private void LoadBookingsChart(List<BookingDisplayModel> bookings, string title, ChartValues<double> chartValues)
         {
-            // Insert in Dictionnary (key: month, year | value: number of bookings) the number of bookings per month for the 12 previous months
-            var bookingsDic = bookings.GroupBy(x => new { Month = x.AppointmentDate.Month, Year = x.AppointmentDate.Year })
-                .ToDictionary(g => g.Key, g => g.Count());
+            // Insert in Dictionnary (key: days | value: sum of totalprice per day) the totalprice sum of each booking per day
+            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day)
+                .ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
 
-            // Remove the current month of the current year, because it shouldn't be visible on the chart
-            if (bookingsDic.ContainsKey(new { DateTime.Now.Month, DateTime.Now.Year }))
-            {
-                bookingsDic.Remove(new { DateTime.Now.Month, DateTime.Now.Year });
-            }
 
             // Replace the initialized 0 values from ChartValuesBookings and replace them with the values of my Dictionnary
             int index = 1;
@@ -202,31 +207,20 @@ namespace MaryaWPF.ViewModels
             {
                 foreach (var item in bookingsDic)
                 {
-                    if (item.Key.Month.Equals(index))
+                    if (item.Key.Equals(index))
                     {
                         chartValues.Remove(value);
-                        chartValues.Add(item.Value);
+                        chartValues.Insert(index, item.Value);
                     }
                 }
                 index++;
             }
 
-            // Loop through each month of datetime.now -1 year (12 previous months)
-            // Add insert each month in a new list of months, get name in string of each month
-            List<int> monthsNumberOfPastYear = new List<int>();
-            List<string> monthsNameOfPastYear = new List<string>();
-            var lastYear = DateTime.Now.AddYears(-1);
-            DateTime todayDate = DateTime.Now.AddMonths(-1);
-            for (DateTime dt = lastYear; dt < todayDate; dt = dt.AddMonths(1))
+            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            var test = BookingsBarLabels;
+            for (int i = 1; i <= daysOfCurrentMonth; i++)
             {
-                monthsNumberOfPastYear.Add(dt.Month);
-                monthsNameOfPastYear.Add(getFullName(dt.Month));
-            }
-
-            int monthsCount = monthsNumberOfPastYear.Count();
-            for (int i = 0; i < monthsCount; i++)
-            {
-                BookingsBarLabels[i] = monthsNameOfPastYear.ElementAt(i);
+                BookingsBarLabels[i-1] = i.ToString();
             }
 
             BookingsSeriesCollection.Add(new LineSeries
@@ -234,13 +228,6 @@ namespace MaryaWPF.ViewModels
                 Title = title,
                 Values = chartValues
             });
-        }
-
-        private string getFullName(int month)
-        {
-            return CultureInfo.CurrentCulture.
-                DateTimeFormat.GetMonthName
-                (month);
         }
 
     }
