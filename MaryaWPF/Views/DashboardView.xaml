@@ -19,19 +19,22 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
-                   HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
+                   HorizontalAlignment="Center" FontSize="44" FontFamily="Segoe UI Light">
             Tableau de bord
         </TextBlock>
 
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
+            Réservations sur les 12 derniers mois
+        </TextBlock>
         <lvc:CartesianChart  Grid.Row="1" Grid.Column="1"
-                            Series="{Binding SeriesCollection}" LegendLocation="Left">
+                            Series="{Binding SeriesCollection}" LegendLocation="Bottom">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="X" Labels="{Binding BarLabels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Y" LabelFormatter="{Binding Formatter}"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
-
         </lvc:CartesianChart>
 
         <!--<lvc:CartesianChart  Grid.Row="2" Grid.Column="1"

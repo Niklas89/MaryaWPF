@@ -9,6 +9,7 @@
 	  <None Remove="logo.png" />
 	  <None Remove="logo1.png" />
 	  <None Remove="Resources\logo.ico" />
+	  <None Remove="Resources\logo100h.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="Resources\logo.ico" />

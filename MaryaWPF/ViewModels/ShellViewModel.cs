@@ -65,6 +65,9 @@ namespace MaryaWPF.ViewModels
         // Command for the home button click
         public HomeButtonCommand HomeButtonCommand { get; set; }
 
+        // Command for the home button click
+        public LogoutButtonCommand LogoutButtonCommand { get; set; }
+
 
         public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, IAPIHelper apiHelper, IMapper mapper)
         {
@@ -76,6 +79,7 @@ namespace MaryaWPF.ViewModels
             _mapper = mapper;
 
             HomeButtonCommand = new HomeButtonCommand(this);
+            LogoutButtonCommand = new LogoutButtonCommand(this);
 
             // send event to every subscriber, even if they aren't listening to that particular type:
             // Tell ShellViewModel to listen to LogOnEvent or string IHandle for example

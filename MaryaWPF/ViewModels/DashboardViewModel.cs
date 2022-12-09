@@ -6,16 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Caliburn.Micro;
-using MaryaWPF.Views;
 using LiveCharts;
 using LiveCharts.Wpf;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Globalization;
 
 namespace MaryaWPF.ViewModels
 {
@@ -25,15 +21,40 @@ namespace MaryaWPF.ViewModels
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
-        private BookingDetailsViewModel _bookingDetails;
+
+
+
+        private Func<double, string> _formatter;
+
+        public Func<double, string> Formatter
+        {
+            get { return _formatter; }
+            set
+            {
+                _formatter = value => value.ToString("N");
+            }
+        }
+
+        //public string[] BarLabels { get; set; } = new[] { "janvier", "février", "mars", "avril" };
+        public string[] BarLabels { get; set; } = new string[12];
+
+        //public SeriesCollection SeriesCollection { get; set; }
+
+        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection
+        {
+            new LineSeries
+            {
+                Title="0",
+                Values = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+            }
+        };
 
         public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
-            IWindowManager window, BookingDetailsViewModel bookingDetails)
+            IWindowManager window)
         {
             _bookingEndpoint = bookingEndpoint;
             _mapper = mapper;
             _status = status;
-            _bookingDetails = bookingDetails;
             _window = window;
         }
 
@@ -61,7 +82,8 @@ namespace MaryaWPF.ViewModels
                 {
                     _status.UpdateMessage("Accès refusé", "Vous n'avez pas l'autorisation de voir les réservations sur l'application bureautique.");
                     await _window.ShowDialogAsync(_status, null, settings);
-                } else
+                }
+                else
                 {
                     _status.UpdateMessage("Fatal Exception", ex.Message);
                     await _window.ShowDialogAsync(_status, null, settings);
@@ -81,99 +103,91 @@ namespace MaryaWPF.ViewModels
         {
             var bookingList = await _bookingEndpoint.GetAll();
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
-            var bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
-            Bookings = new BindingList<BookingDisplayModel>(bookings);
-        }
+            List<BookingDisplayModel> bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
 
-        private BindingList<BookingDisplayModel> _bookings;
+            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true).ToList();
+            string bookingsAcceptedTitle = "Réservations acceptés";
+            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false).ToList();
+            string bookingsNotAcceptedTitle = "Réservations pas acceptés";
 
-        public BindingList<BookingDisplayModel> Bookings
-        {
-            get { return _bookings; }
-            set {
-                _bookings = value;
-                NotifyOfPropertyChange(() => Bookings);
-            }
-        }
+            ChartValues<double> chartValuesBookingsAccepted = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            ChartValues<double> chartValuesBookingsNotAccepted = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        private BookingDisplayModel _selectedBooking;
+            // Create LineSeries for SeriesCollection for chart values of accepted bookings
+            LoadBookingsChart(bookingsAccepted, bookingsAcceptedTitle, chartValuesBookingsAccepted);
 
-        public BookingDisplayModel SelectedBooking
-        {
-            get { return _selectedBooking; }
-            set {
-                _selectedBooking = value;
-                //SelectedBookingId = value.Id;
-                NotifyOfPropertyChange(() => SelectedBooking);
-                ViewBookingDetails();
-            }
-        }
+            // Create LineSeries for SeriesCollection for chart values of NOT accepted bookings
+            LoadBookingsChart(bookingsNotAccepted, bookingsNotAcceptedTitle, chartValuesBookingsNotAccepted);
 
-        //private int _selectedBookingId;
-
-        //public int SelectedBookingId
-        //{
-        //    get { return _selectedBookingId; }
-        //    set { 
-        //        _selectedBookingId = value;
-        //        NotifyOfPropertyChange(() => SelectedBookingId);
-        //    }
-        //}
-
-
-        public async void ViewBookingDetails()
-        {
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 600;
-            settings.Width = 600;
-            settings.SizeToContent = SizeToContent.Manual;
-            settings.ResizeMode = ResizeMode.CanResize;
-            settings.Title = "Détails de la réservation";
-
-            _bookingDetails.UpdateBookingDetails(SelectedBooking);
-            await _window.ShowDialogAsync(_bookingDetails, null, settings);
-
-        }
-
-        //public ISeries[] Series { get; set; } =
-        //{
-        //    new LineSeries<double>
-        //    {
-        //        Values = new double[] { 2, 1, 3, 5, 3, 4, 6 },
-        //        Fill = null
-        //    }
-        //};
-
-
-
-
-        private Func<double, string> _formatter;
-
-        public Func<double, string> Formatter
-        {
-            get { return _formatter; }
-            set
+            // Remove the default LineSeries object
+            foreach(var serie in SeriesCollection)
             {
-                _formatter = value => value.ToString("N");
+                if (serie.Title.Equals("0"))
+                {
+                    SeriesCollection.Remove(serie);
+                    break;
+                }
             }
         }
 
-        public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection
+        private void LoadBookingsChart(List<BookingDisplayModel> bookings, string title, ChartValues<double> chartValues)
         {
-            new LineSeries
-            {
-                Title="val1",
-                Values = new ChartValues<double> { 5, 10, 15, 20 }
-            },
-            new LineSeries
-            {
-                Title="val2",
-                Values = new ChartValues<double> { 10, 15, 20, 25 }
-            }
-        };
+            // Insert in Dictionnary (key: month, year | value: number of bookings) the number of bookings per month for the 12 previous months
+            var bookingsDic = bookings.GroupBy(x => new { Month = x.AppointmentDate.Month, Year = x.AppointmentDate.Year })
+                .ToDictionary(g => g.Key, g => g.Count());
 
-        public string[] BarLabels { get; set; } = new[] { "values 1", "values 2", "values 3", "values 4" };
-           
+            // Remove the current month of the current year, because it shouldn't be visible on the chart
+            if (bookingsDic.ContainsKey(new { DateTime.Now.Month, DateTime.Now.Year }))
+            {
+                bookingsDic.Remove(new { DateTime.Now.Month, DateTime.Now.Year });
+            }
+
+            // Replace the initialized 0 values from ChartValuesBookings and replace them with the values of my Dictionnary
+            int index = 1;
+            foreach (double value in chartValues)
+            {
+                foreach (var item in bookingsDic)
+                {
+                    if (item.Key.Month.Equals(index))
+                    {
+                        chartValues.Remove(value);
+                        chartValues.Add(item.Value);
+                    }
+                }
+                index++;
+            }
+
+            // Loop through each month of datetime.now -1 year (12 previous months)
+            // Add insert each month in a new list of months, get name in string of each month
+            List<int> monthsNumberOfPastYear = new List<int>();
+            List<string> monthsNameOfPastYear = new List<string>();
+            var lastYear = DateTime.Now.AddYears(-1);
+            DateTime todayDate = DateTime.Now.AddMonths(-1);
+            for (DateTime dt = lastYear; dt < todayDate; dt = dt.AddMonths(1))
+            {
+                monthsNumberOfPastYear.Add(dt.Month);
+                monthsNameOfPastYear.Add(getFullName(dt.Month));
+            }
+
+            int monthsCount = monthsNumberOfPastYear.Count();
+            for (int i = 0; i < monthsCount; i++)
+            {
+                BarLabels[i] = monthsNameOfPastYear.ElementAt(i);
+            }
+
+            SeriesCollection.Add(new LineSeries
+            {
+                Title = title,
+                Values = chartValues
+            });
+        }
+
+        private string getFullName(int month)
+        {
+            return CultureInfo.CurrentCulture.
+                DateTimeFormat.GetMonthName
+                (month);
+        }
+
     }
 }
