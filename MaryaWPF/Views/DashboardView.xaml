@@ -51,15 +51,15 @@
 
         <TextBlock Grid.Row="2" Grid.Column="1"
                    HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
-            Réservations du mois courant (à finir)
+            Réservations du mois courant
         </TextBlock>
         <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="2" Grid.Column="1"
                             Series="{Binding BookingsSeriesCollection}" LegendLocation="Bottom">
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Mois" Labels="{Binding BookingsBarLabels}"></lvc:Axis>
+                <lvc:Axis Title="Jours du mois actuel" Labels="{Binding BookingsBarLabels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Nombre de réservations" LabelFormatter="{Binding BookingsFormatter}"></lvc:Axis>
+                <lvc:Axis Title="Total en EUROS" LabelFormatter="{Binding BookingsFormatter}"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
 
