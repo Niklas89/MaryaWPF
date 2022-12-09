@@ -78,7 +78,6 @@ namespace MaryaWPF.ViewModels
                 selectedPartner
             };
             Partners = new BindingList<UserPartnerDisplayModel>(partnerList);
-            SelectedFirstName = selectedPartner.FirstName;
             SelectedLastName = selectedPartner.LastName;
 
         }
