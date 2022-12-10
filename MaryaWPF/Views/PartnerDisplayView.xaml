@@ -8,22 +8,15 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid Name="layer0">
-            <DataGrid x:Name="Partners" Cursor="Hand" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
+            <DataGrid x:Name="Partners" Cursor="Hand" AlternatingRowBackground = "#DBF227"  
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedPartner">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header = "Email" Binding = "{Binding Email}" />
+                    <DataGridTextColumn Header = "Email" Binding = "{Binding Email}"/>
                     <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
                     <DataGridTextColumn Header = "Nom" Binding = "{Binding LastName}" />
                     <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Partner.Phone}" />
                     <DataGridTextColumn Header = "Ville" Binding = "{Binding Partner.City}" />
                     <DataGridTextColumn Header = "Service" Binding = "{Binding Partner.CategoryName}" />
-                    <!--<Datagridtemplatecolumn header="view">
-                        --><!--<DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>  
-                                <Button Name="btnView" Content="View" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>--><!--
-                    </DataGridTemplateColumn>-->
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

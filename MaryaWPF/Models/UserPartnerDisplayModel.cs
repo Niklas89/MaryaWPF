@@ -16,6 +16,7 @@ namespace MaryaWPF.Models
         public bool IsActive { get; set; }
         public DateTime? DeactivatedDate { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public PartnerDisplayModel Partner { get; set; }
   
     }

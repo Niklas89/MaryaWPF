@@ -24,5 +24,10 @@ namespace MaryaWPF.Views
         {
             InitializeComponent();
         }
+
+        private void Partners_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

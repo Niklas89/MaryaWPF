@@ -7,7 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
@@ -20,39 +19,44 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ListBox x:Name="Partners" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" MinHeight="200" 
-                 MinWidth="150">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding FirstName}"/>
-                            <TextBlock Text="{Binding LastName}"/>
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Email: "/>
-                                    <TextBlock Text="{Binding Email}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
-                                    <TextBlock Text="Phone: "/>
-                                    <TextBlock Text="{Binding Partner.Phone}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-
         <ListBox Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
             <StackPanel Name="errorForm"></StackPanel>
-            <ListBoxItem Content="Prénom" />
-            <TextBox Height="23" Width="150" x:Name="SelectedFirstName" Text="" />
-            <ListBoxItem Content="Nom" />
-            <TextBox Height="23" Width="150" x:Name="SelectedLastName" Text="" />
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Prénom" />
+                    <TextBox Height="23" Width="150" x:Name="SelectedFirstName" Text="" />
+                </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Nom" />
+                <TextBox Height="23" Width="150" x:Name="SelectedLastName" Text="" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Date de naissance" />
+                <DatePicker SelectedDateFormat="Long" SelectedDate="3/23/09"
+                  DisplayDateStart="1/01/09" DisplayDateEnd="12/31/09" 
+                  FirstDayOfWeek="Monday" x:Name="SelectedBirthdate"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                    <ListBoxItem Content="Numéro de téléphone" />
+                <TextBox Height="23" Width="150" x:Name="SelectedPhone" Text="" />
+                </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Adresse email" />
+                <TextBox Height="23" Width="150" x:Name="SelectedEmail" Text="" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Adresse" />
+                <TextBox Height="23" Width="150" x:Name="SelectedAddress" Text="" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Ville" />
+                <TextBox Height="23" Width="150" x:Name="SelectedCity" Text="" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Code postal" />
+                <TextBox Height="23" Width="150" x:Name="SelectedPostalCode" Text="" />
+            </StackPanel>
             <Button x:Name="Edit">Modifier</Button>
         </ListBox>
-
-
         <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
     </Grid>
 </UserControl>
