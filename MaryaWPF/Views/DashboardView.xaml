@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MaryaWPF.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             mc:Ignorable="d" Background="White" FontSize="24"
+             mc:Ignorable="d" Background="White" FontSize="18"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
@@ -15,6 +15,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -49,17 +50,69 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Grid.Row="2" Grid.Column="1"
-                   HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
-            Réservations du mois courant
+        <!--<Grid Grid.Row="2" Grid.Column="1" Margin="20 20 20 50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>-->
+        <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0 0 0 50" Orientation="Horizontal">
+            <WrapPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="LineHeight" Value="20" />
+                    <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+                    <Setter Property="TextAlignment" Value="Center" />
+                </Style>
+                <Style TargetType="{x:Type materialDesign:Card}" BasedOn="{StaticResource {x:Type materialDesign:Card}}">
+                    <Setter Property="Height" Value="80" />
+                    <Setter Property="UniformCornerRadius" Value="0" />
+                    <Setter Property="UseLayoutRounding" Value="True" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Width" Value="300" />
+                    <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp16" />
+                </Style>
+            </WrapPanel.Resources>
+            <materialDesign:Card  Margin="20,20,0,0" 
+              materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
+                <TextBlock Text="{Binding TotalPriceAllBookings}" />
+            </materialDesign:Card>
+
+            <materialDesign:Card   Margin="20,20,0,0"
+              materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
+                <TextBlock Text="{Binding TotalPriceAcceptedBookings}" />
+            </materialDesign:Card>
+
+            <materialDesign:Card Margin="20,20,0,0"
+              materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
+                <TextBlock Text="{Binding TotalPriceNotAcceptedBookings}" />
+            </materialDesign:Card>
+
+            <Button Margin="40,20,0,0"
+              materialDesign:ElevationAssist.Elevation="Dp16"
+              Height="80"
+              Width="80"
+              Content="{Binding TotalRevenue}"
+              Style="{StaticResource MaterialDesignFloatingActionMiniButton}" />
+
+        </WrapPanel>
+        <!--</Grid>-->
+        
+
+        <TextBlock Grid.Row="3" Grid.Column="1"
+                   HorizontalAlignment="Center" FontSize="16" FontFamily="Segoe UI Light" Cursor="">
+            Réservations du mois courant (mettre ce graphique dans la page Activité)
         </TextBlock>
-        <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="2" Grid.Column="1"
+        <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="3" Grid.Column="1"
                             Series="{Binding BookingsSeriesCollection}" LegendLocation="Bottom">
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Jours du mois actuel" Labels="{Binding BookingsBarLabels}"></lvc:Axis>
+                <lvc:Axis Title="Jours du mois actuel" FontSize="14" Labels="{Binding BookingsBarLabels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Total en EUROS" LabelFormatter="{Binding BookingsFormatter}"></lvc:Axis>
+                <lvc:Axis Title="Nombre de réservations" FontSize="14" LabelFormatter="{Binding BookingsFormatter}"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
 

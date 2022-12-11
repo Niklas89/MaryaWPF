@@ -25,6 +25,54 @@ namespace MaryaWPF.ViewModels
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
 
+        private string _totalRevenue;
+
+        public string TotalRevenue
+        {
+            get { return _totalRevenue; }
+            set
+            {
+                _totalRevenue = value + " €";
+                NotifyOfPropertyChange(() => TotalRevenue);
+            }
+        }
+
+        private string _totalPriceAllBookings;
+
+        public string TotalPriceAllBookings
+        {
+            get { return _totalPriceAllBookings; }
+            set
+            {
+                _totalPriceAllBookings = "Réservations totales: " + value;
+                NotifyOfPropertyChange(() => TotalPriceAllBookings);
+            }
+        }
+
+        private string _totalPriceAcceptedBookings;
+
+        public string TotalPriceAcceptedBookings
+        {
+            get { return _totalPriceAcceptedBookings; }
+            set
+            {
+                _totalPriceAcceptedBookings = "Réservations accepteés: " + value;
+                NotifyOfPropertyChange(() => TotalPriceAcceptedBookings);
+            }
+        }
+
+        private string _totalPriceNotAcceptedBookings;
+
+        public string TotalPriceNotAcceptedBookings
+        {
+            get { return _totalPriceNotAcceptedBookings; }
+            set
+            {
+                _totalPriceNotAcceptedBookings = "Réservations en attente: " + value;
+                NotifyOfPropertyChange(() => TotalPriceNotAcceptedBookings);
+            }
+        }
+
         private BindingList<BookingDisplayModel> _bookings;
 
         public BindingList<BookingDisplayModel> Bookings
@@ -135,17 +183,21 @@ namespace MaryaWPF.ViewModels
 
         private async Task LoadBookings()
         {
+
             var bookingList = await _bookingEndpoint.GetAll();
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
             List<BookingDisplayModel> bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
 
             // List in order to view not accepted bookings in a datagrid that are superior to today
-            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && booking.AppointmentDate > DateTime.Now)
+            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && booking.AppointmentDate.Month == DateTime.Now.Month)
                 .OrderBy(b => b.AppointmentDate).ToList();
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
+            // List for the chart
             List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
             string bookingsAcceptedTitle = "Réservations acceptés";
+
+            // List for the chart
             List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
             string bookingsNotAcceptedTitle = "Réservations en attente";
 
@@ -177,6 +229,13 @@ namespace MaryaWPF.ViewModels
                     break;
                 }
             }
+
+            // Total Sum of bookings in Textblock above the chart
+            List<BookingDisplayModel> bookingsThisMonth = bookings.Where(x => x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            TotalPriceAllBookings = bookingsThisMonth.Count().ToString();
+            TotalPriceAcceptedBookings = bookingsAccepted.Count().ToString();
+            TotalPriceNotAcceptedBookings = bookingsNotAccepted.Count().ToString();
+            TotalRevenue = bookingsThisMonth.Sum(x => x.TotalPrice).ToString();
         }
 
         public async void ViewBookingDetails()
@@ -197,8 +256,10 @@ namespace MaryaWPF.ViewModels
         private void LoadBookingsChart(List<BookingDisplayModel> bookings, string title, ChartValues<double> chartValues)
         {
             // Insert in Dictionnary (key: days | value: sum of totalprice per day) the totalprice sum of each booking per day
-            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day)
-                .ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
+            // The sum of the TotalPrices
+            //var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
+            // The sum of the number of bookings
+            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Count());
 
 
             // Replace the initialized 0 values from ChartValuesBookings and replace them with the values of my Dictionnary

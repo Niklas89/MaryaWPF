@@ -151,6 +151,8 @@ namespace MaryaWPF.ViewModels
         public async Task Edit()
         {
             UserPartnerModel partner = _mapper.Map<UserPartnerModel>(SelectedPartner);
+
+            // Below lines are USEFUL for sending data to partnerEndPoint
             partner.FirstName = SelectedFirstName;
             partner.LastName = SelectedLastName;
             partner.Partner.Phone = SelectedPhone;
@@ -159,6 +161,18 @@ namespace MaryaWPF.ViewModels
             partner.Partner.City = SelectedCity;
             partner.Partner.PostalCode = SelectedPostalCode;
             partner.Partner.Birthdate = SelectedBirthdate;
+
+            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
+            // and in PartnerDisplayModel
+            SelectedPartner.FirstName = SelectedFirstName;
+            SelectedPartner.LastName = SelectedLastName;
+            SelectedPartner.Email = SelectedEmail;
+            SelectedPartner.Partner.Phone = SelectedPhone;
+            SelectedPartner.Partner.Address = SelectedAddress;
+            SelectedPartner.Partner.PostalCode = SelectedPostalCode;
+            SelectedPartner.Partner.City = SelectedCity;
+            SelectedPartner.Partner.Birthdate = SelectedBirthdate;
+
             await _partnerEndpoint.UpdatePartner(partner);
         }
 
