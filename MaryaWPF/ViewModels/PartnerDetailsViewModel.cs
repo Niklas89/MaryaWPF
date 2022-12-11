@@ -45,13 +45,13 @@ namespace MaryaWPF.ViewModels
             _partnerEndpoint = partnerEndpoint;
             _mapper = mapper;
         }
-
         private string _selectedFirstName;
 
         public string SelectedFirstName
         {
             get { return _selectedFirstName; }
-            set { 
+            set
+            {
                 _selectedFirstName = value;
                 NotifyOfPropertyChange(() => SelectedFirstName);
             }
@@ -69,6 +69,66 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private string _selectedPhone;
+        public string SelectedPhone
+        {
+            get { return _selectedPhone; }
+            set
+            {
+                _selectedPhone = value;
+                NotifyOfPropertyChange(() => SelectedPhone);
+            }
+        }
+        private string _selectedEmail;
+        public string SelectedEmail
+        {
+            get { return _selectedEmail; }
+            set
+            {
+                _selectedEmail = value;
+                NotifyOfPropertyChange(() => SelectedEmail);
+            }
+        }
+        private string _selectedAddress;
+        public string SelectedAddress
+        {
+            get { return _selectedAddress; }
+            set
+            {
+                _selectedAddress = value;
+                NotifyOfPropertyChange(() => SelectedAddress);
+            }
+        }
+        private string _selectedCity;
+        public string SelectedCity
+        {
+            get { return _selectedCity; }
+            set
+            {
+                _selectedCity = value;
+                NotifyOfPropertyChange(() => SelectedCity);
+            }
+        }
+        private string _selectedPostalCode;
+        public string SelectedPostalCode
+        {
+            get { return _selectedPostalCode; }
+            set
+            {
+                _selectedPostalCode = value;
+                NotifyOfPropertyChange(() => SelectedPostalCode);
+            }
+        }
+        private DateTime? _selectedBirthdate;
+        public DateTime? SelectedBirthdate
+        {
+            get { return _selectedBirthdate; }
+            set { 
+                _selectedBirthdate = value;
+                NotifyOfPropertyChange(() => SelectedBirthdate); 
+            }
+        }
+
 
         public void UpdatePartnerDetails(UserPartnerDisplayModel selectedPartner)
         {
@@ -78,8 +138,14 @@ namespace MaryaWPF.ViewModels
                 selectedPartner
             };
             Partners = new BindingList<UserPartnerDisplayModel>(partnerList);
+            SelectedFirstName = selectedPartner.FirstName;
             SelectedLastName = selectedPartner.LastName;
-
+            SelectedPhone = selectedPartner.Partner.Phone;
+            SelectedEmail = selectedPartner.Email;
+            SelectedAddress = selectedPartner.Partner.Address;
+            SelectedCity= selectedPartner.Partner.City;
+            SelectedPostalCode= selectedPartner.Partner.PostalCode;
+            SelectedBirthdate = selectedPartner.Partner.Birthdate;
         }
 
         public async Task Edit()
@@ -87,6 +153,12 @@ namespace MaryaWPF.ViewModels
             UserPartnerModel partner = _mapper.Map<UserPartnerModel>(SelectedPartner);
             partner.FirstName = SelectedFirstName;
             partner.LastName = SelectedLastName;
+            partner.Partner.Phone = SelectedPhone;
+            partner.Email = SelectedEmail;
+            partner.Partner.Address = SelectedAddress;
+            partner.Partner.City = SelectedCity;
+            partner.Partner.PostalCode = SelectedPostalCode;
+            partner.Partner.Birthdate = SelectedBirthdate;
             await _partnerEndpoint.UpdatePartner(partner);
         }
 
