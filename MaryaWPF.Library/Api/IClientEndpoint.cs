@@ -7,5 +7,7 @@ namespace MaryaWPF.Library.Api
     public interface IClientEndpoint
     {
         Task<List<UserClientModel>> GetAll();
+
+        Task UpdateClient(UserClientModel client);
     }
 }

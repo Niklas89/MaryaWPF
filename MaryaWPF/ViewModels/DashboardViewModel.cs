@@ -6,37 +6,92 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Caliburn.Micro;
-using MaryaWPF.Views;
+using LiveCharts;
+using LiveCharts.Wpf;
+using System.Linq;
+using System.Globalization;
 
 namespace MaryaWPF.ViewModels
 {
     public class DashboardViewModel : Screen
     {
         IBookingEndpoint _bookingEndpoint;
+        IClientEndpoint _clientEndpoint;
+        IPartnerEndpoint _partnerEndpoint;
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
 
-        public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status, 
+        private BindingList<BookingDisplayModel> _bookings;
+
+        public BindingList<BookingDisplayModel> Bookings
+        {
+            get { return _bookings; }
+            set
+            {
+                _bookings = value;
+                NotifyOfPropertyChange(() => Bookings);
+            }
+        }
+
+        private BookingDisplayModel _selectedBooking;
+
+        public BookingDisplayModel SelectedBooking
+        {
+            get { return _selectedBooking; }
+            set
+            {
+                _selectedBooking = value;
+                //SelectedBookingId = value.Id;
+                NotifyOfPropertyChange(() => SelectedBooking);
+                ViewBookingDetails();
+            }
+        }
+
+
+        // BOOKINGS CHART =======================================
+        private Func<double, string> _bookingsFormatter;
+
+        public Func<double, string> BookingsFormatter
+        {
+            get { return _bookingsFormatter; }
+            set
+            {
+                _bookingsFormatter = value => value.ToString("N");
+            }
+        }
+
+        //public string[] BarLabels { get; set; } = new[] { "janvier", "février", "mars", "avril" };
+        public string[] BookingsBarLabels { get; set; }
+
+        //public SeriesCollection SeriesCollection { get; set; }
+
+        public SeriesCollection BookingsSeriesCollection { get; set; } = new SeriesCollection
+        {
+            new LineSeries
+            {
+                Title="0",
+                Values = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+            }
+        };
+
+
+        public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
             IWindowManager window, BookingDetailsViewModel bookingDetails)
         {
-            _bookingEndpoint= bookingEndpoint;
-            _mapper= mapper;
+            _bookingEndpoint = bookingEndpoint;
+            _mapper = mapper;
             _status = status;
-            _bookingDetails = bookingDetails;
             _window = window;
+            _bookingDetails = bookingDetails;
         }
 
         // When the page is loaded then we'll call OnViewLoaded
         // async void and not async Task because it's an event
-        protected override async void OnViewLoaded(object view) 
+        protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
             try
@@ -54,16 +109,17 @@ namespace MaryaWPF.ViewModels
                 // have multiple copies of StatusInfoViewModel inside the same class
                 var info = IoC.Get<StatusInfoViewModel>();
 
-                if(ex.Message == "Forbidden")
+                if (ex.Message == "Forbidden")
                 {
                     _status.UpdateMessage("Accès refusé", "Vous n'avez pas l'autorisation de voir les réservations sur l'application bureautique.");
                     await _window.ShowDialogAsync(_status, null, settings);
-                } else
+                }
+                else
                 {
                     _status.UpdateMessage("Fatal Exception", ex.Message);
                     await _window.ShowDialogAsync(_status, null, settings);
                 }
-                
+
 
                 /* second message to show:
                 _status.UpdateMessage("Accès refusé", "Vous n'avez pas l'autorisation de vous connecter sur l'application bureautique.");
@@ -74,49 +130,54 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+
+        // BOOKINGS CHART =======================================================================================================
+
         private async Task LoadBookings()
         {
             var bookingList = await _bookingEndpoint.GetAll();
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
-            var bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
-            Bookings = new BindingList<BookingDisplayModel>(bookings);
-        }
+            List<BookingDisplayModel> bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
 
-        private BindingList<BookingDisplayModel> _bookings;
+            // List in order to view not accepted bookings in a datagrid that are superior to today
+            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && booking.AppointmentDate > DateTime.Now)
+                .OrderBy(b => b.AppointmentDate).ToList();
+            Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
-        public BindingList<BookingDisplayModel> Bookings
-        {
-            get { return _bookings; }
-            set { 
-                _bookings = value;
-                NotifyOfPropertyChange(() => Bookings);
+            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            string bookingsAcceptedTitle = "Réservations acceptés";
+            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            string bookingsNotAcceptedTitle = "Réservations en attente";
+
+            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+            BookingsBarLabels = new string[daysOfCurrentMonth];
+
+            ChartValues<double> chartValuesBookingsAccepted = new ChartValues<double>();
+            ChartValues<double> chartValuesBookingsNotAccepted = new ChartValues<double>();
+
+            for(int i = 1; i <= daysOfCurrentMonth; i++)
+            {
+                chartValuesBookingsAccepted.Add(0);
+                chartValuesBookingsNotAccepted.Add(0);
+            }
+
+            // Create LineSeries for SeriesCollection for chart values of accepted bookings
+            LoadBookingsChart(bookingsAccepted, bookingsAcceptedTitle, chartValuesBookingsAccepted);
+
+            // Create LineSeries for SeriesCollection for chart values of NOT accepted bookings
+            LoadBookingsChart(bookingsNotAccepted, bookingsNotAcceptedTitle, chartValuesBookingsNotAccepted);
+
+            // Remove the default LineSeries object
+            foreach(var serie in BookingsSeriesCollection)
+            {
+                if (serie.Title.Equals("0"))
+                {
+                    BookingsSeriesCollection.Remove(serie);
+                    break;
+                }
             }
         }
-
-        private BookingDisplayModel _selectedBooking;
-
-        public BookingDisplayModel SelectedBooking
-        {
-            get { return _selectedBooking; }
-            set { 
-                _selectedBooking = value;
-                //SelectedBookingId = value.Id;
-                NotifyOfPropertyChange(() => SelectedBooking);
-                ViewBookingDetails();
-            }
-        }
-
-        //private int _selectedBookingId;
-
-        //public int SelectedBookingId
-        //{
-        //    get { return _selectedBookingId; }
-        //    set { 
-        //        _selectedBookingId = value;
-        //        NotifyOfPropertyChange(() => SelectedBookingId);
-        //    }
-        //}
-
 
         public async void ViewBookingDetails()
         {
@@ -132,5 +193,42 @@ namespace MaryaWPF.ViewModels
             await _window.ShowDialogAsync(_bookingDetails, null, settings);
 
         }
+
+        private void LoadBookingsChart(List<BookingDisplayModel> bookings, string title, ChartValues<double> chartValues)
+        {
+            // Insert in Dictionnary (key: days | value: sum of totalprice per day) the totalprice sum of each booking per day
+            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day)
+                .ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
+
+
+            // Replace the initialized 0 values from ChartValuesBookings and replace them with the values of my Dictionnary
+            int index = 1;
+            foreach (double value in chartValues)
+            {
+                foreach (var item in bookingsDic)
+                {
+                    if (item.Key.Equals(index))
+                    {
+                        chartValues.Remove(value);
+                        chartValues.Insert(index, item.Value);
+                    }
+                }
+                index++;
+            }
+
+            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            var test = BookingsBarLabels;
+            for (int i = 1; i <= daysOfCurrentMonth; i++)
+            {
+                BookingsBarLabels[i-1] = i.ToString();
+            }
+
+            BookingsSeriesCollection.Add(new LineSeries
+            {
+                Title = title,
+                Values = chartValues
+            });
+        }
+
     }
 }

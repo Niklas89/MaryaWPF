@@ -4,21 +4,40 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaryaWPF.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Background="White" FontSize="24"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid Name="layer0">
-            <DataGrid x:Name="Clients" AlternatingRowBackground = "LightBlue"  
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
+                   HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
+            Liste des clients
+        </TextBlock>
+
+        <DataGrid x:Name="Clients" Cursor="Hand" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedClient">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header = "Email" Binding = "{Binding Email}" />
-                    <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
-                    <DataGridTextColumn Header = "Nom" Binding = "{Binding LastName}" />
-                    <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Client.Phone}" />
-                    <DataGridTextColumn Header = "Ville" Binding = "{Binding Client.City}" />
-                    <DataGridTextColumn Header = "Code Postal" Binding = "{Binding Client.PostalCode}" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Email" Binding = "{Binding Email}" />
+                <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
+                <DataGridTextColumn Header = "Nom" Binding = "{Binding LastName}" />
+                <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Client.Phone}" />
+                <DataGridTextColumn Header = "Adresse" Binding = "{Binding Client.Address}" />
+                <DataGridTextColumn Header = "Code Postal" Binding = "{Binding Client.PostalCode}" />
+                <DataGridTextColumn Header = "Ville" Binding = "{Binding Client.City}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

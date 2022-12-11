@@ -8,36 +8,70 @@
         mc:Ignorable="d" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
+        Background="white"
         FontFamily="{StaticResource MaterialDesignFont}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         Title="Marya Back-Office" Height="780" Width="1280">
+
     <DockPanel>
+        <!--Background="{DynamicResource MaterialDesignPaper}" in <window> tag -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
 
-        <Menu DockPanel.Dock="Top" FontSize="18" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-            <MenuItem Header="_Dashboard">
-                <MenuItem x:Name="Dashboard" Header="Tableau de bord" />
-            </MenuItem>
-            <MenuItem Header="_Réservations">
-                <MenuItem x:Name="BookingManagement" Header="Liste des réservations" />
-            </MenuItem>
-            <MenuItem Header="_Partenaires">
-                <MenuItem x:Name="PartnerManagement" Header="Liste des partenaires" />
-            </MenuItem>
-            <MenuItem Header="_Clients">
-                <MenuItem x:Name="ClientManagement" Header="Liste des clients" />
-            </MenuItem>
-            <MenuItem Header="_Compte" >
-                <MenuItem x:Name="LogOut" Header="Déconnecter" />
-            </MenuItem>
-        </Menu>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                  Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+            <materialDesign:ColorZone
+              Padding="16">
+                        <DockPanel>
+                        <materialDesign:PopupBox DockPanel.Dock="Right"
+                                     PlacementMode="BottomAndAlignRightEdges"
+                                     StaysOpen="False">
+                            <StackPanel>
+                                <Grid Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Button Grid.Row="0" Content="Profil" />
+                                    <Separator Grid.Row="1" Grid.ColumnSpan="2"/>
+                                    <Button Grid.Row="2" Grid.Column="0" Content="Déconnection" Command="{Binding Path=LogoutButtonCommand}" />
+                                    <materialDesign:PackIcon Margin="0 15 5 0" Grid.Row="2"  Grid.Column="1" Kind="Logout" />
+                                </Grid>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+
+                        <StackPanel
+                  Orientation="Horizontal">
+                                <!--<ToggleButton
+                    Style="{StaticResource MaterialDesignHamburgerToggleButton}" />-->
+                                <TextBlock
+                                Margin="16,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="Marya Back-Office d'Administration" />
+                            </StackPanel>
+                        </DockPanel>
+            </materialDesign:ColorZone>
+        </Grid>
 
 
-        <!--
-        <StackPanel Orientation="Horizontal" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-            <Grid Width="80" Background="#FFFCF3">
+        <StackPanel  Grid.Row="1" Grid.Column="0"
+            Orientation="Horizontal" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                <materialDesign:ColorZone>
+               <Grid Width="80">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -47,50 +81,53 @@
                     Height="56"
                     Margin="0,40,0,80"
                     materialDesign:ButtonAssist.CornerRadius="16"
-                    Background="#AEF0D6"
+                    Background="#015958"
                     BorderThickness="0"
-                    Foreground="#002117"
+                    Foreground="#FFFFFF"
+                    Command="{Binding Path=HomeButtonCommand}"
                     Style="{StaticResource MaterialDesignFlatMidBgButton}">
                     <materialDesign:PackIcon Width="24"
                                        Height="24"
-                                       Kind="PencilOutline" />
+                                       Kind="HomeOutline" />
                 </Button>
-                   -->
+                   
 
                 <!-- <ListBox ItemsSource="{Binding MenuList}"> -->
-                <!--
-                <Viewbox Grid.Row="1"
-                     Width="80"
-                     VerticalAlignment="Top"
-                     Stretch="Uniform">
-                    <ListBox Grid.Row="1"
-                        x:Name="MenuItems"
-                       SelectedIndex="0">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesign3.NavigationRailListBoxItem}">
-                                <Setter Property="Background" Value="#E6E4C0" />
-                                <Setter Property="Foreground" Value="#48473A" />
-                                <Setter Property="materialDesign:BadgedAssist.Badge" Value="{Binding Notification}" />
-                                <Setter Property="materialDesign:BadgedAssist.BadgeBackground" Value="#930006" />
-                                <Setter Property="materialDesign:BadgedAssist.BadgeForeground" Value="#FFDAD4" />
-                                <Setter Property="materialDesign:BadgedAssist.IsMiniBadge" Value="True" />
-                                <Setter Property="materialDesign:NavigationRailAssist.SelectedIcon" Value="{Binding SelectedIcon}" />
-                                <Setter Property="materialDesign:NavigationRailAssist.UnselectedIcon" Value="{Binding UnselectedIcon}" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.Resources>
-                            <DataTemplate DataType="{x:Type models:ShellDisplayModel}">
-                                <TextBlock Text="{Binding Title}" />
-                            </DataTemplate>
-                        </ListBox.Resources>
-                    </ListBox>
-                </Viewbox>
-            </Grid>
-        </StackPanel> -->
-        
-        
-        <Grid>
+                        <Viewbox Grid.Row="1"
+                             Width="80"
+                             VerticalAlignment="Center"
+                             Stretch="Uniform" Margin="0 0 0 50">
+                            <ListBox Grid.Row="1"
+                                x:Name="MenuItems"
+                               SelectedIndex="0" SelectedItem="{Binding SelectedMenuItem}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesign3.NavigationRailListBoxItem}">
+                                        <Setter Property="Background" Value="#E6E4C0" />
+                                        <Setter Property="Foreground" Value="#48473A" />
+                                        <Setter Property="materialDesign:BadgedAssist.Badge" Value="{Binding Notification}" />
+                                        <Setter Property="materialDesign:BadgedAssist.BadgeBackground" Value="#930006" />
+                                        <Setter Property="materialDesign:BadgedAssist.BadgeForeground" Value="#FFDAD4" />
+                                        <Setter Property="materialDesign:BadgedAssist.IsMiniBadge" Value="True" />
+                                        <Setter Property="materialDesign:NavigationRailAssist.SelectedIcon" Value="{Binding SelectedIcon}" />
+                                        <Setter Property="materialDesign:NavigationRailAssist.UnselectedIcon" Value="{Binding UnselectedIcon}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.Resources>
+                                    <DataTemplate DataType="{x:Type models:ShellDisplayModel}">
+                                        <TextBlock Text="{Binding Title}" />
+                                    </DataTemplate>
+                                </ListBox.Resources>
+                            </ListBox>
+                        </Viewbox>
+
+                    </Grid>
+                </materialDesign:ColorZone>
+            </StackPanel>
+
+
+        <Grid Grid.Row="1" Grid.Column="1">
             <ContentControl x:Name="ActiveItem" Margin="20 5 20 20" />
+        </Grid>
         </Grid>
     </DockPanel>
 </Window>

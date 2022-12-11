@@ -9,6 +9,7 @@
 	  <None Remove="logo.png" />
 	  <None Remove="logo1.png" />
 	  <None Remove="Resources\logo.ico" />
+	  <None Remove="Resources\logo100h.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Include="Resources\logo.ico" />
@@ -17,6 +18,8 @@
 	  <PackageReference Include="AutoMapper" Version="12.0.0" />
 	  <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
 	  <PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
+	  <PackageReference Include="LiveCharts" Version="0.9.7" />
+	  <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
 	  <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
 	  <PackageReference Include="MaterialDesignColors" Version="2.0.9" />
 	  <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
