@@ -8,5 +8,6 @@ namespace MaryaWPF.Library.Api
     {
         Task<List<UserPartnerModel>> GetAll();
         Task UpdatePartner(UserPartnerModel partner);
+        Task<List<CategoryModel>> GetAllCategories();
     }
 }

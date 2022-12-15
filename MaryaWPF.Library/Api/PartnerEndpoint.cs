@@ -46,5 +46,21 @@ namespace MaryaWPF.Library.Api
                 }
             }
         }
+
+        public async Task<List<CategoryModel>> GetAllCategories()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/categories"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<CategoryModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

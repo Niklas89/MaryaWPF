@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
 using MaryaWPF.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,24 @@ namespace MaryaWPF.ViewModels
     {
         IPartnerEndpoint _partnerEndpoint;
         IMapper _mapper;
+
+        public PartnerDetailsViewModel(IPartnerEndpoint partnerEndpoint, IMapper mapper)
+        {
+            _partnerEndpoint = partnerEndpoint;
+            _mapper = mapper;
+            _categories = new Dictionary<int, string>();
+        }
+
+        // Categories: needed when you select a category to change in the combobox (AvailableCategories), 
+        // we will need to get the Id of the corresponding categoryName from this Dictionary
+        private Dictionary<int, string> _categories;
+
+        public Dictionary<int, string> Categories
+        {
+            get { return _categories; }
+            set { _categories = value; }
+        }
+
         private UserPartnerDisplayModel _selectedPartner;
         public UserPartnerDisplayModel SelectedPartner
         {
@@ -39,12 +58,7 @@ namespace MaryaWPF.ViewModels
                 NotifyOfPropertyChange(() => Partners);
             }
         }
-
-        public PartnerDetailsViewModel(IPartnerEndpoint partnerEndpoint, IMapper mapper)
-        {
-            _partnerEndpoint = partnerEndpoint;
-            _mapper = mapper;
-        }
+        
         private string _selectedFirstName;
 
         public string SelectedFirstName
@@ -129,8 +143,86 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private int _selectedIdCategory;
 
-        public void UpdatePartnerDetails(UserPartnerDisplayModel selectedPartner)
+        public int SelectedIdCategory
+        {
+            get { return _selectedIdCategory; }
+            set
+            {
+                _selectedIdCategory = value;
+                NotifyOfPropertyChange(() => SelectedIdCategory);
+            }
+        }
+
+        private string _selectedCategoryName;
+
+        public string SelectedCategoryName
+        {
+            get { return _selectedCategoryName; }
+            set
+            {
+                _selectedCategoryName = value;
+                NotifyOfPropertyChange(() => SelectedCategoryName);
+            }
+        }
+
+        private string _selectedAvailableCategory;
+
+        public string SelectedAvailableCategory
+        {
+            get { return _selectedAvailableCategory; }
+            set
+            {
+                _selectedAvailableCategory = value;
+                SelectedCategoryName = value;
+                NotifyOfPropertyChange(() => SelectedAvailableCategory);
+                ChangeSelectedCategory();
+            }
+        }
+
+        // AvailableCategories for the combobox
+        private BindingList<string> _availableCategories = new BindingList<string>();
+
+        public BindingList<string> AvailableCategories
+        {
+            get { return _availableCategories; }
+            set 
+            {
+                _availableCategories = value;
+                NotifyOfPropertyChange(() => AvailableCategories);
+            }
+        }
+
+        private void ChangeSelectedCategory()
+        {
+            foreach (KeyValuePair<int, string> category in Categories)
+            {
+                if(SelectedCategoryName.Equals(category.Value))
+                {
+                    SelectedIdCategory = category.Key;
+                }
+            }
+        }
+
+        // Load the categories displayed in the combobox
+        private async Task LoadCategories()
+        {
+            // If the Dictionary of categories is null: add all categories
+            // The list of categories will be null if a modal is opened for the first time
+            if (Categories == null || Categories.Count < 1)
+            {
+                var categories = await _partnerEndpoint.GetAllCategories();
+                foreach (var category in categories)
+                {
+                    AvailableCategories.Add(category.Name);
+                    Categories.Add(category.Id, category.Name);
+                }
+            }   
+        }
+
+        // Call this method when you click on a partner
+        public async Task UpdatePartnerDetails(UserPartnerDisplayModel selectedPartner)
         {
             _selectedPartner = selectedPartner;
             List<UserPartnerDisplayModel> partnerList = new List<UserPartnerDisplayModel>
@@ -146,8 +238,15 @@ namespace MaryaWPF.ViewModels
             SelectedCity= selectedPartner.Partner.City;
             SelectedPostalCode= selectedPartner.Partner.PostalCode;
             SelectedBirthdate = selectedPartner.Partner.Birthdate;
+            SelectedIdCategory= selectedPartner.Partner.IdCategory;
+            SelectedCategoryName = selectedPartner.Partner.CategoryName;
+            SelectedAvailableCategory = selectedPartner.Partner.CategoryName;
+
+            // Load the categories displayed in the combobox
+            await LoadCategories();
         }
 
+        // Call this method when you submit the edit form of a partner
         public async Task Edit()
         {
             UserPartnerModel partner = _mapper.Map<UserPartnerModel>(SelectedPartner);
@@ -161,6 +260,8 @@ namespace MaryaWPF.ViewModels
             partner.Partner.City = SelectedCity;
             partner.Partner.PostalCode = SelectedPostalCode;
             partner.Partner.Birthdate = SelectedBirthdate;
+            partner.Partner.IdCategory = SelectedIdCategory;
+            partner.Partner.CategoryName = SelectedCategoryName;
 
             // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
             // and in PartnerDisplayModel
@@ -172,6 +273,8 @@ namespace MaryaWPF.ViewModels
             SelectedPartner.Partner.PostalCode = SelectedPostalCode;
             SelectedPartner.Partner.City = SelectedCity;
             SelectedPartner.Partner.Birthdate = SelectedBirthdate;
+            SelectedPartner.Partner.IdCategory = SelectedIdCategory;
+            SelectedPartner.Partner.CategoryName = SelectedCategoryName;
 
             await _partnerEndpoint.UpdatePartner(partner);
         }

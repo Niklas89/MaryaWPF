@@ -124,7 +124,7 @@ namespace MaryaWPF.ViewModels
             settings.ResizeMode = ResizeMode.CanResize;
             settings.Title = "Détails du partenaire";
 
-            _partnerDetails.UpdatePartnerDetails(SelectedPartner);
+            await _partnerDetails.UpdatePartnerDetails(SelectedPartner);
             await _window.ShowDialogAsync(_partnerDetails, null, settings);
 
         }

@@ -55,6 +55,10 @@
                 <ListBoxItem Content="Code postal" />
                 <TextBox Height="23" Width="150" x:Name="SelectedPostalCode" Text="" />
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <ListBoxItem Content="Catégories" />
+                <ComboBox x:Name="AvailableCategories" />
+            </StackPanel>
             <Button x:Name="Edit">Modifier</Button>
         </ListBox>
         <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
