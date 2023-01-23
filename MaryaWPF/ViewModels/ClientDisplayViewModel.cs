@@ -125,6 +125,7 @@ namespace MaryaWPF.ViewModels
             await _window.ShowDialogAsync(_clientDetails, null, settings);
 
         }
+
     }
 }
 
