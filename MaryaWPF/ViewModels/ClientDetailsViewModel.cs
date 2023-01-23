@@ -171,6 +171,7 @@ namespace MaryaWPF.ViewModels
             SelectedClient.Client.City = SelectedCity;
 
             await _clientEndpoint.UpdateClient(client);
+            Close();
         }
 
         public void Close()

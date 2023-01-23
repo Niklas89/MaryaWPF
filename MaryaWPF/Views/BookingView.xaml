@@ -54,11 +54,11 @@
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />
-                <DataGridTextColumn Header = "NbHours" Binding = "{Binding NbHours}" />
+                <DataGridTextColumn Header = "Nombre d'heures" Binding = "{Binding NbHours}" />
                 <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" />
-                <DataGridTextColumn Header = "Price" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
-                <DataGridTextColumn Header = "ServiceDone" Binding = "{Binding ServiceDone}" />
-                <DataGridTextColumn Header = "IsPaid" Binding = "{Binding IsPaid}" />
+                <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
+                <DataGridTextColumn Header = "Service réalisé" Binding = "{Binding ServiceDone}" />
+                <DataGridTextColumn Header = "Service payé" Binding = "{Binding IsPaid}" />
                 <!--<DataGridTemplateColumn Header="View">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
