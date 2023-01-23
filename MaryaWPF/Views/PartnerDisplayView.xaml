@@ -7,18 +7,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid Name="layer0">
-            <DataGrid x:Name="Partners" Cursor="Hand" AlternatingRowBackground = "#DBF227"  
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
+                   HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
+            Liste des partenaires
+        </TextBlock>
+
+        <DataGrid x:Name="Partners" Cursor="Hand" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedPartner">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header = "Email" Binding = "{Binding Email}"/>
-                    <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
-                    <DataGridTextColumn Header = "Nom" Binding = "{Binding LastName}" />
-                    <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Partner.Phone}" />
-                    <DataGridTextColumn Header = "Ville" Binding = "{Binding Partner.City}" />
-                    <DataGridTextColumn Header = "Service" Binding = "{Binding Partner.CategoryName}" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Email" Binding = "{Binding Email}"/>
+                <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
+                <DataGridTextColumn Header = "Nom" Binding = "{Binding LastName}" />
+                <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Partner.Phone}" />
+                <DataGridTextColumn Header = "Ville" Binding = "{Binding Partner.City}" />
+                <DataGridTextColumn Header = "Service" Binding = "{Binding Partner.CategoryName}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
+
