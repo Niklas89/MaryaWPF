@@ -18,8 +18,6 @@ namespace MaryaWPF.ViewModels
     public class DashboardViewModel : Screen
     {
         IBookingEndpoint _bookingEndpoint;
-        IClientEndpoint _clientEndpoint;
-        IPartnerEndpoint _partnerEndpoint;
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
@@ -100,33 +98,6 @@ namespace MaryaWPF.ViewModels
         }
 
 
-        // BOOKINGS CHART =======================================
-        private Func<double, string> _bookingsFormatter;
-
-        public Func<double, string> BookingsFormatter
-        {
-            get { return _bookingsFormatter; }
-            set
-            {
-                _bookingsFormatter = value => value.ToString("N");
-            }
-        }
-
-        //public string[] BarLabels { get; set; } = new[] { "janvier", "février", "mars", "avril" };
-        public string[] BookingsBarLabels { get; set; }
-
-        //public SeriesCollection SeriesCollection { get; set; }
-
-        public SeriesCollection BookingsSeriesCollection { get; set; } = new SeriesCollection
-        {
-            new LineSeries
-            {
-                Title="0",
-                Values = new ChartValues<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-            }
-        };
-
-
         public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
             IWindowManager window, BookingDetailsViewModel bookingDetails)
         {
@@ -195,40 +166,9 @@ namespace MaryaWPF.ViewModels
 
             // List for the chart
             List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
-            string bookingsAcceptedTitle = "Réservations acceptés";
 
             // List for the chart
             List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
-            string bookingsNotAcceptedTitle = "Réservations en attente";
-
-            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-
-            BookingsBarLabels = new string[daysOfCurrentMonth];
-
-            ChartValues<double> chartValuesBookingsAccepted = new ChartValues<double>();
-            ChartValues<double> chartValuesBookingsNotAccepted = new ChartValues<double>();
-
-            for(int i = 1; i <= daysOfCurrentMonth; i++)
-            {
-                chartValuesBookingsAccepted.Add(0);
-                chartValuesBookingsNotAccepted.Add(0);
-            }
-
-            // Create LineSeries for SeriesCollection for chart values of accepted bookings
-            LoadBookingsChart(bookingsAccepted, bookingsAcceptedTitle, chartValuesBookingsAccepted);
-
-            // Create LineSeries for SeriesCollection for chart values of NOT accepted bookings
-            LoadBookingsChart(bookingsNotAccepted, bookingsNotAcceptedTitle, chartValuesBookingsNotAccepted);
-
-            // Remove the default LineSeries object
-            foreach(var serie in BookingsSeriesCollection)
-            {
-                if (serie.Title.Equals("0"))
-                {
-                    BookingsSeriesCollection.Remove(serie);
-                    break;
-                }
-            }
 
             // Total Sum of bookings in Textblock above the chart
             List<BookingDisplayModel> bookingsThisMonth = bookings.Where(x => x.AppointmentDate.Month == DateTime.Now.Month).ToList();
@@ -251,44 +191,6 @@ namespace MaryaWPF.ViewModels
             _bookingDetails.UpdateBookingDetails(SelectedBooking);
             await _window.ShowDialogAsync(_bookingDetails, null, settings);
 
-        }
-
-        private void LoadBookingsChart(List<BookingDisplayModel> bookings, string title, ChartValues<double> chartValues)
-        {
-            // Insert in Dictionnary (key: days | value: sum of totalprice per day) the totalprice sum of each booking per day
-            // The sum of the TotalPrices
-            //var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
-            // The sum of the number of bookings
-            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Count());
-
-
-            // Replace the initialized 0 values from ChartValuesBookings and replace them with the values of my Dictionnary
-            int index = 1;
-            foreach (double value in chartValues)
-            {
-                foreach (var item in bookingsDic)
-                {
-                    if (item.Key.Equals(index))
-                    {
-                        chartValues.Remove(value);
-                        chartValues.Insert(index, item.Value);
-                    }
-                }
-                index++;
-            }
-
-            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            var test = BookingsBarLabels;
-            for (int i = 1; i <= daysOfCurrentMonth; i++)
-            {
-                BookingsBarLabels[i-1] = i.ToString();
-            }
-
-            BookingsSeriesCollection.Add(new LineSeries
-            {
-                Title = title,
-                Values = chartValues
-            });
         }
 
     }

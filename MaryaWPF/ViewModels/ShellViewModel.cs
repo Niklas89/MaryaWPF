@@ -65,7 +65,7 @@ namespace MaryaWPF.ViewModels
         // Command for the home button click
         public HomeButtonCommand HomeButtonCommand { get; set; }
 
-        // Command for the home button click
+        // Command for the logout button click
         public LogoutButtonCommand LogoutButtonCommand { get; set; }
 
 
