@@ -17,6 +17,7 @@ using System.Threading;
 using MaryaWPF.Commands;
 using System.Collections;
 using MaterialDesignColors.Recommended;
+using System.Windows.Markup;
 
 namespace MaryaWPF.ViewModels
 {
@@ -113,14 +114,39 @@ namespace MaryaWPF.ViewModels
             }
         };
 
+        // Month displayed on top of the page
+        private DateTime _dateMonth;
+        public DateTime DateMonth
+        {
+            get { return _dateMonth; }
+            set
+            {
+                _dateMonth = value;
+                NotifyOfPropertyChange(() => DateMonth);
+            }
+        }
 
-        public StatsViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
+        private bool _isCurrentMonth;
+        public bool IsCurrentMonth
+        {
+            get { return _isCurrentMonth; }
+            set
+            {
+                _isCurrentMonth = value;
+                NotifyOfPropertyChange(() => IsCurrentMonth);
+            }
+        }
+
+
+    public StatsViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
             IWindowManager window)
         {
             _bookingEndpoint = bookingEndpoint;
             _mapper = mapper;
             _status = status;
             _window = window;
+            DateMonth = DateTime.Now;
+            IsCurrentMonth = false;
         }
 
         // When the page is loaded then we'll call OnViewLoaded
@@ -174,19 +200,19 @@ namespace MaryaWPF.ViewModels
             List<BookingDisplayModel> bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
 
             // List in order to view not accepted bookings in a datagrid that are superior to today
-            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && booking.AppointmentDate.Month == DateTime.Now.Month)
+            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && booking.AppointmentDate.Month == DateMonth.Month)
                 .OrderBy(b => b.AppointmentDate).ToList();
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
             // List for the chart
-            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateMonth.Month).ToList();
             string bookingsAcceptedTitle = "Réservations acceptés";
 
             // List for the chart
-            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateMonth.Month).ToList();
             string bookingsNotAcceptedTitle = "Réservations en attente";
 
-            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateMonth.Year, DateMonth.Month);
 
             BookingsBarLabels = new string[daysOfCurrentMonth];
 
@@ -245,8 +271,7 @@ namespace MaryaWPF.ViewModels
             // The sum of the TotalPrices
             //var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Sum(x => x.TotalPrice));
             // The sum of the number of bookings
-            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Count());
-
+            var bookingsDic = bookings.GroupBy(x => x.AppointmentDate.Day).ToDictionary(g => g.Key, g => g.Count());  
 
             // Replace the initialized 0 values from ChartValuesBookings and replace them with the values of my Dictionnary
             int index = 1;
@@ -257,13 +282,13 @@ namespace MaryaWPF.ViewModels
                     if (item.Key.Equals(index))
                     {
                         chartValues.Remove(value);
-                        chartValues.Insert(index, item.Value);
+                        chartValues.Insert(index-1, item.Value);
                     }
                 }
                 index++;
             }
 
-            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            int daysOfCurrentMonth = System.DateTime.DaysInMonth(DateMonth.Year, DateMonth.Month);
             var test = BookingsBarLabels;
             for (int i = 1; i <= daysOfCurrentMonth; i++)
             {
@@ -288,6 +313,29 @@ namespace MaryaWPF.ViewModels
             settings.Title = "Statistiques de l'année";
 
             await _window.ShowWindowAsync(IoC.Get<StatsYearViewModel>(), null, settings);
-        } 
+        }
+
+        public async void PreviousMonth()
+        {
+            DateMonth = DateMonth.AddMonths(-1);
+            IsCurrentMonth = true;
+            BookingsSeriesCollection.Clear();
+            PieSeriesCollection.Clear();
+            await LoadBookings();
+        }
+
+        public async void NextMonth()
+        {
+            DateTime nextMonth = DateMonth.AddMonths(1);
+            if(nextMonth.Month == DateTime.Now.Month)
+            {
+                IsCurrentMonth = false;
+            }
+            DateMonth = nextMonth;
+            BookingsSeriesCollection.Clear();
+            PieSeriesCollection.Clear();
+            await LoadBookings();
+            
+        }
     }
 }
