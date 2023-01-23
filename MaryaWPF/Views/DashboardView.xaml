@@ -17,7 +17,6 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="44" FontFamily="Segoe UI Light">
@@ -59,7 +58,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>-->
-        <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0 0 0 50" Orientation="Horizontal">
+        <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0 0 0 50" HorizontalAlignment="Center" Orientation="Horizontal">
             <WrapPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="LineHeight" Value="20" />
@@ -100,21 +99,6 @@
 
         </WrapPanel>
         <!--</Grid>-->
-        
-
-        <TextBlock Grid.Row="3" Grid.Column="1"
-                   HorizontalAlignment="Center" FontSize="16" FontFamily="Segoe UI Light" Cursor="">
-            Réservations du mois courant (mettre ce graphique dans la page Activité)
-        </TextBlock>
-        <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="3" Grid.Column="1"
-                            Series="{Binding BookingsSeriesCollection}" LegendLocation="Bottom">
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Jours du mois actuel" FontSize="14" Labels="{Binding BookingsBarLabels}"></lvc:Axis>
-            </lvc:CartesianChart.AxisX>
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Nombre de réservations" FontSize="14" LabelFormatter="{Binding BookingsFormatter}"></lvc:Axis>
-            </lvc:CartesianChart.AxisY>
-        </lvc:CartesianChart>
 
 
     </Grid>
