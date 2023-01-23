@@ -20,14 +20,31 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         
-        <TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
+        <!--<TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="44" FontFamily="Segoe UI Light">
             Historique activité du mois
-        </TextBlock>
-        
+        </TextBlock>-->
+
+        <StackPanel HorizontalAlignment="Center"
+              Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20" Cursor="">
+            <Button x:Name="PreviousMonth" Margin="0,0,30,0" 
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <materialDesign:PackIcon Kind="ChevronLeft" />
+            </Button>
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="24" Text="{Binding DateMonth, ConverterCulture='fr-FR', StringFormat=Y}" Cursor="" />
+            <Button x:Name="NextMonth" Margin="30,0,0,0" Visibility="{Binding IsCurrentMonth, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <materialDesign:PackIcon Kind="ChevronRight" />
+            </Button>
+        </StackPanel>
+
         <TextBlock Grid.Row="1" Grid.Column="1"
                    HorizontalAlignment="Center" FontSize="16" FontFamily="Segoe UI Light" Cursor="">
-            Réservations du mois courant
+            Réservations par mois
         </TextBlock>
         <lvc:CartesianChart Margin="0 0 0 50"  Grid.Row="1" Grid.Column="1"
                             Series="{Binding BookingsSeriesCollection}" 
