@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="MaryaWPF.Views.CategoryDisplayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MaryaWPF.Views"
+             mc:Ignorable="d" Background="White" FontSize="24" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
+                   HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
+            Liste des services
+        </TextBlock>
+
+        <!--SelectionChanged="Categories_SelectionChanged"-->
+        <DataGrid x:Name="Categories"  Cursor="" Grid.Row="2" Grid.Column="0" AlternatingRowBackground = "LightBlue"  
+                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedCategory">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Catégorie" Binding = "{Binding Name}" />
+                <DataGridTextColumn Header = "Date de création" Binding = "{Binding CreatedAt}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--SelectionChanged="Services_SelectionChanged"-->
+        <DataGrid x:Name="Services"  Cursor="Hand" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" AlternatingRowBackground = "LightYellow"  
+                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedService">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header = "Service" Binding = "{Binding Name}" />
+                <DataGridTextColumn Header = "Catégorie" Binding = "{Binding CategoryName}" />
+                <DataGridTextColumn Header = "Type" Binding = "{Binding TypeName}" />
+                <DataGridTextColumn Header = "Tarif" Binding = "{Binding Price, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

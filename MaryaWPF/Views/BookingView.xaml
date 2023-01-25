@@ -47,7 +47,7 @@
         </StackPanel> -->
 
 
-        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
+        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue" 
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />

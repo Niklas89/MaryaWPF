@@ -158,6 +158,9 @@ namespace MaryaWPF.ViewModels
             if (SelectedMenuItem.Title == "Clients")
                 await ActivateItemAsync(IoC.Get<ClientDisplayViewModel>(), new CancellationToken());
 
+            if (SelectedMenuItem.Title == "Services")
+                await ActivateItemAsync(IoC.Get<CategoryDisplayViewModel>(), new CancellationToken());
+
             if (SelectedMenuItem.Title == "Activité")
                 await ActivateItemAsync(IoC.Get<StatsViewModel>(), new CancellationToken());
 
