@@ -13,16 +13,41 @@ using System.Threading.Tasks;
 
 namespace MaryaWPF.ViewModels
 {
-    public class PartnerDetailsViewModel: Screen
+    public class AddPartnerViewModel: Screen
     {
         IPartnerEndpoint _partnerEndpoint;
         IMapper _mapper;
+        private UserPartnerDisplayModel _newUserPartner;
+        public UserPartnerDisplayModel NewUserPartner
+        {
+            get { return _newUserPartner; }
+            set
+            {
+                _newUserPartner = value;
+            }
+        }
 
-        public PartnerDetailsViewModel(IPartnerEndpoint partnerEndpoint, IMapper mapper)
+        private PartnerDisplayModel _newPartner;
+        public PartnerDisplayModel NewPartner
+        {
+            get { return _newPartner; }
+            set
+            {
+                _newPartner = value;
+            }
+        }
+
+
+        public AddPartnerViewModel(IPartnerEndpoint partnerEndpoint, IMapper mapper, UserPartnerDisplayModel partner)
         {
             _partnerEndpoint = partnerEndpoint;
             _mapper = mapper;
             _categories = new Dictionary<int, string>();
+             _newUserPartner = new UserPartnerDisplayModel();
+            _newPartner = new PartnerDisplayModel();
+            _newUserPartner.Partner = _newPartner;
+
+            _selectedPartner = partner;
         }
 
         // Categories: needed when you select a category to change in the combobox (AvailableCategories), 
@@ -58,7 +83,7 @@ namespace MaryaWPF.ViewModels
                 NotifyOfPropertyChange(() => Partners);
             }
         }
-        
+
         private string _selectedFirstName;
 
         public string SelectedFirstName
@@ -103,6 +128,16 @@ namespace MaryaWPF.ViewModels
                 NotifyOfPropertyChange(() => SelectedEmail);
             }
         }
+        private string _selectedPassword;
+        public string SelectedPassword
+        {
+            get { return _selectedPassword; }
+            set
+            {
+                _selectedPassword = value;
+                NotifyOfPropertyChange(() => SelectedPassword);
+            }
+        }
         private string _selectedAddress;
         public string SelectedAddress
         {
@@ -137,9 +172,10 @@ namespace MaryaWPF.ViewModels
         public DateTime? SelectedBirthdate
         {
             get { return _selectedBirthdate; }
-            set { 
+            set
+            {
                 _selectedBirthdate = value;
-                NotifyOfPropertyChange(() => SelectedBirthdate); 
+                NotifyOfPropertyChange(() => SelectedBirthdate);
             }
         }
 
@@ -187,7 +223,7 @@ namespace MaryaWPF.ViewModels
         public BindingList<string> AvailableCategories
         {
             get { return _availableCategories; }
-            set 
+            set
             {
                 _availableCategories = value;
                 NotifyOfPropertyChange(() => AvailableCategories);
@@ -198,7 +234,7 @@ namespace MaryaWPF.ViewModels
         {
             foreach (KeyValuePair<int, string> category in Categories)
             {
-                if(SelectedCategoryName.Equals(category.Value))
+                if (SelectedCategoryName.Equals(category.Value))
                 {
                     SelectedIdCategory = category.Key;
                 }
@@ -206,7 +242,7 @@ namespace MaryaWPF.ViewModels
         }
 
         // Load the categories displayed in the combobox
-        private async Task LoadCategories()
+        public async Task LoadCategories()
         {
             // If the Dictionary of categories is null: add all categories
             // The list of categories will be null if a modal is opened for the first time
@@ -218,97 +254,41 @@ namespace MaryaWPF.ViewModels
                     AvailableCategories.Add(category.Name);
                     Categories.Add(category.Id, category.Name);
                 }
-            }   
-        }
-
-        // Call this method when you click on a partner
-        public async Task UpdatePartnerDetails(UserPartnerDisplayModel selectedPartner)
-        {
-            _selectedPartner = selectedPartner;
-            List<UserPartnerDisplayModel> partnerList = new List<UserPartnerDisplayModel>
-            {
-                selectedPartner
-            };
-            Partners = new BindingList<UserPartnerDisplayModel>(partnerList);
-            SelectedFirstName = selectedPartner.FirstName;
-            SelectedLastName = selectedPartner.LastName;
-            SelectedPhone = selectedPartner.Partner.Phone;
-            SelectedEmail = selectedPartner.Email;
-            SelectedAddress = selectedPartner.Partner.Address;
-            SelectedCity= selectedPartner.Partner.City;
-            SelectedPostalCode= selectedPartner.Partner.PostalCode;
-            SelectedBirthdate = selectedPartner.Partner.Birthdate;
-            SelectedIdCategory= selectedPartner.Partner.IdCategory;
-            SelectedCategoryName = selectedPartner.Partner.CategoryName;
-            SelectedAvailableCategory = selectedPartner.Partner.CategoryName;
-
-            // Load the categories displayed in the combobox
-            await LoadCategories();
+            }
         }
         public async Task Add()
         {
-            UserPartnerModel partner = _mapper.Map<UserPartnerModel>(SelectedPartner);
+            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
+            // and in PartnerDisplayModel
+
+            NewUserPartner.FirstName = SelectedFirstName;
+            NewUserPartner.LastName = SelectedLastName;
+            NewUserPartner.Email = SelectedEmail;
+            NewUserPartner.Password = SelectedPassword;
+            NewUserPartner.Partner.Phone = SelectedPhone;
+            NewUserPartner.Partner.Address = SelectedAddress;
+            NewUserPartner.Partner.PostalCode = SelectedPostalCode;
+            NewUserPartner.Partner.City = SelectedCity;
+            NewUserPartner.Partner.Birthdate = SelectedBirthdate;
+            NewUserPartner.Partner.IdCategory = SelectedIdCategory;
+            NewUserPartner.Partner.CategoryName = SelectedCategoryName;
+
+            UserPartnerModel partner = _mapper.Map<UserPartnerModel>(NewUserPartner);
 
             // Below lines are USEFUL for sending data to partnerEndPoint
             partner.FirstName = SelectedFirstName;
             partner.LastName = SelectedLastName;
             partner.Partner.Phone = SelectedPhone;
             partner.Email = SelectedEmail;
+            partner.Password = SelectedPassword;
             partner.Partner.Address = SelectedAddress;
             partner.Partner.City = SelectedCity;
             partner.Partner.PostalCode = SelectedPostalCode;
             partner.Partner.Birthdate = SelectedBirthdate;
             partner.Partner.IdCategory = SelectedIdCategory;
             partner.Partner.CategoryName = SelectedCategoryName;
-
-            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
-            // and in PartnerDisplayModel
-            SelectedPartner.FirstName = SelectedFirstName;
-            SelectedPartner.LastName = SelectedLastName;
-            SelectedPartner.Email = SelectedEmail;
-            SelectedPartner.Partner.Phone = SelectedPhone;
-            SelectedPartner.Partner.Address = SelectedAddress;
-            SelectedPartner.Partner.PostalCode = SelectedPostalCode;
-            SelectedPartner.Partner.City = SelectedCity;
-            SelectedPartner.Partner.Birthdate = SelectedBirthdate;
-            SelectedPartner.Partner.IdCategory = SelectedIdCategory;
-            SelectedPartner.Partner.CategoryName = SelectedCategoryName;
 
             await _partnerEndpoint.AddPartner(partner);
-            Close();
-        }
-
-        // Call this method when you submit the edit form of a partner
-        public async Task Edit()
-        {
-            UserPartnerModel partner = _mapper.Map<UserPartnerModel>(SelectedPartner);
-
-            // Below lines are USEFUL for sending data to partnerEndPoint
-            partner.FirstName = SelectedFirstName;
-            partner.LastName = SelectedLastName;
-            partner.Partner.Phone = SelectedPhone;
-            partner.Email = SelectedEmail;
-            partner.Partner.Address = SelectedAddress;
-            partner.Partner.City = SelectedCity;
-            partner.Partner.PostalCode = SelectedPostalCode;
-            partner.Partner.Birthdate = SelectedBirthdate;
-            partner.Partner.IdCategory = SelectedIdCategory;
-            partner.Partner.CategoryName = SelectedCategoryName;
-
-            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
-            // and in PartnerDisplayModel
-            SelectedPartner.FirstName = SelectedFirstName;
-            SelectedPartner.LastName = SelectedLastName;
-            SelectedPartner.Email = SelectedEmail;
-            SelectedPartner.Partner.Phone = SelectedPhone;
-            SelectedPartner.Partner.Address = SelectedAddress;
-            SelectedPartner.Partner.PostalCode = SelectedPostalCode;
-            SelectedPartner.Partner.City = SelectedCity;
-            SelectedPartner.Partner.Birthdate = SelectedBirthdate;
-            SelectedPartner.Partner.IdCategory = SelectedIdCategory;
-            SelectedPartner.Partner.CategoryName = SelectedCategoryName;
-
-            await _partnerEndpoint.UpdatePartner(partner);
             Close();
         }
 

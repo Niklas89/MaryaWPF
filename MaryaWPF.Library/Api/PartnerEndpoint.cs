@@ -47,6 +47,20 @@ namespace MaryaWPF.Library.Api
             }
         }
 
+        public async Task AddPartner(UserPartnerModel partner)
+        {
+
+            // UserPartnerModel data = new UserPartnerModel { FirstName = partner.FirstName, LastName = partner.LastName };
+            string uri = "admin/partner/";
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync<UserPartnerModel>(uri, partner))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<List<CategoryModel>> GetAllCategories()
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/categories"))

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaryaWPF.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"  Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -26,6 +26,10 @@
                    HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
             Liste des partenaires
         </TextBlock>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="20 10 0 10" Grid.ColumnSpan="2">
+            <Button x:Name="ViewAddPartner" Width="200" Margin="0 0 20 0">Ajouter un partenaire</Button>
+        </StackPanel>
 
         <DataGrid x:Name="Partners" Cursor="Hand" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedPartner">

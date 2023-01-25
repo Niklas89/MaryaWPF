@@ -27,6 +27,10 @@
             Liste des clients
         </TextBlock>
 
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="20 10 0 10" Grid.ColumnSpan="2">
+            <Button x:Name="ViewAddClient" Width="200" Margin="0 0 20 0">Ajouter un client</Button>
+        </StackPanel>
+
         <DataGrid x:Name="Clients" Cursor="Hand" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedClient">
             <DataGrid.Columns>

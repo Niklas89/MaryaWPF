@@ -8,6 +8,8 @@ namespace MaryaWPF.Library.Api
     {
         Task<List<UserClientModel>> GetAll();
 
+        Task AddClient(UserClientModel client);
+
         Task UpdateClient(UserClientModel client);
     }
 }
