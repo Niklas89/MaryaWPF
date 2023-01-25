@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MaryaWPF.Views.ServiceDetailsView"
+﻿<UserControl x:Class="MaryaWPF.Views.AddCategoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -24,7 +24,7 @@
           Padding="0,16"
           VerticalAlignment="Center"
           Style="{StaticResource MaterialDesignTitleMediumTextBlock}"
-          Text="Modifier un service" />
+          Text="Ajouter une catégorie" />
 
         <ListBox Padding="10" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
             <StackPanel>
@@ -39,30 +39,12 @@
             <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
                     <ListBoxItem Content="Catégorie" />
-                    <TextBox Height="23" Width="150" Padding="0 0 0 5" IsEnabled="False"  x:Name="SelectedCategoryName" Text="" />
-                </StackPanel>
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
-                    <ListBoxItem Content="Service" />
-                    <TextBox Height="23" Width="150" Padding="0 0 0 5" IsEnabled="False" x:Name="SelectedServiceName" Text="" />
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
-                <StackPanel Orientation="Vertical" Margin="0 0 15 0">
-                    <ListBoxItem Content="Tarif" />
-                    <TextBox Height="23" Width="150" x:Name="SelectedPrice" Text="" />
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0 0 15 0">
-                    <ListBoxItem Content="ID du prix pour Stripe" />
-                    <TextBox Height="23" Width="150" x:Name="SelectedPriceId" Text="" />
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0 0 15 0">
-                    <ListBoxItem Content="Type" />
-                    <ComboBox Height="23" Width="150" x:Name="AvailableTypes" />
+                    <TextBox Height="23" Width="150" Padding="0 0 0 5" x:Name="CategoryName" Text="" />
                 </StackPanel>
             </StackPanel>
         </ListBox>
         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 20" Grid.ColumnSpan="2">
-            <Button x:Name="Edit" Width="150" Margin="0 0 20 0">Modifier</Button>
+            <Button x:Name="Add" Width="150" Margin="0 0 20 0">Ajouter</Button>
             <Button
                 x:Name="Close"
                   Content="Fermer"
