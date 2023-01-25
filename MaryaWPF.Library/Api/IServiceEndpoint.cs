@@ -10,5 +10,7 @@ namespace MaryaWPF.Library.Api
         Task<List<ServiceModel>> GetAllServicesByCategory(int id);
         Task<List<TypeModel>> GetAllTypes();
         Task UpdateService(ServiceModel service);
+        Task AddCategory(CategoryModel category);
+        Task AddService(ServiceModel service);
     }
 }

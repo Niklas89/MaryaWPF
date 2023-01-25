@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace MaryaWPF.Views
 {
     /// <summary>
-    /// Logique d'interaction pour CategoriesView.xaml
+    /// Logique d'interaction pour AddCategoryView.xaml
     /// </summary>
-    public partial class CategoriesView : UserControl
+    public partial class AddCategoryView : UserControl
     {
-        public CategoriesView()
+        public AddCategoryView()
         {
             InitializeComponent();
         }

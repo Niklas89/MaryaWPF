@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
 using MaryaWPF.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,12 +18,14 @@ namespace MaryaWPF.ViewModels
     public class CategoryDisplayViewModel : Screen
     {
         private readonly StatusInfoViewModel _status;
-        IMapper _mapper;
         private ServiceDetailsViewModel _serviceDetails;
+        private AddCategoryViewModel _addCategory;
+        private AddServiceViewModel _addService;
         private readonly IWindowManager _window;
         IServiceEndpoint _serviceEndpoint;
+        IMapper _mapper;
 
-        BindingList<ServiceDisplayModel> _services;
+        private BindingList<ServiceDisplayModel> _services;
 
         public BindingList<ServiceDisplayModel> Services
         {
@@ -37,7 +40,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        BindingList<CategoryDisplayModel> _categories;
+        private BindingList<CategoryDisplayModel> _categories;
 
         public BindingList<CategoryDisplayModel> Categories
         {
@@ -52,13 +55,38 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public CategoryDisplayViewModel(ServiceDetailsViewModel serviceDetails, IMapper mapper, StatusInfoViewModel status, IWindowManager window, IServiceEndpoint serviceEndpoint)
+        private CategoryDisplayModel _newCategory;
+        public CategoryDisplayModel NewCategory
+        {
+            get { return _newCategory; }
+            set
+            {
+                _newCategory = value;
+            }
+        }
+
+        private ServiceDisplayModel _newService;
+        public ServiceDisplayModel NewService
+        {
+            get { return _newService; }
+            set
+            {
+                _newService = value;
+            }
+        }
+
+        public CategoryDisplayViewModel(ServiceDetailsViewModel serviceDetails, AddCategoryViewModel addCategory, AddServiceViewModel addService,
+            IMapper mapper, StatusInfoViewModel status, IWindowManager window, IServiceEndpoint serviceEndpoint)
         {
             _status = status;
             _window = window;
             _mapper = mapper;
             _serviceEndpoint = serviceEndpoint;
             _serviceDetails = serviceDetails;
+            _newCategory = new CategoryDisplayModel();
+            _newService = new ServiceDisplayModel();
+            _addCategory = addCategory;
+            _addService= addService;
         }
 
         // Wait before the View loads
@@ -135,10 +163,9 @@ namespace MaryaWPF.ViewModels
             get { return _selectedService; }
             set
             {
-                _selectedService = value;
-                SelectedServiceId = value.Id;
-                NotifyOfPropertyChange(() => SelectedService);
-                ViewServiceDetails();
+                    _selectedService = value;
+                    NotifyOfPropertyChange(() => SelectedService);
+                    ViewServiceDetails(_selectedService);
             }
         }
 
@@ -180,19 +207,54 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public async void ViewServiceDetails()
+        public async void ViewServiceDetails(ServiceDisplayModel selectedService)
+        {
+            if(selectedService != null)
+            {
+                SelectedServiceId = selectedService.Id;
+
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.Height = 400;
+                settings.Width = 750;
+                settings.SizeToContent = SizeToContent.Manual;
+                settings.ResizeMode = ResizeMode.CanResize;
+                settings.Title = "Détails du service";
+
+                _serviceDetails.UpdateServiceDetails(SelectedService);
+                await _window.ShowDialogAsync(_serviceDetails, null, settings);
+            }
+        }
+
+        public async void AddCategory()
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 600;
+            settings.Height = 400;
             settings.Width = 750;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
-            settings.Title = "Détails du service";
+            settings.Title = "Ajout d'une catégorie";
 
-            _serviceDetails.UpdateServiceDetails(SelectedService);
-            await _window.ShowDialogAsync(_serviceDetails, null, settings);
+            _addCategory.AddCategory(NewCategory, Categories);
+            await _window.ShowDialogAsync(_addCategory, null, settings);
+        }
 
+        public async void AddService()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 400;
+            settings.Width = 750;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Ajout d'un service";
+
+            NewService.IdCategory = SelectedCategoryId;
+            NewService.CategoryName = SelectedCategory.Name;
+
+            _addService.AddService(NewService, Services);
+            await _window.ShowDialogAsync(_addService, null, settings);
         }
 
     }
