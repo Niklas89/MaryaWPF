@@ -47,5 +47,18 @@ namespace MaryaWPF.Library.Api
                 }
             }
         }
+
+        public async Task AddClient(UserClientModel client)
+        {
+            // UserClientModel data = new UserClientModel { FirstName = client.FirstName, LastName = client.LastName };
+            string uri = "admin/client/";
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync<UserClientModel>(uri, client))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

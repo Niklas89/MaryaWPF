@@ -20,10 +20,11 @@ namespace MaryaWPF.ViewModels
         private readonly StatusInfoViewModel _status;
         IMapper _mapper;
         private PartnerDetailsViewModel _partnerDetails;
+        private AddPartnerViewModel _addPartner;
         private readonly IWindowManager _window;
         IPartnerEndpoint _partnerEndpoint;
         IServiceEndpoint _serviceEndpoint;
-        BindingList<UserPartnerDisplayModel> _partners;
+        private BindingList<UserPartnerDisplayModel> _partners;
 
         public BindingList<UserPartnerDisplayModel> Partners
         {
@@ -38,7 +39,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public PartnerDisplayViewModel( PartnerDetailsViewModel partnerDetails, StatusInfoViewModel status, IMapper mapper,
+        public PartnerDisplayViewModel( PartnerDetailsViewModel partnerDetails, AddPartnerViewModel addPartner, StatusInfoViewModel status, IMapper mapper,
             IWindowManager window, IPartnerEndpoint partnerEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _status = status;
@@ -47,6 +48,7 @@ namespace MaryaWPF.ViewModels
             _partnerEndpoint = partnerEndpoint;
             _serviceEndpoint = serviceEndpoint;
             _partnerDetails = partnerDetails;
+            _addPartner = addPartner;
         }
 
         // Wait before the View loads
@@ -126,6 +128,20 @@ namespace MaryaWPF.ViewModels
 
             await _partnerDetails.UpdatePartnerDetails(SelectedPartner);
             await _window.ShowDialogAsync(_partnerDetails, null, settings);
+        }
+
+        public async void ViewAddPartner()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 750;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Ajouter un partenaire";
+
+            await _addPartner.LoadCategories();
+            await _window.ShowDialogAsync(_addPartner, null, settings);
         }
     }
 }

@@ -20,9 +20,10 @@ namespace MaryaWPF.ViewModels
         private readonly StatusInfoViewModel _status;
         IMapper _mapper;
         private ClientDetailsViewModel _clientDetails;
+        private AddClientViewModel _addClient;
         private readonly IWindowManager _window;
         IClientEndpoint _clientEndpoint;
-        BindingList<UserClientDisplayModel> _clients;
+        private BindingList<UserClientDisplayModel> _clients;
 
         public BindingList<UserClientDisplayModel> Clients
         {
@@ -37,13 +38,14 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public ClientDisplayViewModel(ClientDetailsViewModel clientDetails, IMapper mapper, StatusInfoViewModel status, IWindowManager window, IClientEndpoint clientEndpoint)
+        public ClientDisplayViewModel(ClientDetailsViewModel clientDetails, AddClientViewModel addClient, IMapper mapper, StatusInfoViewModel status, IWindowManager window, IClientEndpoint clientEndpoint)
         {
             _status = status;
             _window = window;
             _mapper = mapper;
             _clientEndpoint = clientEndpoint;
             _clientDetails = clientDetails;
+            _addClient = addClient;
         }
 
         // Wait before the View loads
@@ -124,6 +126,19 @@ namespace MaryaWPF.ViewModels
             _clientDetails.UpdateClientDetails(SelectedClient);
             await _window.ShowDialogAsync(_clientDetails, null, settings);
 
+        }
+
+        public async void ViewAddClient()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 750;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Ajouter un client";
+
+            await _window.ShowDialogAsync(_addClient, null, settings);
         }
 
     }
