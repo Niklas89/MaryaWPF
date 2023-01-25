@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Caliburn.Micro;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
