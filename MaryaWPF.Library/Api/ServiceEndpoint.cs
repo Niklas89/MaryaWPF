@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace MaryaWPF.Library.Api
 
         public async Task<List<CategoryModel>> GetAll()
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("service/category"))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/categories"))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -27,6 +28,51 @@ namespace MaryaWPF.Library.Api
                     return result;
                 }
                 else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<TypeModel>> GetAllTypes()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/types"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<TypeModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<ServiceModel>> GetAllServicesByCategory(int id)
+        {
+            string uri = "admin/category/services/" + id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(uri))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ServiceModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task UpdateService(ServiceModel service)
+        {
+            string uri = "admin/category/service/" + service.Id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<ServiceModel>(uri, service))
+            {
+                if (response.IsSuccessStatusCode == false)
                 {
                     throw new Exception(response.ReasonPhrase);
                 }

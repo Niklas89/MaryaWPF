@@ -18,9 +18,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
@@ -50,7 +47,7 @@
         </StackPanel> -->
 
 
-        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
+        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue" 
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />

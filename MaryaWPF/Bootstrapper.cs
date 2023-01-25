@@ -35,14 +35,24 @@ namespace MaryaWPF
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<BookingModel, BookingDisplayModel>();
+
+                cfg.CreateMap<TypeModel, TypeDisplayModel>();
+
                 cfg.CreateMap<PartnerModel, PartnerDisplayModel>();
-                cfg.CreateMap<UserPartnerModel, UserPartnerDisplayModel>();
-                cfg.CreateMap<ClientModel, ClientDisplayModel>();
-                cfg.CreateMap<UserClientModel, UserClientDisplayModel>();
-                cfg.CreateMap<UserPartnerDisplayModel, UserPartnerModel>();
-                cfg.CreateMap<UserClientDisplayModel, UserClientModel>();
                 cfg.CreateMap<PartnerDisplayModel, PartnerModel>();
+                cfg.CreateMap<UserPartnerModel, UserPartnerDisplayModel>();
+                cfg.CreateMap<UserPartnerDisplayModel, UserPartnerModel>();
+
                 cfg.CreateMap<ClientDisplayModel, ClientModel>();
+                cfg.CreateMap<ClientModel, ClientDisplayModel>();
+                cfg.CreateMap<UserClientDisplayModel, UserClientModel>();
+                cfg.CreateMap<UserClientModel, UserClientDisplayModel>();
+
+                cfg.CreateMap<CategoryModel, CategoryDisplayModel>();
+                cfg.CreateMap<CategoryDisplayModel, CategoryModel>();
+
+                cfg.CreateMap<ServiceModel, ServiceDisplayModel>();
+                cfg.CreateMap<ServiceDisplayModel, ServiceModel>();
                 // cfg.CreateMap<sourceModel, destinationModel>();
             });
 
