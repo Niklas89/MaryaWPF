@@ -20,8 +20,6 @@ namespace MaryaWPF.ViewModels
         IServiceEndpoint _serviceEndpoint;
         IBookingEndpoint _bookingEndpoint;
         IMapper _mapper;
-        private readonly ConfirmationDeleteViewModel _confirmationDelete;
-        private readonly IWindowManager _window;
 
         private ServiceDisplayModel _selectedService;
         public ServiceDisplayModel SelectedService
@@ -47,14 +45,12 @@ namespace MaryaWPF.ViewModels
         }
 
         public ServiceDetailsViewModel(IServiceEndpoint serviceEndpoint, IBookingEndpoint bookingEndpoint,
-            ConfirmationDeleteViewModel confirmationDelete, IWindowManager window, IMapper mapper)
+            IMapper mapper)
         {
             _serviceEndpoint = serviceEndpoint;
             _bookingEndpoint = bookingEndpoint;
             _mapper = mapper;
-            _window = window;
             _types = new Dictionary<int, string>();
-            _confirmationDelete = confirmationDelete;
         }
 
         // Types: needed when you select a type to change in the combobox (AvailableTypes), 
@@ -178,34 +174,6 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public bool IsConfirmedToDelete
-        {
-            get
-            {
-                bool output = false;
-
-                if (ConfirmationToDelete?.Length > 2)
-                {
-                    output = true;
-                    Delete();
-                }
-                return output;
-            }
-        }
-
-        private string _confirmationToDelete;
-
-        public string ConfirmationToDelete
-        {
-            get { return _confirmationToDelete; }
-            set
-            {
-                _confirmationToDelete = value;
-                NotifyOfPropertyChange(() => IsConfirmedToDelete);
-                NotifyOfPropertyChange(() => ConfirmationToDelete);
-            }
-        }
-
         public bool IsErrorVisible
         {
             get
@@ -293,6 +261,7 @@ namespace MaryaWPF.ViewModels
             SelectedPrice = selectedService.Price;
             SelectedIdType = selectedService.IdType;
             SelectedTypeName = selectedService.TypeName;
+            SelectedAvailableType = selectedService.TypeName;
             SelectedPriceId = selectedService.PriceId;
             SelectedCategoryName = selectedService.CategoryName;
             SelectedServiceName = selectedService.Name;
@@ -362,19 +331,6 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public async void AskConfirmationToDelete()
-        {
-            ConfirmationToDelete = "t";
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.NoResize;
-            settings.Title = "Confirmation de suppression";
-
-            _confirmationDelete.UpdateMessage("Demande de confirmation de suppression", "Etes vous sûr de vouloir supprimer le service " + SelectedServiceName + " ?", ConfirmationToDelete);
-            await _window.ShowDialogAsync(_confirmationDelete, null, settings);
-
-        }
-
         public async void Delete()
         {
             try
@@ -388,12 +344,6 @@ namespace MaryaWPF.ViewModels
                 ErrorMessage = ex.Message;
             }
         }
-
-        // After Delete: update datagrid
-        //private async Task LoadServicesAfterDelete()
-        //{
-        //    Services.Remove(SelectedService);
-        //}
 
         public void Close()
         {

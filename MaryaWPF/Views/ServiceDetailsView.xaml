@@ -65,7 +65,7 @@
             <Button x:Name="Edit" Width="150" Margin="0 0 20 0">Modifier</Button>
             <Button
               Width="150" Margin="0 0 0 0"
-              Content="Supprimer" x:Name="AskConfirmationToDelete"
+              Content="Supprimer" x:Name="Delete"
               IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
               Style="{StaticResource MaterialDesignFlatDarkButton}"
               ToolTip="MaterialDesignFlatButton"
