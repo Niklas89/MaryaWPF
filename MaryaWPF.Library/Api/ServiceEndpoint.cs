@@ -50,6 +50,22 @@ namespace MaryaWPF.Library.Api
             }
         }
 
+        public async Task<List<ServiceModel>> GetAllServices()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/services"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ServiceModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<List<ServiceModel>> GetAllServicesByCategory(int id)
         {
             string uri = "admin/category/services/" + id;

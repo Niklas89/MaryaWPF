@@ -15,7 +15,9 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
@@ -26,26 +28,30 @@
         <!-- et le total du nb de réservations en attente du mois courant -->
         <!-- et le total du nb de réservations sur le mois courant -->
         <!-- par ex: 126 resa   -   96 acceptés   -   30 en attente   -->
-        <TextBlock Grid.Row="1" Grid.Column="1"
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
             Réservations en attente
         </TextBlock>
-        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue"  
+        
+        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" 
+                  AlternatingRowBackground = "LightBlue"  Margin=" 0 0 0 40" 
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
             <DataGrid.Columns>
-                <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate}" />
+                <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate, StringFormat=g, ConverterCulture=fr-FR}" />
                 <DataGridTextColumn Header = "Nombre d'heures" Binding = "{Binding NbHours}" />
-                <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" />
+                <DataGridTextColumn Header = "Service" Binding = "{Binding ServiceName}" />
+                <DataGridTextColumn Header = "Client" Binding = "{Binding ClientFullName}" />
                 <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
                 <DataGridTextColumn Header = "Service réalisé" Binding = "{Binding ServiceDoneYesNo}" />
                 <DataGridTextColumn Header = "Service payé  " Binding = "{Binding IsPaidYesNo}" />
-                <DataGridTemplateColumn Header="View">
+
+                <!--<DataGridTemplateColumn Header="View">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Rembourser" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
 
@@ -58,7 +64,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>-->
-        <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0 0 0 50" HorizontalAlignment="Center" Orientation="Horizontal">
+        <WrapPanel Grid.Row="3" Grid.Column="1" Margin="0 0 0 0" HorizontalAlignment="Center" Orientation="Horizontal">
             <WrapPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="LineHeight" Value="20" />
@@ -99,6 +105,36 @@
 
         </WrapPanel>
         <!--</Grid>-->
+
+        <StackPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Cursor="">
+            <materialDesign:PackIcon Margin="0 0 10 0" Foreground="{DynamicResource PrimaryHueDarkBrush}"  Width="40" Height="40" Kind="CashRefund" Cursor="" />
+            <materialDesign:Card Width="400"
+                                 Height="50"
+                                 Padding="0 15 0 0"
+                             Background="{DynamicResource PrimaryHueDarkBrush}"
+                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                             UniformCornerRadius="6">
+                <TextBlock TextAlignment="Center" FontSize="16">
+                <Hyperlink NavigateUri="https://dashboard.stripe.com/payments" RequestNavigate="Hyperlink_RequestNavigate">
+                    Rembourser les réservations en attente
+                    <Hyperlink.Style>
+                        <Style TargetType="Hyperlink"
+                               BasedOn="{StaticResource {x:Type Hyperlink}}">
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
+                            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="LightSkyBlue" />
+                                <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                            </Trigger>
+                        </Style.Triggers>
+                        </Style>
+                    </Hyperlink.Style>
+                </Hyperlink>
+                </TextBlock>
+            </materialDesign:Card>
+        </StackPanel>
 
 
     </Grid>

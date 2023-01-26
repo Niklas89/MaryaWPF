@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using LiveCharts.Wpf;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Models;
 using System;
@@ -12,11 +13,6 @@ namespace MaryaWPF.ViewModels
 {
     public class BookingDetailsViewModel : Screen
     {
-
-        //public string Header { get; private set; }
-        //public string Message { get; private set; }
-
-        //public BookingDisplayModel SelectedBooking { get; private set; }
         IBookingEndpoint _bookingEndpoint;
 
         private BookingDisplayModel _selectedBooking;
@@ -43,34 +39,70 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        public bool IsEditVisible
+        {
+            get
+            {
+                bool output = false;
+
+                if (BookingCanBeEdited == true)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private bool _bookingCanBeEdited;
+
+        public bool BookingCanBeEdited
+        {
+            get { return _bookingCanBeEdited; }
+            set
+            {
+                _bookingCanBeEdited = value;
+                NotifyOfPropertyChange(() => IsEditVisible);
+                NotifyOfPropertyChange(() => BookingCanBeEdited);
+            }
+        }
+
         public BookingDetailsViewModel(IBookingEndpoint bookingEndpoint)
         {
             _bookingEndpoint = bookingEndpoint;
         }
 
 
-        //public void UpdateMessage(string header, string message)
         public void UpdateBookingDetails(BookingDisplayModel selectedBooking)
         {
-            //Header = header;
-            //Message = message;
 
-            //NotifyOfPropertyChange(() => Header);
-            //NotifyOfPropertyChange(() => Message);
-
-            _selectedBooking = selectedBooking;
-           // NotifyOfPropertyChange(() => SelectedBooking);
+            SelectedBooking = selectedBooking;
             List<BookingDisplayModel> bookingList = new List<BookingDisplayModel>
             {
                 selectedBooking
             };
             Bookings = new BindingList<BookingDisplayModel>(bookingList);
 
+            BookingCanBeEdited = false;
+
+            CheckIfBookingCanBeEdited();
+
         }
 
-        public async Task CancelBooking()
+        // Check if the booking can be edited
+        private void CheckIfBookingCanBeEdited()
+        {
+            if (!SelectedBooking.Accepted  && !SelectedBooking.IsCancelled) 
+                BookingCanBeEdited = true;
+        }
+
+        public async void CancelBooking()
         {
             await _bookingEndpoint.RemoveBooking(SelectedBooking.Id);
+        }
+
+        public async void Edit()
+        {
+
         }
 
         public void Close()

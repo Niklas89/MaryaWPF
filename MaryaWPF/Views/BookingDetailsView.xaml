@@ -33,6 +33,10 @@
             </ListBox>
             <Button x:Name="CancelBooking" Padding="5" Margin="20">Annuler la réservation</Button>
             <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
+            <Button
+              Width="150" Margin="0 0 0 0"
+              Content="Modifier" x:Name="Edit"
+              Visibility="{Binding IsEditVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
         </StackPanel>
     </Grid>
 </UserControl>

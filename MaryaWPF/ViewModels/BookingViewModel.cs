@@ -19,15 +19,22 @@ namespace MaryaWPF.ViewModels
     public class BookingViewModel : Screen
     {
         IBookingEndpoint _bookingEndpoint;
+        IServiceEndpoint _serviceEndpoint;
+        IClientEndpoint _clientEndpoint;
+        IPartnerEndpoint _partnerEndpoint;
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
 
         public BookingViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
-            IWindowManager window, BookingDetailsViewModel bookingDetails)
+            IWindowManager window, BookingDetailsViewModel bookingDetails, IServiceEndpoint serviceEndpoint,
+            IClientEndpoint clientEndpoint, IPartnerEndpoint partnerEndpoint)
         {
             _bookingEndpoint = bookingEndpoint;
+            _partnerEndpoint = partnerEndpoint;
+            _clientEndpoint = clientEndpoint;
+            _serviceEndpoint = serviceEndpoint;
             _mapper = mapper;
             _status = status;
             _bookingDetails = bookingDetails;
@@ -42,6 +49,9 @@ namespace MaryaWPF.ViewModels
             try
             {
                 await LoadBookings();
+                await LoadServicesForBookings();
+                await LoadClientsForBookings();
+                await LoadPartnersForBookings();
             }
             catch (Exception ex)
             {
@@ -81,6 +91,57 @@ namespace MaryaWPF.ViewModels
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
             var bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
             Bookings = new BindingList<BookingDisplayModel>(bookings);
+        }
+
+        private async Task LoadServicesForBookings()
+        {
+            var serviceList = await _serviceEndpoint.GetAllServices();
+            var services = _mapper.Map<List<ServiceDisplayModel>>(serviceList);
+
+            foreach (var booking in Bookings)
+            {
+                foreach (var service in services)
+                {
+                    if (booking.IdService == service.Id)
+                    {
+                        booking.ServiceName = service.Name;
+                    }
+                }
+            }
+        }
+
+        private async Task LoadClientsForBookings()
+        {
+            var clientList = await _clientEndpoint.GetAll();
+            var clients = _mapper.Map<List<UserClientDisplayModel>>(clientList);
+
+            foreach (var booking in Bookings)
+            {
+                foreach (var client in clients)
+                {
+                    if (booking.IdClient == client.Client.Id)
+                    {
+                        booking.ClientFullName = client.FirstName + " " + client.LastName;
+                    }
+                }
+            }
+        }
+
+        private async Task LoadPartnersForBookings()
+        {
+            var partnerList = await _partnerEndpoint.GetAll();
+            var partners = _mapper.Map<List<UserPartnerDisplayModel>>(partnerList);
+
+            foreach (var booking in Bookings)
+            {
+                foreach (var partner in partners)
+                {
+                    if (booking.IdPartner == partner.Partner.Id)
+                    {
+                        booking.PartnerFullName = partner.FirstName + " " + partner.LastName;
+                    }
+                }
+            }
         }
 
         private BindingList<BookingDisplayModel> _bookings;

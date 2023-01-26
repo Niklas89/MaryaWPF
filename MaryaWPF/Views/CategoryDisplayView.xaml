@@ -32,7 +32,7 @@
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedCategory">
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Catégorie" Binding = "{Binding Name}" />
-                <DataGridTextColumn Header = "Date de création" Binding = "{Binding CreatedAt}" />
+                <DataGridTextColumn Header = "Date de création" Binding = "{Binding CreatedAt, StringFormat=g, ConverterCulture=fr-FR}" />
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="AddCategory" Width="150" Grid.Row="3" Grid.Column="0" Margin="10 20 0 0" Content="Ajouter catégorie" />
