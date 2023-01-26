@@ -8,5 +8,6 @@ namespace MaryaWPF.Library.Api
     {
         Task<List<BookingModel>> GetAll();
         Task RemoveBooking(int bookingId);
+        Task<List<BookingModel>> GetAllBookingsByService(int id);
     }
 }

@@ -6,16 +6,22 @@ using MaryaWPF.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MaryaWPF.ViewModels
 {
     public class ServiceDetailsViewModel : Screen
     {
         IServiceEndpoint _serviceEndpoint;
+        IBookingEndpoint _bookingEndpoint;
         IMapper _mapper;
+        private readonly ConfirmationDeleteViewModel _confirmationDelete;
+        private readonly IWindowManager _window;
 
         private ServiceDisplayModel _selectedService;
         public ServiceDisplayModel SelectedService
@@ -40,11 +46,15 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public ServiceDetailsViewModel(IServiceEndpoint serviceEndpoint, IMapper mapper)
+        public ServiceDetailsViewModel(IServiceEndpoint serviceEndpoint, IBookingEndpoint bookingEndpoint,
+            ConfirmationDeleteViewModel confirmationDelete, IWindowManager window, IMapper mapper)
         {
             _serviceEndpoint = serviceEndpoint;
+            _bookingEndpoint = bookingEndpoint;
             _mapper = mapper;
+            _window = window;
             _types = new Dictionary<int, string>();
+            _confirmationDelete = confirmationDelete;
         }
 
         // Types: needed when you select a type to change in the combobox (AvailableTypes), 
@@ -66,6 +76,28 @@ namespace MaryaWPF.ViewModels
             {
                 _selectedPrice = value;
                 NotifyOfPropertyChange(() => SelectedPrice);
+            }
+        }
+
+        private string _selectedCategoryName;
+
+        public string SelectedCategoryName
+        {
+            get { return _selectedCategoryName; }
+            set
+            {
+                _selectedCategoryName = value;
+            }
+        }
+
+        private string _selectedServiceName;
+
+        public string SelectedServiceName
+        {
+            get { return _selectedServiceName; }
+            set
+            {
+                _selectedServiceName = value;
             }
         }
 
@@ -105,6 +137,102 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private string _selectedAvailableType;
+
+        public string SelectedAvailableType
+        {
+            get { return _selectedAvailableType; }
+            set
+            {
+                _selectedAvailableType = value;
+                SelectedTypeName = value;
+                NotifyOfPropertyChange(() => SelectedAvailableType);
+                ChangeSelectedType();
+            }
+        }
+
+        public bool IsDeleteVisible
+        {
+            get
+            {
+                bool output = false;
+
+                if (ServiceCanBeDeleted == true)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private bool _serviceCanBeDeleted;
+
+        public bool ServiceCanBeDeleted
+        {
+            get { return _serviceCanBeDeleted; }
+            set
+            {
+                _serviceCanBeDeleted = value;
+                NotifyOfPropertyChange(() => IsDeleteVisible);
+                NotifyOfPropertyChange(() => ServiceCanBeDeleted);
+            }
+        }
+
+        public bool IsConfirmedToDelete
+        {
+            get
+            {
+                bool output = false;
+
+                if (ConfirmationToDelete?.Length > 2)
+                {
+                    output = true;
+                    Delete();
+                }
+                return output;
+            }
+        }
+
+        private string _confirmationToDelete;
+
+        public string ConfirmationToDelete
+        {
+            get { return _confirmationToDelete; }
+            set
+            {
+                _confirmationToDelete = value;
+                NotifyOfPropertyChange(() => IsConfirmedToDelete);
+                NotifyOfPropertyChange(() => ConfirmationToDelete);
+            }
+        }
+
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
+
         // AvailableTypes for the combobox
         private BindingList<string> _availableTypes = new BindingList<string>();
 
@@ -116,6 +244,24 @@ namespace MaryaWPF.ViewModels
                 _availableTypes = value;
                 NotifyOfPropertyChange(() => AvailableTypes);
             }
+        }
+
+        private void ChangeSelectedType()
+        {
+            foreach (KeyValuePair<int, string> type in Types)
+            {
+                if (SelectedTypeName.Equals(type.Value))
+                {
+                    SelectedIdType = type.Key;
+                }
+            }
+        }
+
+        // Check if the service exist in a booking so it can be deleted
+        private async Task CheckIfServiceCanBeDeleted()
+        {
+            var bookingList = await _bookingEndpoint.GetAllBookingsByService(SelectedService.Id);
+            if (bookingList.Count == 0) ServiceCanBeDeleted = true;
         }
 
         // Load the types displayed in the combobox
@@ -134,43 +280,120 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public async void UpdateServiceDetails(ServiceDisplayModel selectedService)
+        public async void UpdateServiceDetails(ServiceDisplayModel selectedService, BindingList<ServiceDisplayModel> services)
         {
             _selectedService = selectedService;
+            /*
             List<ServiceDisplayModel> serviceList = new List<ServiceDisplayModel>
             {
                 selectedService
             };
-            Services = new BindingList<ServiceDisplayModel>(serviceList);
+            Services = new BindingList<ServiceDisplayModel>(serviceList); */
+            Services = services;
             SelectedPrice = selectedService.Price;
             SelectedIdType = selectedService.IdType;
             SelectedTypeName = selectedService.TypeName;
             SelectedPriceId = selectedService.PriceId;
+            SelectedCategoryName = selectedService.CategoryName;
+            SelectedServiceName = selectedService.Name;
 
             // Load the types displayed in the combobox
             await LoadTypes();
+
+            // Check if the service can be deleted
+            await CheckIfServiceCanBeDeleted();
 
         }
 
         public async Task Edit()
         {
+
+            ErrorMessage = "";
             ServiceModel service = _mapper.Map<ServiceModel>(SelectedService);
+            bool priceAtZero = false;
+            bool priceIdIsNull = false;
+            bool typeIdAtZero = false;
 
-            // Below lines are USEFUL for sending data to clientEndPoint
-            service.Price = SelectedPrice;
-            service.IdType = SelectedIdType;
-            service.PriceId = SelectedPriceId;
+            try
+            {
+                if (SelectedPrice < 1)
+                {
+                    priceAtZero = true;
+                    throw new Exception();
+                }
 
-            // Below lines are USEFUL for INotifyPropertyChange in ServiceDisplayModel
-            // and in ServiceDisplayModel
-            SelectedService.Price = SelectedPrice;
-            SelectedService.IdType = SelectedIdType;
-            SelectedService.TypeName = SelectedTypeName;
-            SelectedService.PriceId = SelectedPriceId;
+                if (string.IsNullOrEmpty(SelectedPriceId))
+                {
+                    priceIdIsNull = true;
+                    throw new Exception();
+                }
 
-            await _serviceEndpoint.UpdateService(service);
-            Close();
+                if (SelectedIdType == 0)
+                {
+                    typeIdAtZero = true;
+                    throw new Exception();
+                }
+
+                // Below lines are USEFUL for sending data to clientEndPoint
+                service.Price = SelectedPrice;
+                service.IdType = SelectedIdType;
+                service.PriceId = SelectedPriceId;
+
+                // Below lines are USEFUL for INotifyPropertyChange in ServiceDisplayModel
+                SelectedService.Price = SelectedPrice;
+                SelectedService.IdType = SelectedIdType;
+                SelectedService.TypeName = SelectedTypeName;
+                SelectedService.PriceId = SelectedPriceId;
+
+                await _serviceEndpoint.UpdateService(service);
+
+                Close();
+
+            } catch(Exception ex)
+            {
+                if (priceAtZero)
+                    ErrorMessage = "Le tarif pour un service doit être supérieur à 1 €.";
+                else if (priceIdIsNull)
+                    ErrorMessage = "Veuillez définir un ID du prix pour Stripe.";
+                else if (typeIdAtZero)
+                    ErrorMessage = "Veuillez choisir le Type pour le service à ajouter.";
+                else
+                    ErrorMessage = ex.Message;
+            }
         }
+
+        public async void AskConfirmationToDelete()
+        {
+            ConfirmationToDelete = "t";
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.Title = "Confirmation de suppression";
+
+            _confirmationDelete.UpdateMessage("Demande de confirmation de suppression", "Etes vous sûr de vouloir supprimer le service " + SelectedServiceName + " ?", ConfirmationToDelete);
+            await _window.ShowDialogAsync(_confirmationDelete, null, settings);
+
+        }
+
+        public async void Delete()
+        {
+            try
+            {
+                await _serviceEndpoint.DeleteService(SelectedService.Id);
+                Services.Remove(SelectedService);
+                Close();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+        }
+
+        // After Delete: update datagrid
+        //private async Task LoadServicesAfterDelete()
+        //{
+        //    Services.Remove(SelectedService);
+        //}
 
         public void Close()
         {

@@ -24,10 +24,17 @@ namespace MaryaWPF.Models
             get { return !ServiceDone ? "Non" : "Oui"; }
         }
         public bool IsPaid { get; set; }
+
         public string IsPaidYesNo
         {
             get { return !IsPaid ? "Non" : "Oui"; }
         }
+
+        public DateTime CreatedAt { get; set; }
+        public int IdClient { get; set; }
+        public int? IdPartner { get; set; }
+        public int IdService { get; set; }
+
 
         private int myVar;
         // Handle the display update

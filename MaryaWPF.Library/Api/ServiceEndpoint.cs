@@ -78,5 +78,41 @@ namespace MaryaWPF.Library.Api
                 }
             }
         }
+
+        public async Task AddCategory(CategoryModel category)
+        {
+            string uri = "admin/category/";
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync<CategoryModel>(uri, category))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task AddService(ServiceModel service)
+        {
+            string uri = "admin/category/service/";
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync<ServiceModel>(uri, service))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task DeleteService(int id)
+        {
+            string uri = "admin/category/service/" + id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync(uri))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }
