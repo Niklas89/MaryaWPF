@@ -64,6 +64,13 @@
         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 20" Grid.ColumnSpan="2">
             <Button x:Name="Edit" Width="150" Margin="0 0 20 0">Modifier</Button>
             <Button
+              Width="150" Margin="0 0 0 0"
+              Content="Supprimer" x:Name="AskConfirmationToDelete"
+              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+              Style="{StaticResource MaterialDesignFlatDarkButton}"
+              ToolTip="MaterialDesignFlatButton"
+              Visibility="{Binding IsDeleteVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
+            <Button
                 x:Name="Close"
                   Content="Fermer"
                 Width="150"

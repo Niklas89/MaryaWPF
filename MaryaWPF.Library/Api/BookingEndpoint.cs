@@ -35,6 +35,23 @@ namespace MaryaWPF.Library.Api
             }
         }
 
+        public async Task<List<BookingModel>> GetAllBookingsByService(int id)
+        {
+            string uri = "admin/bookings/service/" + id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(uri))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<BookingModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task RemoveBooking(int bookingId)
         {
             BookingModel data = new BookingModel { CancelDate = DateTime.Now };

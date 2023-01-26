@@ -24,7 +24,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _newService = value;
-                NotifyOfPropertyChange(() => NewService);
             }
         }
 
@@ -48,7 +47,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _serviceName = value;
-                NotifyOfPropertyChange(() => ServiceName);
             }
         }
 
@@ -60,7 +58,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _price = value;
-                NotifyOfPropertyChange(() => Price);
             }
         }
 
@@ -72,7 +69,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _selectedIdType = value;
-                NotifyOfPropertyChange(() => SelectedIdType);
             }
         }
 
@@ -84,7 +80,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _selectedTypeName = value;
-                NotifyOfPropertyChange(() => SelectedTypeName);
             }
         }
 
@@ -96,7 +91,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _priceId = value;
-                NotifyOfPropertyChange(() => PriceId);
             }
         }
 
@@ -109,7 +103,6 @@ namespace MaryaWPF.ViewModels
             {
                 _selectedAvailableType = value;
                 SelectedTypeName = value;
-                NotifyOfPropertyChange(() => SelectedAvailableType);
                 ChangeSelectedType();
             }
         }
@@ -123,7 +116,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _availableTypes = value;
-                NotifyOfPropertyChange(() => AvailableTypes);
             }
         }
 
@@ -173,7 +165,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _selectedCategoryId = value;
-                NotifyOfPropertyChange(() => SelectedCategoryId);
             }
         }
 
@@ -221,6 +212,7 @@ namespace MaryaWPF.ViewModels
 
         public async void AddService(ServiceDisplayModel service, BindingList<ServiceDisplayModel> services)
         {
+            ErrorMessage = "";
             _newService = service;
             Services = services;
             SelectedCategoryId = service.IdCategory;
@@ -235,6 +227,9 @@ namespace MaryaWPF.ViewModels
             ErrorMessage = "";
             ServiceModel service = _mapper.Map<ServiceModel>(NewService);
             bool serviceAlreadyExist = false;
+            bool priceAtZero = false;
+            bool priceIdIsNull = false;
+            bool typeIdAtZero = false;
 
             try
             {
@@ -253,6 +248,25 @@ namespace MaryaWPF.ViewModels
                     }
                 }
 
+                if (Price < 1)
+                {
+                    priceAtZero = true;
+                    throw new Exception();
+                }
+
+                if (string.IsNullOrEmpty(PriceId))
+                {
+                    priceIdIsNull = true;
+                    throw new Exception();
+                }
+
+                if (SelectedIdType == 0)
+                {
+                    typeIdAtZero = true;
+                    throw new Exception();
+                }
+
+
                 // Below lines are USEFUL for sending data to serviceEndPoint
                 service.Name = ServiceName;
                 service.Price = Price;
@@ -260,17 +274,13 @@ namespace MaryaWPF.ViewModels
                 service.IdCategory = SelectedCategoryId;
                 service.PriceId = PriceId;
 
-                // Below lines are USEFUL for INotifyPropertyChange 
-                NewService.Name = ServiceName;
-                NewService.Price = Price;
-                NewService.IdType = SelectedIdType;
-                NewService.TypeName = SelectedTypeName;
-                NewService.PriceId = PriceId;
-                NewService.IdCategory = SelectedCategoryId;
-                NewService.CategoryName = SelectedCategoryName;
-
                 // Add the new category
                 await _serviceEndpoint.AddService(service);
+
+                // Clear the View fields in case of another add
+                ServiceName = null;
+                Price = 0;
+                PriceId = null;
 
                 // After Add: get the last inserted service and insert it in the list bound to the datagrid
                 await LoadServicesAfterAdd();
@@ -278,10 +288,20 @@ namespace MaryaWPF.ViewModels
                 Close();
 
             }
+            catch(ArgumentNullException ex)
+            {
+                ErrorMessage = "Veuillez définir un nom pour le service à ajouter.";
+            }
             catch (Exception ex)
             {
                 if (serviceAlreadyExist)
                     ErrorMessage = "Le nom du service existe déjà. Veuillez en choisir une autre.";
+                else if(priceAtZero)
+                    ErrorMessage = "Le tarif pour un service doit être supérieur à 1 €.";
+                else if(priceIdIsNull)
+                    ErrorMessage = "Veuillez définir un ID du prix pour Stripe.";
+                else if (typeIdAtZero)
+                    ErrorMessage = "Veuillez choisir le Type pour le service à ajouter.";
                 else
                     ErrorMessage = ex.Message;
             }

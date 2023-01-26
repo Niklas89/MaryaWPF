@@ -221,7 +221,7 @@ namespace MaryaWPF.ViewModels
                 settings.ResizeMode = ResizeMode.CanResize;
                 settings.Title = "Détails du service";
 
-                _serviceDetails.UpdateServiceDetails(SelectedService);
+                _serviceDetails.UpdateServiceDetails(SelectedService, Services);
                 await _window.ShowDialogAsync(_serviceDetails, null, settings);
             }
         }
@@ -230,7 +230,7 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 400;
+            settings.Height = 600;
             settings.Width = 750;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
@@ -244,7 +244,7 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 400;
+            settings.Height = 600;
             settings.Width = 750;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
