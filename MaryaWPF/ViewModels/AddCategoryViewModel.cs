@@ -25,7 +25,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _newCategory = value;
-                NotifyOfPropertyChange(() => NewCategory);
             }
         }
 
@@ -49,7 +48,6 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _categoryName = value;
-                NotifyOfPropertyChange(() => CategoryName);
             }
         }
 
@@ -88,6 +86,7 @@ namespace MaryaWPF.ViewModels
 
         public void AddCategory(CategoryDisplayModel category, BindingList<CategoryDisplayModel> categories)
         {
+            ErrorMessage = "";
             _newCategory = category;
             Categories = categories;
         }
@@ -119,18 +118,23 @@ namespace MaryaWPF.ViewModels
                 // Below lines are USEFUL for sending data to categoryEndPoint
                 category.Name = CategoryName;
 
-                // Below lines are USEFUL for INotifyPropertyChange 
-                NewCategory.Name = CategoryName;
-
                 // Add the new category
                 await _serviceEndpoint.AddCategory(category);
+
+                // Clear the View field in case of another add
+                CategoryName = null;
 
                 // After Add: get the last inserted category and insert it in the list bound to the datagrid
                 await LoadCategoriesAfterAdd();
 
                 Close();
 
-            } catch(Exception ex)
+            }
+            catch (ArgumentNullException ex)
+            {
+                ErrorMessage = "Veuillez définir un nom pour la catégorie à ajouter.";
+            }
+            catch (Exception ex)
             {
                 if(catAlreadyExist) 
                     ErrorMessage = "Le nom de la catégorie existe déjà. Veuillez en choisir une autre.";

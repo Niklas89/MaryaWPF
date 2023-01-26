@@ -20,6 +20,10 @@ namespace MaryaWPF.Models
         public bool IsCancelled { get; set; }
         public bool ServiceDone { get; set; }
         public bool IsPaid { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int IdClient { get; set; }
+        public int? IdPartner { get; set; }
+        public int IdService { get; set; }
 
         private int myVar;
         // Handle the display update
