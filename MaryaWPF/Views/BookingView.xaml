@@ -54,8 +54,8 @@
                 <DataGridTextColumn Header = "Nombre d'heures" Binding = "{Binding NbHours}" />
                 <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" />
                 <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
-                <DataGridTextColumn Header = "Service réalisé" Binding = "{Binding ServiceDone}" />
-                <DataGridTextColumn Header = "Service payé" Binding = "{Binding IsPaid}" />
+                <DataGridTextColumn Header = "Service réalisé" Binding = "{Binding ServiceDoneYesNo}" />
+                <DataGridTextColumn Header = "Service payé" Binding = "{Binding IsPaidYesNo}" />
                 <!--<DataGridTemplateColumn Header="View">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

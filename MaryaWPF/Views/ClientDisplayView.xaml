@@ -38,6 +38,7 @@
                 <DataGridTextColumn Header = "Adresse" Binding = "{Binding Client.Address}" />
                 <DataGridTextColumn Header = "Code Postal" Binding = "{Binding Client.PostalCode}" />
                 <DataGridTextColumn Header = "Ville" Binding = "{Binding Client.City}" />
+                <DataGridTextColumn Header = "Actif" Binding = "{Binding IsActive}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

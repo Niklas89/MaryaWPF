@@ -67,6 +67,7 @@
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                   Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
                   ToolTip="Resource name: MaterialDesignPaperSecondaryLightButton" />
+            <Button x:Name="Delete" Content="Désactiver" Width="150" Margin="20 0 0 0" Style="{StaticResource MaterialDesignRaisedAccentButton}"/>
         </StackPanel>
     </Grid>
 </UserControl>

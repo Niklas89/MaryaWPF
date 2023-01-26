@@ -19,7 +19,15 @@ namespace MaryaWPF.Models
         public DateTime? CancelDate { get; set; }
         public bool IsCancelled { get; set; }
         public bool ServiceDone { get; set; }
+        public string ServiceDoneYesNo
+        {
+            get { return !ServiceDone ? "Non" : "Oui"; }
+        }
         public bool IsPaid { get; set; }
+        public string IsPaidYesNo
+        {
+            get { return !IsPaid ? "Non" : "Oui"; }
+        }
 
         private int myVar;
         // Handle the display update

@@ -71,26 +71,26 @@ namespace MaryaWPF.Models
             }
         }
 
-        private string _sIRET;
+        private string _siret;
 
         public string SIRET
         {
-            get { return _sIRET; }
+            get { return _siret; }
             set 
-            { 
-                _sIRET = value; 
+            {
+                _siret = value; 
                 CallPropertyChanged(nameof(SIRET));
             }
         }
 
-        private string _iBAN;
+        private string _iban;
 
         public string IBAN
         {
-            get { return _iBAN; }
+            get { return _iban; }
             set 
-            { 
-                _iBAN = value; 
+            {
+                _iban = value; 
                 CallPropertyChanged(nameof(IBAN));
             }
         }

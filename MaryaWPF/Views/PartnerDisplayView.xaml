@@ -38,8 +38,13 @@
                 <DataGridTextColumn Header = "Prénom" Binding = "{Binding FirstName}" />
                 <DataGridTextColumn Header = "Nom" Binding = "{Binding LastName}" />
                 <DataGridTextColumn Header = "Téléphone" Binding = "{Binding Partner.Phone}" />
+                <DataGridTextColumn Header = "Adresse" Binding = "{Binding Partner.Address}" />
+                <DataGridTextColumn Header = "Code postal" Binding = "{Binding Partner.PostalCode}" />
                 <DataGridTextColumn Header = "Ville" Binding = "{Binding Partner.City}" />
                 <DataGridTextColumn Header = "Service" Binding = "{Binding Partner.CategoryName}" />
+                <DataGridTextColumn Header = "IBAN" Binding = "{Binding Partner.IBAN}" />
+                <DataGridTextColumn Header = "SIRET" Binding = "{Binding Partner.SIRET}" />
+                <DataGridTextColumn Header = "Actif" Binding = "{Binding IsActiveYesNo}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,6 +54,19 @@ namespace MaryaWPF.Library.Api
             // UserPartnerModel data = new UserPartnerModel { FirstName = partner.FirstName, LastName = partner.LastName };
             string uri = "admin/partner/";
             using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync<UserPartnerModel>(uri, partner))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task DeletePartner(UserPartnerModel partner)
+        {
+            // UserClientModel data = new UserClientModel { FirstName = client.FirstName, LastName = client.LastName };
+            string uri = "admin/inactivate/" + partner.Id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<UserPartnerModel>(uri, partner))
             {
                 if (response.IsSuccessStatusCode == false)
                 {

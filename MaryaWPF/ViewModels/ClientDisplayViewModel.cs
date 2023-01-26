@@ -140,7 +140,6 @@ namespace MaryaWPF.ViewModels
 
             await _window.ShowDialogAsync(_addClient, null, settings);
         }
-
     }
 }
 

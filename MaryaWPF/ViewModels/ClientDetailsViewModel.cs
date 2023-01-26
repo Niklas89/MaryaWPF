@@ -174,6 +174,33 @@ namespace MaryaWPF.ViewModels
             Close();
         }
 
+        public async Task Delete()
+        {
+            UserClientModel client = _mapper.Map<UserClientModel>(SelectedClient);
+
+            // Below lines are USEFUL for sending data to clientEndPoint
+            client.FirstName = SelectedFirstName;
+            client.LastName = SelectedLastName;
+            client.Email = SelectedEmail;
+            client.Client.Phone = SelectedPhone;
+            client.Client.Address = SelectedAddress;
+            client.Client.PostalCode = SelectedPostalCode;
+            client.Client.City = SelectedCity;
+
+            // Below lines are USEFUL for INotifyPropertyChange in UserClientDisplayModel
+            // and in ClientDisplayModel
+            SelectedClient.FirstName = SelectedFirstName;
+            SelectedClient.LastName = SelectedLastName;
+            SelectedClient.Email = SelectedEmail;
+            SelectedClient.Client.Phone = SelectedPhone;
+            SelectedClient.Client.Address = SelectedAddress;
+            SelectedClient.Client.PostalCode = SelectedPostalCode;
+            SelectedClient.Client.City = SelectedCity;
+
+            await _clientEndpoint.DeleteClient(client);
+            Close();
+        }
+
         public void Close()
         {
             TryCloseAsync();

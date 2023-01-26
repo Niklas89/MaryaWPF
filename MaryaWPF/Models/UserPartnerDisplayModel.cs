@@ -59,8 +59,11 @@ namespace MaryaWPF.Models
                 CallPropertyChanged(nameof(Password));
             }
         }
-
         public bool IsActive { get; set; }
+        public string IsActiveYesNo
+        {
+            get { return !IsActive ? "Non" : "Oui"; }
+        }
         public DateTime? DeactivatedDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
