@@ -31,19 +31,42 @@ namespace MaryaWPF.Models
         }
 
         public DateTime CreatedAt { get; set; }
+
         public int IdClient { get; set; }
+
+        private string _clientFullName { get; set; }
+        public string ClientFullName
+        {
+            get { return _clientFullName; }
+            set
+            {
+                _clientFullName = value;
+                CallPropertyChanged(nameof(ClientFullName));
+            }
+        }
+
         public int? IdPartner { get; set; }
+
+        private string _partnerFullName { get; set; }
+        public string PartnerFullName
+        {
+            get { return _partnerFullName; }
+            set
+            {
+                _partnerFullName = value;
+                CallPropertyChanged(nameof(PartnerFullName));
+            }
+        }
+
         public int IdService { get; set; }
 
-
-        private int myVar;
-        // Handle the display update
-        public int MyProperty
+        private string _serviceName;
+        public string ServiceName
         {
-            get { return myVar; }
-            set { 
-                myVar = value;
-                CallPropertyChanged(nameof(MyProperty));
+            get { return _serviceName; }
+            set {
+                _serviceName = value;
+                CallPropertyChanged(nameof(ServiceName));
             }
         }
 

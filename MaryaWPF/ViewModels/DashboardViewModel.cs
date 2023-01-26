@@ -18,6 +18,8 @@ namespace MaryaWPF.ViewModels
     public class DashboardViewModel : Screen
     {
         IBookingEndpoint _bookingEndpoint;
+        IServiceEndpoint _serviceEndpoint;
+        IClientEndpoint _clientEndpoint;
         IMapper _mapper;
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
@@ -99,9 +101,12 @@ namespace MaryaWPF.ViewModels
 
 
         public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
-            IWindowManager window, BookingDetailsViewModel bookingDetails)
+            IWindowManager window, BookingDetailsViewModel bookingDetails, IServiceEndpoint serviceEndpoint, 
+            IClientEndpoint clientEndpoint)
         {
             _bookingEndpoint = bookingEndpoint;
+            _serviceEndpoint = serviceEndpoint;
+            _clientEndpoint = clientEndpoint;
             _mapper = mapper;
             _status = status;
             _window = window;
@@ -116,6 +121,8 @@ namespace MaryaWPF.ViewModels
             try
             {
                 await LoadBookings();
+                await LoadServicesForBookings();
+                await LoadClientsForBookings();
             }
             catch (Exception ex)
             {
@@ -146,6 +153,40 @@ namespace MaryaWPF.ViewModels
                 */
 
                 await TryCloseAsync();
+            }
+        }
+
+        private async Task LoadServicesForBookings()
+        {
+            var serviceList = await _serviceEndpoint.GetAllServices();
+            var services = _mapper.Map<List<ServiceDisplayModel>>(serviceList);
+
+            foreach(var booking in Bookings)
+            {
+                foreach (var service in services)
+                {
+                    if (booking.IdService == service.Id)
+                    {
+                        booking.ServiceName = service.Name;
+                    }
+                }
+            }
+        }
+
+        private async Task LoadClientsForBookings()
+        {
+            var clientList = await _clientEndpoint.GetAll();
+            var clients = _mapper.Map<List<UserClientDisplayModel>>(clientList);
+
+            foreach (var booking in Bookings)
+            {
+                foreach (var client in clients)
+                {
+                    if (booking.IdClient == client.Client.Id)
+                    {
+                        booking.ClientFullName = client.FirstName + " " + client.LastName;
+                    }
+                }
             }
         }
 

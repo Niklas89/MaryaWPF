@@ -266,6 +266,8 @@ namespace MaryaWPF.ViewModels
             SelectedCategoryName = selectedService.CategoryName;
             SelectedServiceName = selectedService.Name;
 
+            ServiceCanBeDeleted = false;
+
             // Load the types displayed in the combobox
             await LoadTypes();
 
