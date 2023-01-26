@@ -11,5 +11,7 @@ namespace MaryaWPF.Library.Api
         Task AddClient(UserClientModel client);
 
         Task UpdateClient(UserClientModel client);
+
+        Task DeleteClient(UserClientModel client);
     }
 }

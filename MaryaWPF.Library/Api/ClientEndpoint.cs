@@ -60,5 +60,18 @@ namespace MaryaWPF.Library.Api
                 }
             }
         }
+
+        public async Task DeleteClient(UserClientModel client)
+        {
+            // UserClientModel data = new UserClientModel { FirstName = client.FirstName, LastName = client.LastName };
+            string uri = "admin/inactivate/" + client.Id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync<UserClientModel>(uri, client))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

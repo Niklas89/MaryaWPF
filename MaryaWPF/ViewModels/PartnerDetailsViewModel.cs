@@ -168,7 +168,6 @@ namespace MaryaWPF.ViewModels
         }
 
         private string _selectedAvailableCategory;
-
         public string SelectedAvailableCategory
         {
             get { return _selectedAvailableCategory; }
@@ -178,6 +177,30 @@ namespace MaryaWPF.ViewModels
                 SelectedCategoryName = value;
                 NotifyOfPropertyChange(() => SelectedAvailableCategory);
                 ChangeSelectedCategory();
+            }
+        }
+
+        private string _selectedIBAN;
+
+        public string SelectedIBAN
+        {
+            get { return _selectedIBAN; }
+            set
+            {
+                _selectedIBAN = value;
+                NotifyOfPropertyChange(() => SelectedIBAN);
+            }
+        }
+
+        private string _selectedSIRET;
+
+        public string SelectedSIRET
+        {
+            get { return _selectedSIRET; }
+            set
+            {
+                _selectedSIRET = value;
+                NotifyOfPropertyChange(() => SelectedSIRET);
             }
         }
 
@@ -241,6 +264,8 @@ namespace MaryaWPF.ViewModels
             SelectedIdCategory= selectedPartner.Partner.IdCategory;
             SelectedCategoryName = selectedPartner.Partner.CategoryName;
             SelectedAvailableCategory = selectedPartner.Partner.CategoryName;
+            SelectedSIRET = selectedPartner.Partner.SIRET;
+            SelectedIBAN = selectedPartner.Partner.IBAN;
 
             // Load the categories displayed in the combobox
             await LoadCategories();
@@ -260,7 +285,9 @@ namespace MaryaWPF.ViewModels
             partner.Partner.Birthdate = SelectedBirthdate;
             partner.Partner.IdCategory = SelectedIdCategory;
             partner.Partner.CategoryName = SelectedCategoryName;
-
+            partner.Partner.SIRET = SelectedSIRET;
+            partner.Partner.IBAN = SelectedIBAN;
+    
             // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
             // and in PartnerDisplayModel
             SelectedPartner.FirstName = SelectedFirstName;
@@ -273,6 +300,8 @@ namespace MaryaWPF.ViewModels
             SelectedPartner.Partner.Birthdate = SelectedBirthdate;
             SelectedPartner.Partner.IdCategory = SelectedIdCategory;
             SelectedPartner.Partner.CategoryName = SelectedCategoryName;
+            SelectedPartner.Partner.SIRET = SelectedSIRET;
+            SelectedPartner.Partner.IBAN = SelectedIBAN;
 
             await _partnerEndpoint.AddPartner(partner);
             Close();
@@ -294,6 +323,43 @@ namespace MaryaWPF.ViewModels
             partner.Partner.Birthdate = SelectedBirthdate;
             partner.Partner.IdCategory = SelectedIdCategory;
             partner.Partner.CategoryName = SelectedCategoryName;
+            partner.Partner.SIRET = SelectedSIRET;
+            partner.Partner.IBAN = SelectedIBAN;
+
+            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
+            // and in PartnerDisplayModel
+            SelectedPartner.FirstName = SelectedFirstName;
+            SelectedPartner.LastName = SelectedLastName;
+            SelectedPartner.Email = SelectedEmail;
+            SelectedPartner.Partner.Phone = SelectedPhone;
+            SelectedPartner.Partner.Address = SelectedAddress;
+            SelectedPartner.Partner.PostalCode = SelectedPostalCode;
+            SelectedPartner.Partner.City = SelectedCity;
+            SelectedPartner.Partner.Birthdate = SelectedBirthdate;
+            SelectedPartner.Partner.IdCategory = SelectedIdCategory;
+            SelectedPartner.Partner.CategoryName = SelectedCategoryName;
+            SelectedPartner.Partner.SIRET = SelectedSIRET;
+            SelectedPartner.Partner.IBAN = SelectedIBAN;
+
+            await _partnerEndpoint.UpdatePartner(partner);
+            Close();
+        }
+
+        public async Task Delete()
+        {
+            UserPartnerModel partner = _mapper.Map<UserPartnerModel>(SelectedPartner);
+
+            // Below lines are USEFUL for sending data to partnerEndPoint
+            partner.FirstName = SelectedFirstName;
+            partner.LastName = SelectedLastName;
+            partner.Partner.Phone = SelectedPhone;
+            partner.Email = SelectedEmail;
+            partner.Partner.Address = SelectedAddress;
+            partner.Partner.City = SelectedCity;
+            partner.Partner.PostalCode = SelectedPostalCode;
+            partner.Partner.Birthdate = SelectedBirthdate;
+            partner.Partner.IdCategory = SelectedIdCategory;
+            partner.Partner.CategoryName = SelectedCategoryName;
 
             // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
             // and in PartnerDisplayModel
@@ -308,7 +374,7 @@ namespace MaryaWPF.ViewModels
             SelectedPartner.Partner.IdCategory = SelectedIdCategory;
             SelectedPartner.Partner.CategoryName = SelectedCategoryName;
 
-            await _partnerEndpoint.UpdatePartner(partner);
+            await _partnerEndpoint.DeletePartner(partner);
             Close();
         }
 

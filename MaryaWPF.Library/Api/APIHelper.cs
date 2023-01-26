@@ -67,7 +67,7 @@ namespace MaryaWPF.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw new Exception(response.Content.ReadAsStringAsync().Result.Replace("\"", ""));
                 }
             }
         }

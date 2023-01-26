@@ -217,6 +217,30 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private string _selectedIBAN;
+
+        public string SelectedIBAN
+        {
+            get { return _selectedIBAN; }
+            set
+            {
+                _selectedIBAN = value;
+                NotifyOfPropertyChange(() => SelectedIBAN);
+            }
+        }
+
+        private string _selectedSIRET;
+
+        public string SelectedSIRET
+        {
+            get { return _selectedSIRET; }
+            set
+            {
+                _selectedSIRET = value;
+                NotifyOfPropertyChange(() => SelectedSIRET);
+            }
+        }
+
         // AvailableCategories for the combobox
         private BindingList<string> _availableCategories = new BindingList<string>();
 
@@ -272,6 +296,8 @@ namespace MaryaWPF.ViewModels
             NewUserPartner.Partner.Birthdate = SelectedBirthdate;
             NewUserPartner.Partner.IdCategory = SelectedIdCategory;
             NewUserPartner.Partner.CategoryName = SelectedCategoryName;
+            NewUserPartner.Partner.IBAN = SelectedIBAN;
+            NewUserPartner.Partner.SIRET = SelectedSIRET;
 
             UserPartnerModel partner = _mapper.Map<UserPartnerModel>(NewUserPartner);
 
@@ -287,6 +313,8 @@ namespace MaryaWPF.ViewModels
             partner.Partner.Birthdate = SelectedBirthdate;
             partner.Partner.IdCategory = SelectedIdCategory;
             partner.Partner.CategoryName = SelectedCategoryName;
+            partner.Partner.IBAN = SelectedIBAN;
+            partner.Partner.SIRET = SelectedSIRET;
 
             await _partnerEndpoint.AddPartner(partner);
             Close();

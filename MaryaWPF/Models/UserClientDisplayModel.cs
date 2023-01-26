@@ -61,6 +61,10 @@ namespace MaryaWPF.Models
         }
 
         public bool IsActive { get; set; }
+        public string IsActiveYesNo
+        {
+            get { return !IsActive ? "Non" : "Oui"; }
+        }
         public DateTime? DeactivatedDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public ClientDisplayModel Client { get; set; }
