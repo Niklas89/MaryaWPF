@@ -16,13 +16,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="44" FontFamily="Segoe UI Light">
-            Tableau de bord
+            Informations utiles du mois
         </TextBlock>
         <!-- Afficher aussi en gros le total du nb de réservations acceptés du mois courant -->
         <!-- et le total du nb de réservations en attente du mois courant -->
@@ -30,7 +30,7 @@
         <!-- par ex: 126 resa   -   96 acceptés   -   30 en attente   -->
         <TextBlock Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
-            Réservations en attente
+            Annuler et rembourser les réservations en attente
         </TextBlock>
         
         <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" 
@@ -115,7 +115,7 @@
                              Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                              UniformCornerRadius="6">
                 <TextBlock TextAlignment="Center" FontSize="16">
-                <Hyperlink NavigateUri="https://dashboard.stripe.com/payments" RequestNavigate="Hyperlink_RequestNavigate">
+                <Hyperlink NavigateUri="https://dashboard.stripe.com/test/payments" RequestNavigate="Hyperlink_RequestNavigate" Cursor="Hand">
                     Rembourser les réservations en attente
                     <Hyperlink.Style>
                         <Style TargetType="Hyperlink"

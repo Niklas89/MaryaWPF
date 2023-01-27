@@ -15,9 +15,19 @@ namespace MaryaWPF.Models
         public int? NbHours { get; set; }
         public string Description { get; set; }
         public bool Accepted { get; set; }
+        public string AcceptedYesNo
+        {
+            get { return !Accepted ? "Non" : "Oui"; }
+        }
+
         public float TotalPrice { get; set; }
         public DateTime? CancelDate { get; set; }
         public bool IsCancelled { get; set; }
+        public string IsCancelledYesNo
+        {
+            get { return !IsCancelled ? "Non" : "Oui"; }
+        }
+
         public bool ServiceDone { get; set; }
         public string ServiceDoneYesNo
         {

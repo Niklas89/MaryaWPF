@@ -200,9 +200,14 @@ namespace MaryaWPF.ViewModels
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
             List<BookingDisplayModel> bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
 
-            // List in order to view not accepted bookings in a datagrid that are superior to today
-            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && booking.AppointmentDate.Month == DateTime.Now.Month)
-                .OrderBy(b => b.AppointmentDate).ToList();
+            // List in order to view not accepted and not cancelled bookings in a datagrid of this month
+            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && !booking.IsCancelled && booking.AppointmentDate.Month == DateTime.Now.Month)
+            .OrderBy(b => b.AppointmentDate).ToList();
+
+            // List in order to view not accepted and not cancelled bookings in a datagrid - past and future
+            // List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && !booking.IsCancelled)
+            //    .OrderBy(b => b.AppointmentDate).ToList();
+
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
             // List for the chart
