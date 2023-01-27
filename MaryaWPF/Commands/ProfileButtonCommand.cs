@@ -8,12 +8,12 @@ using System.Windows.Input;
 
 namespace MaryaWPF.Commands
 {
-    public class HomeButtonCommand : ICommand
+    public class ProfileButtonCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
         ShellViewModel _buttonViewModel;
 
-        public HomeButtonCommand(ShellViewModel viewModel)
+        public ProfileButtonCommand(ShellViewModel viewModel)
         {
             _buttonViewModel = viewModel;
         }
@@ -25,7 +25,7 @@ namespace MaryaWPF.Commands
 
         public async void Execute(object parameter)
         {
-            await _buttonViewModel.OnHomeButtonClick();
+            await _buttonViewModel.OnProfileButtonClick();
         }
     }
 }

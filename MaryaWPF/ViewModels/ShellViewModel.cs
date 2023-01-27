@@ -68,6 +68,9 @@ namespace MaryaWPF.ViewModels
         // Command for the logout button click
         public LogoutButtonCommand LogoutButtonCommand { get; set; }
 
+        // Command for the profile button click
+        public ProfileButtonCommand ProfileButtonCommand { get; set; }
+
 
         public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, IAPIHelper apiHelper, IMapper mapper)
         {
@@ -80,6 +83,7 @@ namespace MaryaWPF.ViewModels
 
             HomeButtonCommand = new HomeButtonCommand(this);
             LogoutButtonCommand = new LogoutButtonCommand(this);
+            ProfileButtonCommand = new ProfileButtonCommand(this);
 
             // send event to every subscriber, even if they aren't listening to that particular type:
             // Tell ShellViewModel to listen to LogOnEvent or string IHandle for example
@@ -140,8 +144,15 @@ namespace MaryaWPF.ViewModels
         }
 
 
+        // Called in ProfileButtonCommand class
+        public async Task OnProfileButtonClick()
+        {
+            await ActivateItemAsync(IoC.Get<ProfileViewModel>(), new CancellationToken());
+        }
+
+
         // Called in HomeButtonCommand class
-        public async void OnHomeButtonClick()
+        public async Task OnHomeButtonClick()
         {
             await ActivateItemAsync(IoC.Get<DashboardViewModel>(), new CancellationToken());
         }
@@ -163,9 +174,6 @@ namespace MaryaWPF.ViewModels
 
             if (SelectedMenuItem.Title == "Activité")
                 await ActivateItemAsync(IoC.Get<StatsViewModel>(), new CancellationToken());
-
-            if (SelectedMenuItem.Title == "Déconnection")
-                await LogOut();
         }
 
 
