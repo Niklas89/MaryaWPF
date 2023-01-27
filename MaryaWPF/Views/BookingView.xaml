@@ -56,7 +56,7 @@
                 <!-- <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" /> A mettre dans BookingDetailsView-->
                 <DataGridTextColumn Header = "Service" Binding = "{Binding ServiceName}" />
                 <DataGridTextColumn Header = "Client" Binding = "{Binding ClientFullName}" />
-                <DataGridTextColumn Header = "Partner" Binding = "{Binding PartnerFullName}" />
+                <DataGridTextColumn Header = "Partenaire" Binding = "{Binding PartnerFullName}" />
                 <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
                 <DataGridTextColumn Header = "Accepté" Binding = "{Binding AcceptedYesNo}" />
                 <DataGridTextColumn Header = "Annulé" Binding = "{Binding IsCancelledYesNo}" />

@@ -4,39 +4,95 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaryaWPF.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel Orientation="Vertical">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
             <!--<TextBlock x:Name="Header" FontSize="20" FontWeight="Bold" Margin="10" />
             <TextBlock x:Name="Message" FontSize="18" Margin="10" />-->
 
-            <ListBox x:Name="Bookings" Grid.Row="2" Grid.Column="0" MinHeight="200" 
-                 MinWidth="150">
+            <ListBox x:Name="Bookings" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Description}"/>
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Price: " FontSize="14"/>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Service : " FontSize="14"/>
+                                    <TextBlock Text="{Binding ServiceName}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Prix : " FontSize="14"/>
                                     <TextBlock Text="{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" FontSize="14"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
-                                    <TextBlock Text="Qty: " FontSize="14"/>
-                                    <TextBlock Text="{Binding AppointmentDate}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Description : " FontSize="14"/>
+                                    <TextBlock Text="{Binding Description}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Date de la prestation : " FontSize="14"/>
+                                    <TextBlock Text="{Binding AppointmentDate, StringFormat=g, ConverterCulture=fr-FR}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Client : " FontSize="14"/>
+                                    <TextBlock Text="{Binding ClientFullName}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Partenaire : " FontSize="14"/>
+                                    <TextBlock Text="{Binding PartnerFullName}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Prestation acceptée : " FontSize="14"/>
+                                    <TextBlock Text="{Binding AcceptedYesNo}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Prestation annulée : " FontSize="14"/>
+                                    <TextBlock Text="{Binding IsCancelledYesNo}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Prestation réalisée : " FontSize="14"/>
+                                    <TextBlock Text="{Binding ServiceDoneYesNo}" FontSize="14"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Prestation payée : " FontSize="14"/>
+                                    <TextBlock Text="{Binding IsPaidYesNo}" FontSize="14"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button x:Name="CancelBooking" Padding="5" Margin="20">Annuler la réservation</Button>
-            <Button x:Name="Close" Padding="5" Margin="20">Fermer</Button>
-            <Button
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 20">
+                <Button x:Name="CancelBooking" Width="150" Margin="0 0 20 0">Annuler</Button>
+                <Button x:Name="Close" Width="150"
+                Margin="20 0 0 0"
+                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
+                  ToolTip="Resource name: MaterialDesignRaisedAccentButton">Fermer</Button>
+            </StackPanel>
+            <!--<Button
               Width="150" Margin="0 0 0 0"
               Content="Modifier" x:Name="Edit"
-              Visibility="{Binding IsEditVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
+              Visibility="{Binding IsEditVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />-->
         </StackPanel>
     </Grid>
 </UserControl>
