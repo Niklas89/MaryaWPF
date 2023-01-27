@@ -186,8 +186,8 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 600;
-            settings.Width = 600;
+            settings.Height = 350;
+            settings.Width = 700;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
             settings.Title = "Détails de la réservation";

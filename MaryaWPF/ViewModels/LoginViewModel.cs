@@ -14,8 +14,8 @@ namespace MaryaWPF.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _email;
-        private string _password;
+        private string _email = "chr.guillaume60@gmail.com";
+        private string _password = "SS480412tennis";
         private IAPIHelper _apiHelper;
         private IEventAggregator _events;
 
