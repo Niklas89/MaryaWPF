@@ -76,6 +76,8 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        // CanLogIn : Can + name of method LogIn() which is linked to the button in View
+        // The LogIn button will be disabled when password and email fields are empty
         public bool CanLogIn
         {
             get

@@ -62,7 +62,6 @@
         <Button
               Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="50" Padding="80 5" x:Name="LogIn"
               Content="Connexion"
-              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
               Style="{StaticResource MaterialDesignRaisedDarkButton}"
               ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" />
 

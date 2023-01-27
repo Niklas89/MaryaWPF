@@ -66,7 +66,7 @@ namespace MaryaWPF.ViewModels
             {
                 _email = value;
                 NotifyOfPropertyChange(() => Email);
-                NotifyOfPropertyChange(() => CanLogIn);
+                NotifyOfPropertyChange(() => CanEdit);
             }
         }
 
@@ -87,11 +87,13 @@ namespace MaryaWPF.ViewModels
             {
                 _password = value;
                 NotifyOfPropertyChange(() => Password);
-                NotifyOfPropertyChange(() => CanLogIn);
+                NotifyOfPropertyChange(() => CanEdit);
             }
         }
 
-        public bool CanLogIn
+        // CanEdit : Can + name of method Edit() which is linked to the button in View
+        // The Edit button will be disabled when password and email fields are empty
+        public bool CanEdit 
         {
             get
             {
@@ -237,7 +239,11 @@ namespace MaryaWPF.ViewModels
             } finally
             {
                 if (updateProfileSuccess)
+                {
                     SuccessMessage = "Votre profil a été mis à jour avec succès !";
+                    Password = "";
+                }
+                    
             }
         }
 
