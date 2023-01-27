@@ -19,8 +19,9 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin=" 0 0 0 20"
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="64" FontFamily="Segoe UI Light">
             Réservations
         </TextBlock>
@@ -52,13 +53,15 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate, StringFormat=g, ConverterCulture=fr-FR}" />
                 <DataGridTextColumn Header = "Nombre d'heures" Binding = "{Binding NbHours}" />
-                <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" /> <!--A supprimer et mettre dans BookingDetailsView-->
+                <!-- <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" /> A mettre dans BookingDetailsView-->
                 <DataGridTextColumn Header = "Service" Binding = "{Binding ServiceName}" />
                 <DataGridTextColumn Header = "Client" Binding = "{Binding ClientFullName}" />
                 <DataGridTextColumn Header = "Partner" Binding = "{Binding PartnerFullName}" />
                 <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
-                <DataGridTextColumn Header = "Service réalisé" Binding = "{Binding ServiceDoneYesNo}" />
-                <DataGridTextColumn Header = "Service payé" Binding = "{Binding IsPaidYesNo}" />
+                <DataGridTextColumn Header = "Accepté" Binding = "{Binding AcceptedYesNo}" />
+                <DataGridTextColumn Header = "Annulé" Binding = "{Binding IsCancelledYesNo}" />
+                <DataGridTextColumn Header = "Réalisé" Binding = "{Binding ServiceDoneYesNo}" />
+                <DataGridTextColumn Header = "Payé" Binding = "{Binding IsPaidYesNo}" />
                 <!--<DataGridTemplateColumn Header="View">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -68,6 +71,36 @@
                     </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
+
+        <StackPanel Grid.Row="3" Height="100" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Cursor="">
+            <materialDesign:PackIcon Margin="0 25 10 0" Foreground="{DynamicResource PrimaryHueDarkBrush}"  Width="40" Height="40" Kind="CashRefund" Cursor="" />
+            <materialDesign:Card Width="400"
+                                 Height="50"
+                                 Padding="0 15 0 0"
+                             Background="{DynamicResource PrimaryHueDarkBrush}"
+                             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                             UniformCornerRadius="6">
+                <TextBlock TextAlignment="Center" FontSize="16">
+                <Hyperlink NavigateUri="https://dashboard.stripe.com/test/payments" RequestNavigate="Hyperlink_RequestNavigate">
+                    Rembourser les réservations en attente
+                    <Hyperlink.Style>
+                        <Style TargetType="Hyperlink"
+                               BasedOn="{StaticResource {x:Type Hyperlink}}">
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
+                            <Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="LightSkyBlue" />
+                                <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                            </Trigger>
+                        </Style.Triggers>
+                        </Style>
+                    </Hyperlink.Style>
+                </Hyperlink>
+                </TextBlock>
+            </materialDesign:Card>
+        </StackPanel>
 
 
         <!--<StackPanel Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3">
@@ -111,130 +144,6 @@
             </ListBox.ItemTemplate>
         </ListBox> -->
 
-
-        <!-- CARD EXAMPLE
-        <materialDesign:Card
-  Width="220">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-        Height="140" />
-                    <RowDefinition
-        Height="*" />
-                    <RowDefinition
-        Height="Auto" />
-                    <RowDefinition
-        Height="Auto" />
-                    <RowDefinition
-        Height="Auto" />
-                    <RowDefinition
-        Height="Auto" />
-                </Grid.RowDefinitions>
-                <Image
-      Height="140"
-      Source="Resources/Contact.png"
-      Stretch="UniformToFill" />
-                <Button
-      Grid.Row="0"
-      Margin="0,0,16,-20"
-      HorizontalAlignment="Right"
-      VerticalAlignment="Bottom"
-      Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
-                    <materialDesign:PackIcon
-        Kind="ShareVariant" />
-                </Button>
-                <StackPanel
-      Grid.Row="1"
-      Margin="8,24,8,4">
-                    <TextBlock
-        Margin="0"
-        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-        Text="E.T. the Extra-Terrestrial" />
-                    <Viewbox
-        Height="16"
-        Margin="0,4,0,8"
-        HorizontalAlignment="Left">
-                        <materialDesign:RatingBar
-          Margin="0"
-          Foreground="Gold"
-          Orientation="Horizontal"
-          Value="3" />
-                    </Viewbox>
-                    <TextBlock
-        VerticalAlignment="Center"
-        Style="{StaticResource MaterialDesignBody1TextBlock}"
-        Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."
-        TextWrapping="Wrap" />
-                </StackPanel>
-                <Separator
-      Grid.Row="2"
-      Margin="8,0,8,0"
-      Style="{StaticResource MaterialDesignDarkSeparator}" />
-                <TextBlock
-      Grid.Row="3"
-      Margin="8,4,8,4"
-      Style="{StaticResource MaterialDesignBody2TextBlock}"
-      Text="Tonight's availability" />
-                <Grid
-      Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-          Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <materialDesign:PackIcon
-        Grid.Column="0"
-        Margin="8,4,4,4"
-        VerticalAlignment="Center"
-        Kind="Clock" />
-                    <ListBox
-        Grid.Column="1"
-        Margin="4,8,8,4"
-        SelectedIndex="0"
-        Style="{StaticResource MaterialDesignToolToggleFlatListBox}">
-                        <ListBox.Resources>
-                            <Style
-            TargetType="{x:Type ListBoxItem}"
-            BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem}">
-                                <Setter
-              Property="Padding"
-              Value="4,6,4,6" />
-                            </Style>
-                        </ListBox.Resources>
-                        <ListBox.ToolTip>
-                            <StackPanel>
-                                <TextBlock
-              Text="MaterialDesignFlatToggleListBox" />
-                                <TextBlock
-              Text="Exclusive selection" />
-                                <TextBlock
-              Text="ListBoxAssist.IsToggle allows more natural toggle behaviour" />
-                            </StackPanel>
-                        </ListBox.ToolTip>
-                        <ListBoxItem>
-                            <TextBlock
-            Text="18:00" />
-                        </ListBoxItem>
-                        <ListBoxItem>
-                            <TextBlock
-            Text="19:00" />
-                        </ListBoxItem>
-                        <ListBoxItem>
-                            <TextBlock
-            Text="22:00" />
-                        </ListBoxItem>
-                    </ListBox>
-                </Grid>
-                <StackPanel
-      Grid.Row="5">
-                    <Button
-        Margin="8,4,8,8"
-        HorizontalAlignment="Left"
-        Content="RESERVE"
-        Style="{StaticResource MaterialDesignFlatButton}" />
-                </StackPanel>
-            </Grid>
-        </materialDesign:Card>  -->
 
     </Grid>
 </UserControl>
