@@ -251,21 +251,7 @@ namespace MaryaWPF.ViewModels
             }
 
         }
-        // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
-        // and in PartnerDisplayModel
-
-        /*NewUserClient.FirstName = SelectedFirstName;
-            NewUserClient.LastName = SelectedLastName;
-            NewUserClient.Email = SelectedEmail;
-            NewUserClient.Password = SelectedPassword;
-            NewUserClient.Client.Phone = SelectedPhone;
-            NewUserClient.Client.Address = SelectedAddress;
-            NewUserClient.Client.PostalCode = SelectedPostalCode;
-            NewUserClient.Client.City = SelectedCity;
-
-            UserClientModel client = _mapper.Map<UserClientModel>(NewUserClient);*/
-
-        // Below lines are USEFUL for sending data to partnerEndPoint
+       
         private async Task LoadClientsAfterAdd()
         {
             var clientListAfterAdd = await _clientEndpoint.GetAll();

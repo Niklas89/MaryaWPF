@@ -39,6 +39,26 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private UserPartnerDisplayModel _newUserPartner;
+        public UserPartnerDisplayModel NewUserPartner
+        {
+            get { return _newUserPartner; }
+            set
+            {
+                _newUserPartner = value;
+            }
+        }
+
+        private PartnerDisplayModel _newPartner;
+        public PartnerDisplayModel NewPartner
+        {
+            get { return _newPartner; }
+            set
+            {
+                _newPartner = value;
+            }
+        }
+
         public PartnerDisplayViewModel( PartnerDetailsViewModel partnerDetails, AddPartnerViewModel addPartner, StatusInfoViewModel status, IMapper mapper,
             IWindowManager window, IPartnerEndpoint partnerEndpoint, IServiceEndpoint serviceEndpoint)
         {
@@ -49,6 +69,9 @@ namespace MaryaWPF.ViewModels
             _serviceEndpoint = serviceEndpoint;
             _partnerDetails = partnerDetails;
             _addPartner = addPartner;
+            _newUserPartner = new UserPartnerDisplayModel();
+            _newPartner = new PartnerDisplayModel();
+            _newUserPartner.Partner = _newPartner;
         }
 
         // Wait before the View loads
@@ -141,6 +164,7 @@ namespace MaryaWPF.ViewModels
             settings.Title = "Ajouter un partenaire";
 
             await _addPartner.LoadCategories();
+            _addPartner.AddPartner(NewUserPartner, Partners);
             await _window.ShowDialogAsync(_addPartner, null, settings);
         }
     }
