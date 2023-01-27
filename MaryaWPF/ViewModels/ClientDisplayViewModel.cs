@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Caliburn.Micro;
+using LiveCharts.Wpf;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
 using MaryaWPF.Models;
@@ -38,11 +39,34 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private ClientDisplayModel _newClient;
+        public ClientDisplayModel NewClient
+        {
+            get { return _newClient; }
+            set
+            {
+                _newClient = value;
+            }
+        }
+
+        private UserClientDisplayModel _newUserClient;
+        public UserClientDisplayModel NewUserClient
+        {
+            get { return _newUserClient; }
+            set
+            {
+                _newUserClient = value;
+            }
+        }
+
         public ClientDisplayViewModel(ClientDetailsViewModel clientDetails, AddClientViewModel addClient, IMapper mapper, StatusInfoViewModel status, IWindowManager window, IClientEndpoint clientEndpoint)
         {
             _status = status;
             _window = window;
             _mapper = mapper;
+            _newUserClient = new UserClientDisplayModel();
+            _newClient = new ClientDisplayModel();
+            _newUserClient.Client = _newClient;
             _clientEndpoint = clientEndpoint;
             _clientDetails = clientDetails;
             _addClient = addClient;
@@ -138,6 +162,7 @@ namespace MaryaWPF.ViewModels
             settings.ResizeMode = ResizeMode.CanResize;
             settings.Title = "Ajouter un client";
 
+            _addClient.AddClient(NewUserClient, Clients);
             await _window.ShowDialogAsync(_addClient, null, settings);
         }
     }
