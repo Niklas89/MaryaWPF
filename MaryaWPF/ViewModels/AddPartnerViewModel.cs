@@ -280,11 +280,44 @@ namespace MaryaWPF.ViewModels
                 }
             }
         }
+
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
+
+        public void AddPartner(UserPartnerDisplayModel partner, BindingList<UserPartnerDisplayModel> partners)
+        {
+            ErrorMessage = "";
+            _newUserPartner = partner;
+            Partners = partners;
+        }
+
         public async Task Add()
         {
-            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
-            // and in PartnerDisplayModel
-
+            ErrorMessage = "";
             NewUserPartner.FirstName = SelectedFirstName;
             NewUserPartner.LastName = SelectedLastName;
             NewUserPartner.Email = SelectedEmail;
@@ -301,24 +334,110 @@ namespace MaryaWPF.ViewModels
 
             UserPartnerModel partner = _mapper.Map<UserPartnerModel>(NewUserPartner);
 
-            // Below lines are USEFUL for sending data to partnerEndPoint
-            partner.FirstName = SelectedFirstName;
-            partner.LastName = SelectedLastName;
-            partner.Partner.Phone = SelectedPhone;
-            partner.Email = SelectedEmail;
-            partner.Password = SelectedPassword;
-            partner.Partner.Address = SelectedAddress;
-            partner.Partner.City = SelectedCity;
-            partner.Partner.PostalCode = SelectedPostalCode;
-            partner.Partner.Birthdate = SelectedBirthdate;
-            partner.Partner.IdCategory = SelectedIdCategory;
-            partner.Partner.CategoryName = SelectedCategoryName;
-            partner.Partner.IBAN = SelectedIBAN;
-            partner.Partner.SIRET = SelectedSIRET;
+            try
+            {
+                // Below lines are USEFUL for sending data to serviceEndPoint
 
-            await _partnerEndpoint.AddPartner(partner);
-            Close();
+                partner.FirstName = SelectedFirstName;
+                partner.LastName = SelectedLastName;
+                partner.Partner.Phone = SelectedPhone;
+                partner.Email = SelectedEmail;
+                partner.Password = SelectedPassword;
+                partner.Partner.Address = SelectedAddress;
+                partner.Partner.City = SelectedCity;
+                partner.Partner.PostalCode = SelectedPostalCode;
+                partner.Partner.Birthdate = SelectedBirthdate;
+                partner.Partner.IdCategory = SelectedIdCategory;
+                partner.Partner.CategoryName = SelectedCategoryName;
+                partner.Partner.IBAN = SelectedIBAN;
+                partner.Partner.SIRET = SelectedSIRET;
+
+                await _partnerEndpoint.AddPartner(partner);
+
+                // After Add: get the last inserted service and insert it in the list bound to the datagrid
+                await LoadPartnersAfterAdd();
+
+                SelectedFirstName = null;
+                SelectedLastName = null;
+                SelectedEmail = null;
+                SelectedPassword = null;
+                SelectedPhone = null;
+                SelectedAddress = null;
+                SelectedCity = null;
+                SelectedBirthdate = null;
+                SelectedPostalCode = null;
+                SelectedIBAN = null;
+                SelectedSIRET = null;
+
+                Close();
+
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+
         }
+
+        private async Task LoadPartnersAfterAdd()
+        {
+            var partnerListAfterAdd = await _partnerEndpoint.GetAll();
+            var partnersAfterAdd = _mapper.Map<List<UserPartnerDisplayModel>>(partnerListAfterAdd);
+            UserPartnerDisplayModel lastInsertPartner = partnersAfterAdd.LastOrDefault();
+            lastInsertPartner.FirstName = SelectedFirstName;
+            lastInsertPartner.LastName = SelectedLastName;
+            lastInsertPartner.Email = SelectedEmail;
+            lastInsertPartner.Password = SelectedPassword;
+            lastInsertPartner.Partner.Phone = SelectedPhone;
+            lastInsertPartner.Partner.Address = SelectedAddress;
+            lastInsertPartner.Partner.City = SelectedCity;
+            lastInsertPartner.Partner.PostalCode = SelectedPostalCode;
+            lastInsertPartner.Partner.Birthdate = SelectedBirthdate;
+            lastInsertPartner.Partner.IdCategory = SelectedIdCategory;
+            lastInsertPartner.Partner.CategoryName = SelectedCategoryName;
+            lastInsertPartner.Partner.IBAN = SelectedIBAN;
+            lastInsertPartner.Partner.SIRET = SelectedSIRET;
+            Partners.Add(lastInsertPartner);
+        }
+        //public async Task Add()
+        //{
+        //    // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
+        //    // and in PartnerDisplayModel
+
+        //    NewUserPartner.FirstName = SelectedFirstName;
+        //    NewUserPartner.LastName = SelectedLastName;
+        //    NewUserPartner.Email = SelectedEmail;
+        //    NewUserPartner.Password = SelectedPassword;
+        //    NewUserPartner.Partner.Phone = SelectedPhone;
+        //    NewUserPartner.Partner.Address = SelectedAddress;
+        //    NewUserPartner.Partner.PostalCode = SelectedPostalCode;
+        //    NewUserPartner.Partner.City = SelectedCity;
+        //    NewUserPartner.Partner.Birthdate = SelectedBirthdate;
+        //    NewUserPartner.Partner.IdCategory = SelectedIdCategory;
+        //    NewUserPartner.Partner.CategoryName = SelectedCategoryName;
+        //    NewUserPartner.Partner.IBAN = SelectedIBAN;
+        //    NewUserPartner.Partner.SIRET = SelectedSIRET;
+
+        //    UserPartnerModel partner = _mapper.Map<UserPartnerModel>(NewUserPartner);
+
+        //    // Below lines are USEFUL for sending data to partnerEndPoint
+        //    partner.FirstName = SelectedFirstName;
+        //    partner.LastName = SelectedLastName;
+        //    partner.Partner.Phone = SelectedPhone;
+        //    partner.Email = SelectedEmail;
+        //    partner.Password = SelectedPassword;
+        //    partner.Partner.Address = SelectedAddress;
+        //    partner.Partner.City = SelectedCity;
+        //    partner.Partner.PostalCode = SelectedPostalCode;
+        //    partner.Partner.Birthdate = SelectedBirthdate;
+        //    partner.Partner.IdCategory = SelectedIdCategory;
+        //    partner.Partner.CategoryName = SelectedCategoryName;
+        //    partner.Partner.IBAN = SelectedIBAN;
+        //    partner.Partner.SIRET = SelectedSIRET;
+
+        //    await _partnerEndpoint.AddPartner(partner);
+        //    Close();
+        //}
 
         public void Close()
         {
