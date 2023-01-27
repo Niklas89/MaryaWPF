@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="MaryaWPF.Views.ProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MaryaWPF.Views"
+             mc:Ignorable="d" Background="White"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+          Padding="0,16"
+          VerticalAlignment="Center"
+          Style="{StaticResource MaterialDesignTitleMediumTextBlock}"
+          Text="Modifier mon profil" />
+
+        <ListBox Padding="10" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+            <StackPanel>
+                <TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                       Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                       Padding="0,16"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource MaterialDesignBodyMediumTextBlock}"
+                       Foreground="Red" MaxWidth="300"
+                       TextWrapping="Wrap" Margin="0 0 0 20"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock x:Name="SuccessMessage" Visibility="{Binding IsSuccessVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                       Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                       Padding="0,16"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource MaterialDesignBodyMediumTextBlock}"
+                       Foreground="Green" MaxWidth="300"
+                       TextWrapping="Wrap" Margin="0 0 0 20"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
+                    <ListBoxItem Content="Date d'inscription" />
+                    <TextBox Height="23" Width="150" Padding="0 0 0 5" IsEnabled="False"  x:Name="CreatedAt" Text="" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
+                    <ListBoxItem Content="Prénom" />
+                    <TextBox Height="23" Width="150" Padding="0 0 0 5" IsEnabled="False"  x:Name="FirstName" Text="" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
+                    <ListBoxItem Content="Nom" />
+                    <TextBox Height="23" Width="150" Padding="0 0 0 5" IsEnabled="False" x:Name="LastName" Text="" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
+                    <ListBoxItem Content="Email" />
+                    <TextBox Height="23" Width="300" Padding="0 0 0 5" x:Name="Email" Text="" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0 0 15 0">
+                    <ListBoxItem Content="Mot de passe" />
+                    <PasswordBox x:Name="Password"  Grid.Row="6" Grid.Column="2" MinWidth="300" 
+                         Margin=" 0 0 0 20" />
+                </StackPanel>
+            </StackPanel>
+        </ListBox>
+        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 20" Grid.ColumnSpan="2">
+            <Button x:Name="Edit" Width="150" Margin="0 0 20 0">Modifier</Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -70,7 +70,8 @@ namespace MaryaWPF
             .PerRequest<IBookingEndpoint, BookingEndpoint>()
             .PerRequest<IServiceEndpoint, ServiceEndpoint>()
             .PerRequest<IClientEndpoint, ClientEndpoint>()
-            .PerRequest<IPartnerEndpoint, PartnerEndpoint>();
+            .PerRequest<IPartnerEndpoint, PartnerEndpoint>()
+            .PerRequest<IProfileEndpoint, ProfileEndpoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>() // Singleton : create one instance for the life of the application / for the scope of the container

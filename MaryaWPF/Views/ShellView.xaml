@@ -46,7 +46,7 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Button Grid.Row="0" Content="Profil" />
+                                    <Button Grid.Row="0" Content="Profil" Command="{Binding Path=ProfileButtonCommand}" />
                                     <Separator Grid.Row="1" Grid.ColumnSpan="2"/>
                                     <Button Grid.Row="2" Grid.Column="0" Content="Déconnection" Command="{Binding Path=LogoutButtonCommand}" />
                                     <materialDesign:PackIcon Margin="0 15 5 0" Grid.Row="2"  Grid.Column="1" Kind="Logout" />
