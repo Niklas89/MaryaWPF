@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Caliburn.Micro;
+using LiveCharts.Wpf;
 using MaryaWPF.Library.Api;
 using MaryaWPF.Library.Models;
 using MaryaWPF.Models;
@@ -7,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace MaryaWPF.ViewModels
     {
         IClientEndpoint _clientEndpoint;
         IMapper _mapper;
+        
         private UserClientDisplayModel _selectedClient;
         public UserClientDisplayModel SelectedClient
         {
@@ -61,7 +64,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public AddClientViewModel(IClientEndpoint clientEndpoint, IMapper mapper)
+        public AddClientViewModel(IClientEndpoint clientEndpoint, IMapper mapper, UserClientDisplayModel client)
         {
             _clientEndpoint = clientEndpoint;
             _mapper = mapper;
@@ -165,11 +168,43 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
+
+        public void AddClient(UserClientDisplayModel client, BindingList<UserClientDisplayModel> clients)
+        {
+            ErrorMessage = "";
+            _newUserClient = client;
+            Clients = clients;
+        }
+
         public async Task Add()
         {
-            // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
-            // and in PartnerDisplayModel
-
+            ErrorMessage = "";
             NewUserClient.FirstName = SelectedFirstName;
             NewUserClient.LastName = SelectedLastName;
             NewUserClient.Email = SelectedEmail;
@@ -181,18 +216,70 @@ namespace MaryaWPF.ViewModels
 
             UserClientModel client = _mapper.Map<UserClientModel>(NewUserClient);
 
-            // Below lines are USEFUL for sending data to partnerEndPoint
-            client.FirstName = SelectedFirstName;
-            client.LastName = SelectedLastName;
-            client.Client.Phone = SelectedPhone;
-            client.Email = SelectedEmail;
-            client.Password = SelectedPassword;
-            client.Client.Address = SelectedAddress;
-            client.Client.City = SelectedCity;
-            client.Client.PostalCode = SelectedPostalCode;
+            try
+            {
+                // Below lines are USEFUL for sending data to serviceEndPoint
+                client.FirstName = SelectedFirstName;
+                client.LastName = SelectedLastName;
+                client.Email = SelectedEmail;
+                client.Password = SelectedPassword;
+                client.Client.Phone = SelectedPhone;
+                client.Client.Address = SelectedAddress;
+                client.Client.City = SelectedCity;
+                client.Client.PostalCode = SelectedPostalCode;
 
-            await _clientEndpoint.AddClient(client);
-            Close();
+                await _clientEndpoint.AddClient(client);
+
+                // After Add: get the last inserted service and insert it in the list bound to the datagrid
+                await LoadClientsAfterAdd();
+
+                SelectedFirstName = null;
+                SelectedLastName = null;
+                SelectedEmail = null;
+                SelectedPassword = null;
+                SelectedPhone = null;
+                SelectedAddress = null;
+                SelectedCity = null;
+                SelectedPostalCode = null;
+
+                Close();
+
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+
+        }
+        // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
+        // and in PartnerDisplayModel
+
+        /*NewUserClient.FirstName = SelectedFirstName;
+            NewUserClient.LastName = SelectedLastName;
+            NewUserClient.Email = SelectedEmail;
+            NewUserClient.Password = SelectedPassword;
+            NewUserClient.Client.Phone = SelectedPhone;
+            NewUserClient.Client.Address = SelectedAddress;
+            NewUserClient.Client.PostalCode = SelectedPostalCode;
+            NewUserClient.Client.City = SelectedCity;
+
+            UserClientModel client = _mapper.Map<UserClientModel>(NewUserClient);*/
+
+        // Below lines are USEFUL for sending data to partnerEndPoint
+        private async Task LoadClientsAfterAdd()
+        {
+            var clientListAfterAdd = await _clientEndpoint.GetAll();
+            var clientsAfterAdd = _mapper.Map<List<UserClientDisplayModel>>(clientListAfterAdd);
+            UserClientDisplayModel lastInsertClient = clientsAfterAdd.LastOrDefault();
+            lastInsertClient.FirstName = SelectedFirstName;
+            lastInsertClient.LastName = SelectedLastName;
+            lastInsertClient.Client.Phone = SelectedPhone;
+            lastInsertClient.Email = SelectedEmail;
+            lastInsertClient.Password = SelectedPassword;
+            lastInsertClient.Client.Address = SelectedAddress;
+            lastInsertClient.Client.City = SelectedCity;
+            lastInsertClient.Client.PostalCode = SelectedPostalCode;
+            Clients.Add(lastInsertClient);
         }
 
         public void Close()

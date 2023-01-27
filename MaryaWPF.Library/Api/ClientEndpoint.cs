@@ -56,7 +56,7 @@ namespace MaryaWPF.Library.Api
             {
                 if (response.IsSuccessStatusCode == false)
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw new Exception(response.Content.ReadAsStringAsync().Result.Replace("\"", ""));
                 }
             }
         }
