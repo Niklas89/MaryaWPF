@@ -123,7 +123,8 @@ namespace MaryaWPF.ViewModels
             }
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
             var partners = _mapper.Map<List<UserPartnerDisplayModel>>(partnerList);
-            Partners = new BindingList<UserPartnerDisplayModel>(partners);
+            var orderedPartners = partners.OrderBy(p => p.Email).ToList();
+            Partners = new BindingList<UserPartnerDisplayModel>(orderedPartners);
         }
 
         private UserPartnerDisplayModel _selectedPartner;

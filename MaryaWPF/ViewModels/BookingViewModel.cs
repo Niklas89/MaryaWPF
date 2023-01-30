@@ -90,7 +90,8 @@ namespace MaryaWPF.ViewModels
             var bookingList = await _bookingEndpoint.GetAll();
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
             var bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
-            Bookings = new BindingList<BookingDisplayModel>(bookings);
+            var orderedBookings = bookings.OrderByDescending(b => b.AppointmentDate).ToList();
+            Bookings = new BindingList<BookingDisplayModel>(orderedBookings);
         }
 
         private async Task LoadServicesForBookings()
@@ -186,7 +187,7 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 350;
+            settings.Height = 450;
             settings.Width = 700;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;

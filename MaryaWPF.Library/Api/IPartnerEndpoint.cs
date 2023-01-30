@@ -11,5 +11,6 @@ namespace MaryaWPF.Library.Api
         Task UpdatePartner(UserPartnerModel partner);
         Task DeletePartner(UserPartnerModel partner);
         Task<List<CategoryModel>> GetAllCategories();
+        Task<List<UserPartnerModel>> GetAllRecruted();
     }
 }

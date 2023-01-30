@@ -25,6 +25,19 @@ namespace MaryaWPF.ViewModels
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
 
+
+        // Month displayed on top of the page
+        private DateTime _dateMonth;
+        public DateTime DateMonth
+        {
+            get { return _dateMonth; }
+            set
+            {
+                _dateMonth = value;
+                NotifyOfPropertyChange(() => DateMonth);
+            }
+        }
+
         private string _totalRevenue;
 
         public string TotalRevenue
@@ -110,6 +123,7 @@ namespace MaryaWPF.ViewModels
             _mapper = mapper;
             _status = status;
             _window = window;
+            DateMonth = DateTime.Now;
             _bookingDetails = bookingDetails;
         }
 
@@ -191,7 +205,7 @@ namespace MaryaWPF.ViewModels
         }
 
 
-        // BOOKINGS CHART =======================================================================================================
+        // BOOKINGS GRID =======================================================================================================
 
         private async Task LoadBookings()
         {
@@ -202,11 +216,11 @@ namespace MaryaWPF.ViewModels
 
             // List in order to view not accepted and not cancelled bookings in a datagrid of this month
             List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && !booking.IsCancelled && booking.AppointmentDate.Month == DateTime.Now.Month)
-            .OrderBy(b => b.AppointmentDate).ToList();
+            .OrderByDescending(b => b.AppointmentDate).ToList();
 
             // List in order to view not accepted and not cancelled bookings in a datagrid - past and future
             // List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && !booking.IsCancelled)
-            //    .OrderBy(b => b.AppointmentDate).ToList();
+            //    .OrderByDescending(b => b.AppointmentDate).ToList();
 
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
@@ -228,7 +242,7 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 350;
+            settings.Height = 450;
             settings.Width = 700;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;

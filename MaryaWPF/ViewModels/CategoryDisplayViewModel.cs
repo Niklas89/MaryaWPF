@@ -125,7 +125,8 @@ namespace MaryaWPF.ViewModels
         {
             var categoryList = await _serviceEndpoint.GetAll();
             var categories = _mapper.Map<List<CategoryDisplayModel>>(categoryList);
-            Categories = new BindingList<CategoryDisplayModel>(categories);
+            var orderedCategories = categories.OrderBy(c => c.Name).ToList();
+            Categories = new BindingList<CategoryDisplayModel>(orderedCategories);
         }
 
         private async void LoadServicesByCategory()
@@ -134,7 +135,8 @@ namespace MaryaWPF.ViewModels
             var typeList = await _serviceEndpoint.GetAllTypes();
 
             var services = _mapper.Map<List<ServiceDisplayModel>>(serviceList);
-            Services = new BindingList<ServiceDisplayModel>(services);
+            var orderedServices = services.OrderBy(c => c.Name).ToList();
+            Services = new BindingList<ServiceDisplayModel>(orderedServices);
 
             foreach (var service in Services)
             {
@@ -181,6 +183,20 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        public bool IsSelectedCategory
+        {
+            get
+            {
+                bool output = false;
+
+                if (SelectedCategory != null)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
         private CategoryDisplayModel _selectedCategory;
 
         public CategoryDisplayModel SelectedCategory
@@ -190,6 +206,7 @@ namespace MaryaWPF.ViewModels
             {
                 _selectedCategory = value;
                 SelectedCategoryId = value.Id;
+                NotifyOfPropertyChange(() => IsSelectedCategory);
                 NotifyOfPropertyChange(() => SelectedCategory);
                 LoadServicesByCategory();
             }
@@ -230,7 +247,7 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 600;
+            settings.Height = 400;
             settings.Width = 750;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;

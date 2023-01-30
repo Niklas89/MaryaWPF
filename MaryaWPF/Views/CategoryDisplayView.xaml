@@ -50,6 +50,7 @@
         <Button x:Name="AddService" Width="150" Grid.Row="3" Grid.Column="2" Margin="10 20 0 0" Content="Ajouter service"
                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                   Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
-                  ToolTip="Resource name: MaterialDesignPaperSecondaryLightButton" />
+                  ToolTip="Resource name: MaterialDesignPaperSecondaryLightButton"
+                Visibility="{Binding IsSelectedCategory, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
     </Grid>
 </UserControl>

@@ -16,24 +16,33 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center" FontSize="44" FontFamily="Segoe UI Light">
-            Informations utiles du mois
+            Tableau de bord
         </TextBlock>
+
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20"
+                   HorizontalAlignment="Center"
+                    FontSize="24" 
+                   Text="{Binding DateMonth, ConverterCulture='fr-FR', StringFormat=Y}" Cursor="" />
+
+        <!-- ajouter le mois janvier 2023 ICI -->
+
         <!-- Afficher aussi en gros le total du nb de réservations acceptés du mois courant -->
         <!-- et le total du nb de réservations en attente du mois courant -->
         <!-- et le total du nb de réservations sur le mois courant -->
         <!-- par ex: 126 resa   -   96 acceptés   -   30 en attente   -->
-        <TextBlock Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20"
-                   HorizontalAlignment="Center" FontSize="20" FontFamily="Segoe UI Light">
-            Annuler et rembourser les réservations en attente
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin=" 0 0 0 20"
+                   HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Light">
+            Réservations en attente
         </TextBlock>
-        
-        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" 
+
+        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" 
                   AlternatingRowBackground = "LightBlue"  Margin=" 0 0 0 40" 
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
             <DataGrid.Columns>
@@ -54,6 +63,7 @@
                     </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
+        
 
         <!--<Grid Grid.Row="2" Grid.Column="1" Margin="20 20 20 50">
             <Grid.RowDefinitions>
@@ -64,7 +74,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>-->
-        <WrapPanel Grid.Row="3" Grid.Column="1" Margin="0 0 0 0" HorizontalAlignment="Center" Orientation="Horizontal">
+        <WrapPanel Grid.Row="4" Grid.Column="1" Margin="0 0 0 0" HorizontalAlignment="Center" Orientation="Horizontal">
             <WrapPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="LineHeight" Value="20" />
@@ -106,7 +116,7 @@
         </WrapPanel>
         <!--</Grid>-->
 
-        <StackPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Cursor="">
+        <StackPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Cursor="">
             <materialDesign:PackIcon Margin="0 0 10 0" Foreground="{DynamicResource PrimaryHueDarkBrush}"  Width="40" Height="40" Kind="CashRefund" Cursor="" />
             <materialDesign:Card Width="400"
                                  Height="50"

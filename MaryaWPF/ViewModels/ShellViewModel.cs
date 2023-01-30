@@ -71,6 +71,9 @@ namespace MaryaWPF.ViewModels
         // Command for the profile button click
         public ProfileButtonCommand ProfileButtonCommand { get; set; }
 
+        // Command for the recruted button click
+        public RecrutedButtonCommand RecrutedButtonCommand { get; set; }
+
 
         public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, IAPIHelper apiHelper, IMapper mapper)
         {
@@ -84,6 +87,7 @@ namespace MaryaWPF.ViewModels
             HomeButtonCommand = new HomeButtonCommand(this);
             LogoutButtonCommand = new LogoutButtonCommand(this);
             ProfileButtonCommand = new ProfileButtonCommand(this);
+            RecrutedButtonCommand = new RecrutedButtonCommand(this);
 
             // send event to every subscriber, even if they aren't listening to that particular type:
             // Tell ShellViewModel to listen to LogOnEvent or string IHandle for example
@@ -148,6 +152,13 @@ namespace MaryaWPF.ViewModels
         public async Task OnProfileButtonClick()
         {
             await ActivateItemAsync(IoC.Get<ProfileViewModel>(), new CancellationToken());
+        }
+
+
+        // Called in RecrutedButtonCommand class
+        public async Task OnRecrutedButtonClick()
+        {
+            await ActivateItemAsync(IoC.Get<RecrutedClientsPartnersViewModel>(), new CancellationToken());
         }
 
 

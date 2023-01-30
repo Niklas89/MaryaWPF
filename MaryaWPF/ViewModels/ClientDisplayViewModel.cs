@@ -108,7 +108,8 @@ namespace MaryaWPF.ViewModels
         {
             var clientList = await _clientEndpoint.GetAll();
             var clients = _mapper.Map<List<UserClientDisplayModel>>(clientList);
-            Clients = new BindingList<UserClientDisplayModel>(clients);
+            var orderedClients = clients.OrderBy(p => p.Email).ToList();
+            Clients = new BindingList<UserClientDisplayModel>(orderedClients);
         }
 
         private UserClientDisplayModel _selectedClient;

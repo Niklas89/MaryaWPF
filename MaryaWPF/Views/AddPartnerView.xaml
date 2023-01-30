@@ -20,6 +20,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+          Padding="0,16"
+          VerticalAlignment="Center"
+          Style="{StaticResource MaterialDesignTitleMediumTextBlock}"
+          Text="Ajouter un partenaire" />
+
         <ListBox Padding="10" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
             <StackPanel  >
                 <TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"

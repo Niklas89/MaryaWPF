@@ -34,6 +34,22 @@ namespace MaryaWPF.Library.Api
             }
         }
 
+        public async Task<List<UserClientModel>> GetAllRecruted()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/client/recruted"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<UserClientModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task UpdateClient(UserClientModel client)
         {
 

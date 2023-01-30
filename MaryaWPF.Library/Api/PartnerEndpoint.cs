@@ -34,6 +34,22 @@ namespace MaryaWPF.Library.Api
             }
         }
 
+        public async Task<List<UserPartnerModel>> GetAllRecruted()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("admin/partner/recruted"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<UserPartnerModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task UpdatePartner(UserPartnerModel partner)
         {
 

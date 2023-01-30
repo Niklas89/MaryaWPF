@@ -19,9 +19,14 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
-            <!--<TextBlock x:Name="Header" FontSize="20" FontWeight="Bold" Margin="10" />
-            <TextBlock x:Name="Message" FontSize="18" Margin="10" />-->
+
+        <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+          Padding="0,16"
+          VerticalAlignment="Center"
+          Style="{StaticResource MaterialDesignTitleMediumTextBlock}"
+          Text="Détails de la réservation" />
+        
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
 
             <ListBox x:Name="Bookings" >
                 <ListBox.ItemTemplate>
@@ -81,18 +86,19 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 20">
-                <Button x:Name="CancelBooking" Width="150" Margin="0 0 20 0">Annuler</Button>
-                <Button x:Name="Close" Width="150"
-                Margin="20 0 0 0"
-                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
-                  ToolTip="Resource name: MaterialDesignRaisedAccentButton">Fermer</Button>
-            </StackPanel>
+            
             <!--<Button
               Width="150" Margin="0 0 0 0"
               Content="Modifier" x:Name="Edit"
               Visibility="{Binding IsEditVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />-->
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 20 0 20" Grid.ColumnSpan="2">
+            <Button x:Name="CancelBooking" Width="150" Margin="0 0 20 0">Annuler</Button>
+            <Button x:Name="Close" Width="150"
+                Margin="20 0 0 0"
+                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
+                  ToolTip="Resource name: MaterialDesignRaisedAccentButton" Cursor="Hand">Fermer</Button>
         </StackPanel>
     </Grid>
 </UserControl>
