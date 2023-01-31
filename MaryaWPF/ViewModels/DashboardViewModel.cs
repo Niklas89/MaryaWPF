@@ -25,7 +25,8 @@ namespace MaryaWPF.ViewModels
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
         private DashboardBookingsViewModel _dashboardBookings;
-        private DateTime _dateMonth;
+        private DateTime _dateMonth; 
+        private bool _isCurrentMonth;
         private string _totalRevenue;
         private string _totalPriceAllBookings;
         private string _totalPriceNotAcceptedBookings;
@@ -34,6 +35,7 @@ namespace MaryaWPF.ViewModels
         private BookingDisplayModel _selectedBooking;
         private BindingList<BookingDisplayModel> _allBookingsThisMonth;
         private BindingList<BookingDisplayModel> _acceptedBookingsThisMonth;
+
 
         public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
             IWindowManager window, BookingDetailsViewModel bookingDetails, IServiceEndpoint serviceEndpoint, 
@@ -46,6 +48,7 @@ namespace MaryaWPF.ViewModels
             _status = status;
             _window = window;
             DateMonth = DateTime.Now;
+            IsCurrentMonth = false;
             _bookingDetails = bookingDetails;
             _dashboardBookings = dashboardBookings;
         }
@@ -62,6 +65,16 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        
+        public bool IsCurrentMonth
+        {
+            get { return _isCurrentMonth; }
+            set
+            {
+                _isCurrentMonth = value;
+                NotifyOfPropertyChange(() => IsCurrentMonth);
+            }
+        }
 
 
         public string TotalRevenue
@@ -132,7 +145,7 @@ namespace MaryaWPF.ViewModels
                 _selectedBooking = value;
                 //SelectedBookingId = value.Id;
                 NotifyOfPropertyChange(() => SelectedBooking);
-                ViewBookingDetails();
+                if(SelectedBooking != null) ViewBookingDetails();
             }
         }
 
@@ -164,6 +177,11 @@ namespace MaryaWPF.ViewModels
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+            await LoadViewServices();
+        }
+
+        private async Task LoadViewServices()
+        {
             try
             {
                 await LoadBookings();
@@ -247,7 +265,7 @@ namespace MaryaWPF.ViewModels
             List<BookingDisplayModel> bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
 
             // List in order to view not accepted and not cancelled bookings in a datagrid of this month
-            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && !booking.IsCancelled && booking.AppointmentDate.Month == DateTime.Now.Month)
+            List<BookingDisplayModel> bookingsListNotAccepted = bookings.Where(booking => booking.Accepted == false && !booking.IsCancelled && booking.AppointmentDate.Month == DateMonth.Month)
             .OrderByDescending(b => b.AppointmentDate).ToList();
 
             // List in order to view not accepted and not cancelled bookings in a datagrid - past and future
@@ -257,20 +275,20 @@ namespace MaryaWPF.ViewModels
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
             // Load the total of all the bookings this month : when you click on the card it shows in the pop-up
-            List<BookingDisplayModel> allBookingsThisMonthList = bookings.Where(booking => booking.AppointmentDate.Month == DateTime.Now.Month).OrderByDescending(b => b.AppointmentDate).ToList();
+            List<BookingDisplayModel> allBookingsThisMonthList = bookings.Where(booking => booking.AppointmentDate.Month == DateMonth.Month).OrderByDescending(b => b.AppointmentDate).ToList();
             AllBookingsThisMonth = new BindingList<BookingDisplayModel>(allBookingsThisMonthList);
 
             // List for the chart
-            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && !x.IsCancelled && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && !x.IsCancelled && x.AppointmentDate.Month == DateMonth.Month).ToList();
             
             // List the accepted bookings of this month : when you click on the card it shows in the pop-up
             AcceptedBookingsThisMonth = new BindingList<BookingDisplayModel>(bookingsAccepted.OrderByDescending(b => b.AppointmentDate).ToList());
 
             // List for the chart
-            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && !x.IsCancelled && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && !x.IsCancelled && x.AppointmentDate.Month == DateMonth.Month).ToList();
 
             // Total Sum of bookings in Textblock above the chart
-            List<BookingDisplayModel> bookingsThisMonth = bookings.Where(x => x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            List<BookingDisplayModel> bookingsThisMonth = bookings.Where(x => x.AppointmentDate.Month == DateMonth.Month).ToList();
             TotalPriceAllBookings = bookingsThisMonth.Count().ToString();
             TotalPriceAcceptedBookings = bookingsAccepted.Count().ToString();
             TotalPriceNotAcceptedBookings = bookingsNotAccepted.Count().ToString();
@@ -334,6 +352,25 @@ namespace MaryaWPF.ViewModels
 
             _dashboardBookings.UpdateDashboardBookings(AcceptedBookingsThisMonth, settings.Title);
             await _window.ShowDialogAsync(_dashboardBookings, null, settings);
+        }
+
+        public async void PreviousMonth()
+        {
+            DateMonth = DateMonth.AddMonths(-1);
+            IsCurrentMonth = true;
+            await LoadViewServices();
+        }
+
+        public async void NextMonth()
+        {
+            DateTime nextMonth = DateMonth.AddMonths(1);
+            if (nextMonth.Month == DateTime.Now.Month)
+            {
+                IsCurrentMonth = false;
+            }
+            DateMonth = nextMonth;
+            await LoadViewServices();
+
         }
 
     }

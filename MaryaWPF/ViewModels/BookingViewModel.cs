@@ -26,6 +26,8 @@ namespace MaryaWPF.ViewModels
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
+        private DateTime _dateMonth;
+        private bool _isCurrentMonth;
 
         public BookingViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
             IWindowManager window, BookingDetailsViewModel bookingDetails, IServiceEndpoint serviceEndpoint,
@@ -39,6 +41,31 @@ namespace MaryaWPF.ViewModels
             _status = status;
             _bookingDetails = bookingDetails;
             _window = window;
+            DateMonth = DateTime.Now;
+            IsCurrentMonth = false;
+        }
+
+
+        // Month displayed on top of the page
+        public DateTime DateMonth
+        {
+            get { return _dateMonth; }
+            set
+            {
+                _dateMonth = value;
+                NotifyOfPropertyChange(() => DateMonth);
+            }
+        }
+
+
+        public bool IsCurrentMonth
+        {
+            get { return _isCurrentMonth; }
+            set
+            {
+                _isCurrentMonth = value;
+                NotifyOfPropertyChange(() => IsCurrentMonth);
+            }
         }
 
         // When the page is loaded then we'll call OnViewLoaded
@@ -46,6 +73,11 @@ namespace MaryaWPF.ViewModels
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+            await LoadViewServices();
+        }
+
+        private async Task LoadViewServices()
+        {
             try
             {
                 await LoadBookings();
@@ -90,7 +122,7 @@ namespace MaryaWPF.ViewModels
             var bookingList = await _bookingEndpoint.GetAll();
             // AutoMapper nuget : link source model in MaryaWPF.Library to destination model in MaryaWPF
             var bookings = _mapper.Map<List<BookingDisplayModel>>(bookingList);
-            var orderedBookings = bookings.OrderByDescending(b => b.AppointmentDate).ToList();
+            var orderedBookings = bookings.Where(booking => booking.AppointmentDate.Month == DateMonth.Month).OrderByDescending(b => b.AppointmentDate).ToList();
             Bookings = new BindingList<BookingDisplayModel>(orderedBookings);
         }
 
@@ -167,7 +199,7 @@ namespace MaryaWPF.ViewModels
                 _selectedBooking = value;
                 //SelectedBookingId = value.Id;
                 NotifyOfPropertyChange(() => SelectedBooking);
-                ViewBookingDetails();
+                if(SelectedBooking != null) ViewBookingDetails();
             }
         }
 
@@ -195,6 +227,25 @@ namespace MaryaWPF.ViewModels
 
             _bookingDetails.UpdateBookingDetails(SelectedBooking);
             await _window.ShowDialogAsync(_bookingDetails, null, settings);
+
+        }
+
+        public async void PreviousMonth()
+        {
+            DateMonth = DateMonth.AddMonths(-1);
+            IsCurrentMonth = true;
+            await LoadViewServices();
+        }
+
+        public async void NextMonth()
+        {
+            DateTime nextMonth = DateMonth.AddMonths(1);
+            if (nextMonth.Month == DateTime.Now.Month)
+            {
+                IsCurrentMonth = false;
+            }
+            DateMonth = nextMonth;
+            await LoadViewServices();
 
         }
     }

@@ -39,13 +39,13 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public bool IsEditVisible
+        public bool IsCancelVisible
         {
             get
             {
                 bool output = false;
 
-                if (BookingCanBeEdited == true)
+                if (BookingCanBeCancelled == true)
                 {
                     output = true;
                 }
@@ -53,16 +53,16 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private bool _bookingCanBeEdited;
+        private bool _bookingCanBeCancelled;
 
-        public bool BookingCanBeEdited
+        public bool BookingCanBeCancelled
         {
-            get { return _bookingCanBeEdited; }
+            get { return _bookingCanBeCancelled; }
             set
             {
-                _bookingCanBeEdited = value;
-                NotifyOfPropertyChange(() => IsEditVisible);
-                NotifyOfPropertyChange(() => BookingCanBeEdited);
+                _bookingCanBeCancelled = value;
+                NotifyOfPropertyChange(() => IsCancelVisible);
+                NotifyOfPropertyChange(() => BookingCanBeCancelled);
             }
         }
 
@@ -74,35 +74,41 @@ namespace MaryaWPF.ViewModels
 
         public void UpdateBookingDetails(BookingDisplayModel selectedBooking)
         {
-
-            SelectedBooking = selectedBooking;
-            List<BookingDisplayModel> bookingList = new List<BookingDisplayModel>
+            if(selectedBooking != null)
             {
+                SelectedBooking = selectedBooking;
+                List<BookingDisplayModel> bookingList = new List<BookingDisplayModel>
+                {
                 selectedBooking
-            };
-            Bookings = new BindingList<BookingDisplayModel>(bookingList);
+                };
+                Bookings = new BindingList<BookingDisplayModel>(bookingList);
 
-            BookingCanBeEdited = false;
+                BookingCanBeCancelled = false;
 
-            CheckIfBookingCanBeEdited();
-
+                CheckIfBookingCanBeCancelled();
+            } else
+            {
+                Close();
+            }
         }
 
-        // Check if the booking can be edited
-        private void CheckIfBookingCanBeEdited()
+        // Check if the booking can be cancelled
+        private async Task CheckIfBookingCanBeCancelled()
         {
-            if (!SelectedBooking.Accepted  && !SelectedBooking.IsCancelled) 
-                BookingCanBeEdited = true;
+            if (!SelectedBooking.Accepted && !SelectedBooking.IsCancelled)
+                BookingCanBeCancelled = true;
         }
+
 
         public async void CancelBooking()
         {
             await _bookingEndpoint.RemoveBooking(SelectedBooking.Id);
-        }
 
-        public async void Edit()
-        {
+            // Below lines are USEFUL for INotifyPropertyChange in BookingDisplayModel
+            SelectedBooking.IsCancelled = true;
+            SelectedBooking.CancelDate = DateTime.Now;
 
+            Close();
         }
 
         public void Close()

@@ -26,10 +26,27 @@
             Tableau de bord
         </TextBlock>
 
-        <TextBlock Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20"
+        <StackPanel HorizontalAlignment="Center"
+              Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20" Cursor="">
+            <Button x:Name="PreviousMonth" Margin="0,0,30,0" 
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <materialDesign:PackIcon Kind="ChevronLeft" />
+            </Button>
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="24" Text="{Binding DateMonth, ConverterCulture='fr-FR', StringFormat=Y}" Cursor="" />
+            <Button x:Name="NextMonth" Margin="30,0,0,0" Visibility="{Binding IsCurrentMonth, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignPaperSecondaryLightButton}">
+                <materialDesign:PackIcon Kind="ChevronRight" />
+            </Button>
+        </StackPanel>
+
+        <!-- <TextBlock Grid.Row="1" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Center"
                     FontSize="24" 
-                   Text="{Binding DateMonth, ConverterCulture='fr-FR', StringFormat=Y}" Cursor="" />
+                   Text="{Binding DateMonth, ConverterCulture='fr-FR', StringFormat=Y}" Cursor="" /> -->
 
         <TextBlock Grid.Row="2" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Light">

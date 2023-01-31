@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MaryaWPF.Views"
              mc:Ignorable="d" Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Cursor="">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
@@ -87,13 +87,10 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             
-            <!--<Button
-              Width="150" Margin="0 0 0 0"
-              Content="Modifier" x:Name="Edit"
-              Visibility="{Binding IsEditVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />-->
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 20 0 20" Grid.ColumnSpan="2">
-            <Button x:Name="CancelBooking" Width="150" Margin="0 0 20 0">Annuler</Button>
+            <Button x:Name="CancelBooking" Width="150" Margin="0 0 20 0" 
+                    Visibility="{Binding IsCancelVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">Annuler</Button>
             <Button x:Name="Close" Width="150"
                 Margin="20 0 0 0"
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"

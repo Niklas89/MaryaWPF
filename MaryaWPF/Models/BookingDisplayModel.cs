@@ -21,8 +21,32 @@ namespace MaryaWPF.Models
         }
 
         public float TotalPrice { get; set; }
-        public DateTime? CancelDate { get; set; }
-        public bool IsCancelled { get; set; }
+
+        private DateTime? _cancelDate;
+
+        public DateTime? CancelDate
+        {
+            get { return _cancelDate; }
+            set 
+            { 
+                _cancelDate = value;
+                CallPropertyChanged(nameof(CancelDate));
+            }
+        }
+
+
+        private bool _isCancelled;
+        public bool IsCancelled
+        {
+            get { return _isCancelled; }
+            set 
+            { 
+                _isCancelled = value;
+                CallPropertyChanged(nameof(IsCancelledYesNo));
+                CallPropertyChanged(nameof(IsCancelled));
+            }
+        }
+
         public string IsCancelledYesNo
         {
             get { return !IsCancelled ? "Non" : "Oui"; }
@@ -44,7 +68,7 @@ namespace MaryaWPF.Models
 
         public int IdClient { get; set; }
 
-        private string _clientFullName { get; set; }
+        private string _clientFullName;
         public string ClientFullName
         {
             get { return _clientFullName; }
@@ -57,7 +81,7 @@ namespace MaryaWPF.Models
 
         public int? IdPartner { get; set; }
 
-        private string _partnerFullName { get; set; }
+        private string _partnerFullName;
         public string PartnerFullName
         {
             get { return _partnerFullName; }
