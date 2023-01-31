@@ -24,10 +24,34 @@ namespace MaryaWPF.ViewModels
         private readonly StatusInfoViewModel _status;
         private readonly IWindowManager _window;
         private BookingDetailsViewModel _bookingDetails;
+        private DashboardBookingsViewModel _dashboardBookings;
+        private DateTime _dateMonth;
+        private string _totalRevenue;
+        private string _totalPriceAllBookings;
+        private string _totalPriceNotAcceptedBookings;
+        private BindingList<BookingDisplayModel> _bookings;
+        private string _totalPriceAcceptedBookings;
+        private BookingDisplayModel _selectedBooking;
+        private BindingList<BookingDisplayModel> _allBookingsThisMonth;
+        private BindingList<BookingDisplayModel> _acceptedBookingsThisMonth;
+
+        public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
+            IWindowManager window, BookingDetailsViewModel bookingDetails, IServiceEndpoint serviceEndpoint, 
+            IClientEndpoint clientEndpoint, DashboardBookingsViewModel dashboardBookings)
+        {
+            _bookingEndpoint = bookingEndpoint;
+            _serviceEndpoint = serviceEndpoint;
+            _clientEndpoint = clientEndpoint;
+            _mapper = mapper;
+            _status = status;
+            _window = window;
+            DateMonth = DateTime.Now;
+            _bookingDetails = bookingDetails;
+            _dashboardBookings = dashboardBookings;
+        }
 
 
         // Month displayed on top of the page
-        private DateTime _dateMonth;
         public DateTime DateMonth
         {
             get { return _dateMonth; }
@@ -38,7 +62,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private string _totalRevenue;
+
 
         public string TotalRevenue
         {
@@ -50,7 +74,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private string _totalPriceAllBookings;
+
 
         public string TotalPriceAllBookings
         {
@@ -62,7 +86,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private string _totalPriceAcceptedBookings;
+
 
         public string TotalPriceAcceptedBookings
         {
@@ -74,7 +98,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private string _totalPriceNotAcceptedBookings;
+
 
         public string TotalPriceNotAcceptedBookings
         {
@@ -86,7 +110,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private BindingList<BookingDisplayModel> _bookings;
+
 
         public BindingList<BookingDisplayModel> Bookings
         {
@@ -98,7 +122,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        private BookingDisplayModel _selectedBooking;
+
 
         public BookingDisplayModel SelectedBooking
         {
@@ -113,19 +137,27 @@ namespace MaryaWPF.ViewModels
         }
 
 
-        public DashboardViewModel(IBookingEndpoint bookingEndpoint, IMapper mapper, StatusInfoViewModel status,
-            IWindowManager window, BookingDetailsViewModel bookingDetails, IServiceEndpoint serviceEndpoint, 
-            IClientEndpoint clientEndpoint)
+        public BindingList<BookingDisplayModel> AllBookingsThisMonth
         {
-            _bookingEndpoint = bookingEndpoint;
-            _serviceEndpoint = serviceEndpoint;
-            _clientEndpoint = clientEndpoint;
-            _mapper = mapper;
-            _status = status;
-            _window = window;
-            DateMonth = DateTime.Now;
-            _bookingDetails = bookingDetails;
+            get { return _allBookingsThisMonth; }
+            set
+            {
+                _allBookingsThisMonth = value;
+                NotifyOfPropertyChange(() => AllBookingsThisMonth);
+            }
         }
+
+
+        public BindingList<BookingDisplayModel> AcceptedBookingsThisMonth
+        {
+            get { return _acceptedBookingsThisMonth; }
+            set
+            {
+                _acceptedBookingsThisMonth = value;
+                NotifyOfPropertyChange(() => AcceptedBookingsThisMonth);
+            }
+        }
+
 
         // When the page is loaded then we'll call OnViewLoaded
         // async void and not async Task because it's an event
@@ -224,11 +256,18 @@ namespace MaryaWPF.ViewModels
 
             Bookings = new BindingList<BookingDisplayModel>(bookingsListNotAccepted);
 
-            // List for the chart
-            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            // Load the total of all the bookings this month : when you click on the card it shows in the pop-up
+            List<BookingDisplayModel> allBookingsThisMonthList = bookings.Where(booking => booking.AppointmentDate.Month == DateTime.Now.Month).OrderByDescending(b => b.AppointmentDate).ToList();
+            AllBookingsThisMonth = new BindingList<BookingDisplayModel>(allBookingsThisMonthList);
 
             // List for the chart
-            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            List<BookingDisplayModel> bookingsAccepted = bookings.Where(x => x.Accepted == true && !x.IsCancelled && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
+            
+            // List the accepted bookings of this month : when you click on the card it shows in the pop-up
+            AcceptedBookingsThisMonth = new BindingList<BookingDisplayModel>(bookingsAccepted.OrderByDescending(b => b.AppointmentDate).ToList());
+
+            // List for the chart
+            List<BookingDisplayModel> bookingsNotAccepted = bookings.Where(x => x.Accepted == false && !x.IsCancelled && x.AppointmentDate.Month == DateTime.Now.Month).ToList();
 
             // Total Sum of bookings in Textblock above the chart
             List<BookingDisplayModel> bookingsThisMonth = bookings.Where(x => x.AppointmentDate.Month == DateTime.Now.Month).ToList();
@@ -251,6 +290,50 @@ namespace MaryaWPF.ViewModels
             _bookingDetails.UpdateBookingDetails(SelectedBooking);
             await _window.ShowDialogAsync(_bookingDetails, null, settings);
 
+        }
+
+        public async void ViewAllBookingsThisMonth()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 1000;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Toutes les réservations en " + DateMonth.ToString("MMMM yyyy");
+
+            _dashboardBookings.UpdateDashboardBookings(AllBookingsThisMonth, settings.Title);
+            await _window.ShowDialogAsync(_dashboardBookings, null, settings);
+        }
+
+
+        public async void ViewNotAcceptedBookingsThisMonth()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 1000;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Réservations en attente de " + DateMonth.ToString("MMMM yyyy");
+
+            _dashboardBookings.UpdateDashboardBookings(Bookings, settings.Title);
+            await _window.ShowDialogAsync(_dashboardBookings, null, settings);
+        }
+
+
+        public async void ViewAcceptedBookingsThisMonth()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 1000;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Réservations acceptés de " + DateMonth.ToString("MMMM yyyy");
+
+            _dashboardBookings.UpdateDashboardBookings(AcceptedBookingsThisMonth, settings.Title);
+            await _window.ShowDialogAsync(_dashboardBookings, null, settings);
         }
 
     }

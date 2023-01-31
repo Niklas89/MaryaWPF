@@ -31,12 +31,6 @@
                     FontSize="24" 
                    Text="{Binding DateMonth, ConverterCulture='fr-FR', StringFormat=Y}" Cursor="" />
 
-        <!-- ajouter le mois janvier 2023 ICI -->
-
-        <!-- Afficher aussi en gros le total du nb de réservations acceptés du mois courant -->
-        <!-- et le total du nb de réservations en attente du mois courant -->
-        <!-- et le total du nb de réservations sur le mois courant -->
-        <!-- par ex: 126 resa   -   96 acceptés   -   30 en attente   -->
         <TextBlock Grid.Row="2" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Light">
             Réservations en attente
@@ -91,19 +85,43 @@
                     <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp16" />
                 </Style>
             </WrapPanel.Resources>
-            <materialDesign:Card  Margin="20,20,0,0" 
+            <materialDesign:Card  Margin="20,20,0,0"
               materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
-                <TextBlock Text="{Binding TotalPriceAllBookings}" />
+                <Button
+                    x:Name="ViewAllBookingsThisMonth"
+                    Width="300"
+                    Height="80"
+                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                  Style="{StaticResource MaterialDesignPaperLightButton}"
+                  ToolTip="Resource name: MaterialDesignPaperLightButton" Cursor="Hand">
+                <TextBlock Text="{Binding TotalPriceAllBookings}" FontSize="16" />
+                </Button>
             </materialDesign:Card>
 
             <materialDesign:Card   Margin="20,20,0,0"
               materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
-                <TextBlock Text="{Binding TotalPriceAcceptedBookings}" />
+                <Button
+                    x:Name="ViewAcceptedBookingsThisMonth"
+                    Width="300"
+                    Height="80"
+                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                  Style="{StaticResource MaterialDesignPaperLightButton}"
+                  ToolTip="Resource name: MaterialDesignPaperLightButton" Cursor="Hand">
+                    <TextBlock Text="{Binding TotalPriceAcceptedBookings}" FontSize="16" />
+                </Button>
             </materialDesign:Card>
 
             <materialDesign:Card Margin="20,20,0,0"
               materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
-                <TextBlock Text="{Binding TotalPriceNotAcceptedBookings}" />
+                <Button
+                    x:Name="ViewNotAcceptedBookingsThisMonth"
+                    Width="300"
+                    Height="80"
+                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                  Style="{StaticResource MaterialDesignPaperLightButton}"
+                  ToolTip="Resource name: MaterialDesignPaperLightButton" Cursor="Hand">
+                    <TextBlock Text="{Binding TotalPriceNotAcceptedBookings}" FontSize="16" />
+                </Button>
             </materialDesign:Card>
 
             <Button Margin="40,20,0,0"
