@@ -9,6 +9,8 @@ using MaryaWPF.Library.Api;
 using MaryaWPF.EventModels;
 using System.Threading;
 using System.Windows.Input;
+using System.Dynamic;
+using System.Windows;
 
 namespace MaryaWPF.ViewModels
 {
@@ -16,13 +18,17 @@ namespace MaryaWPF.ViewModels
     {
         private string _email = "niklasedelstam@protonmail.com";
         private string _password = "Niklas89";
+        private readonly IWindowManager _window;
         private IAPIHelper _apiHelper;
         private IEventAggregator _events;
+        private RegistrationViewModel _registration;
 
-        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events )
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events, IWindowManager window, RegistrationViewModel registration)
         {
             _apiHelper = apiHelper;
             _events = events;
+            _window = window;
+            _registration = registration;
         }
 
         public string Email 
@@ -110,6 +116,19 @@ namespace MaryaWPF.ViewModels
             {
                 ErrorMessage = ex.Message;
             }
+        }
+
+        public async Task Register()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 750;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Inscription";
+
+            await _window.ShowDialogAsync(_registration, null, settings);
         }
 
     }

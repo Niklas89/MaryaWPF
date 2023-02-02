@@ -37,5 +37,27 @@ namespace MaryaWPF.Library.Api
 
             return true;
         }
+
+        public async Task<bool> RegisterUser(string firstName, string lastName, string email, string password)
+        {
+            var data = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("firstName", firstName),
+                new KeyValuePair<string, string>("lastName", lastName),
+                new KeyValuePair<string, string>("email", email),
+                new KeyValuePair<string, string>("password", password),
+            });
+
+            string uri = "auth/admin/register";
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsync(uri, data))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result.Replace("\"", ""));
+                }
+            }
+
+            return true;
+        }
     }
 }

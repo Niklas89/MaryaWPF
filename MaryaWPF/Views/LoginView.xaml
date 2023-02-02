@@ -24,6 +24,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
@@ -64,6 +65,10 @@
               Content="Connexion"
               Style="{StaticResource MaterialDesignRaisedDarkButton}"
               ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" />
+
+        <Button x:Name="Register" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Width="200"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Style="{StaticResource MaterialDesignPaperSecondaryLightButton}">Inscription</Button>
 
     </Grid>
 </UserControl>
