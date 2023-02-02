@@ -61,14 +61,16 @@
 
         <!--Login row-->
         <Button
-              Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="50" Padding="80 5" x:Name="LogIn"
+              Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0 50 0 0" Padding="80 5" x:Name="LogIn"
               Content="Connexion"
               Style="{StaticResource MaterialDesignRaisedDarkButton}"
-              ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" />
+              ToolTip="Se connecter à l'application" />
 
-        <Button x:Name="Register" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Width="200"
-                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                Style="{StaticResource MaterialDesignPaperSecondaryLightButton}">Inscription</Button>
-
+        <Button
+              Width="200" Margin="0 10 0 50"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ResetPassword"
+            Content="Mot de passe oublié ?"
+              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+              Style="{StaticResource MaterialDesignFlatDarkButton}"
+              ToolTip="Générer un nouveau mot de passe" Cursor="Hand" />
     </Grid>
 </UserControl>

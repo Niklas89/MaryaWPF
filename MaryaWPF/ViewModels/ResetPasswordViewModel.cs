@@ -15,44 +15,19 @@ using System.Windows;
 
 namespace MaryaWPF.ViewModels
 {
-    public class RegistrationViewModel : Screen
+    public class ResetPasswordViewModel : Screen
     {
         private string _email;
-        private string _password;
-        private string _firstName;
-        private string _lastName;
         private readonly IMapper _mapper;
         private IWindowManager _window;
         private IProfileEndpoint _profileEndpoint;
 
-        public RegistrationViewModel(IMapper mapper, IWindowManager window, IProfileEndpoint profileEndpoint)
+        public ResetPasswordViewModel(IMapper mapper, IWindowManager window, IProfileEndpoint profileEndpoint)
         {
             _window = window;
             _mapper = mapper;
             _profileEndpoint = profileEndpoint;
 
-        }
-
-        public string FirstName
-        {
-            get { return _firstName; }
-            set
-            {
-                _firstName = value;
-                NotifyOfPropertyChange(() => FirstName);
-                NotifyOfPropertyChange(() => CanRegister);
-            }
-        }
-
-        public string LastName
-        {
-            get { return _lastName; }
-            set
-            {
-                _lastName = value;
-                NotifyOfPropertyChange(() => LastName);
-                NotifyOfPropertyChange(() => CanRegister);
-            }
         }
 
         public string Email
@@ -62,31 +37,20 @@ namespace MaryaWPF.ViewModels
             {
                 _email = value;
                 NotifyOfPropertyChange(() => Email);
-                NotifyOfPropertyChange(() => CanRegister);
+                NotifyOfPropertyChange(() => CanSend);
             }
         }
 
 
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                _password = value;
-                NotifyOfPropertyChange(() => Password);
-                NotifyOfPropertyChange(() => CanRegister);
-            }
-        }
-
-        // CanRegister : Can + name of method Register() which is linked to the button in View
-        // The Register button will be disabled when password and email fields are empty
-        public bool CanRegister
+        // CanSend : Can + name of method Send() which is linked to the button in View
+        // The Send button will be disabled when email field is empty
+        public bool CanSend
         {
             get
             {
                 bool output = false;
 
-                if (FirstName?.Length > 0 && LastName?.Length > 0 && Email?.Length > 0 && Password?.Length > 0)
+                if (Email?.Length > 0)
                 {
                     output = true;
                 }
@@ -149,46 +113,34 @@ namespace MaryaWPF.ViewModels
         }
 
 
-        public async void Register()
+        public async void Send()
         {
             ErrorMessage = "";
             SuccessMessage = "";
-            bool registerUserSuccess = false;
+            bool resetPasswordSuccess = false;
 
             try
             {
                 if (!IsValidEmail(Email))
                     throw new FormatException();
 
-                if (string.IsNullOrEmpty(FirstName))
-                    throw new ArgumentNullException();
-
-                if (string.IsNullOrEmpty(LastName))
-                    throw new ArgumentNullException();
-
-                if (string.IsNullOrEmpty(Password))
-                    throw new ArgumentNullException();
-
-                registerUserSuccess = await _profileEndpoint.RegisterUser(FirstName, LastName, Email, Password);
+                resetPasswordSuccess = await _profileEndpoint.ResetPassword(Email);
             }
             catch (FormatException ex)
             {
                 ErrorMessage = "Vous n'avez pas indiqué une adresse email au bon format.";
             }
-            catch (ArgumentNullException ex)
-            {
-                ErrorMessage = "Vous devez remplir tous les champs.";
-            }
             catch (Exception ex)
             {
-                    ErrorMessage = ex.Message;
+                ErrorMessage = ex.Message;
             }
             finally
             {
-                if (registerUserSuccess)
+                if (resetPasswordSuccess)
                 {
-                    SuccessMessage = "Le compte a été créé avec succès !";
-                    Password = "";
+                    SuccessMessage = "Félicitations, l'email a bien été envoyé." +
+                        "Vous pouvez à présent définir votre nouveau mot de passe en cliquant sur le lien dans l'email " +
+                        "qui vous a été envoyé.";
                 }
 
             }

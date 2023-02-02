@@ -109,8 +109,7 @@
                     Width="300"
                     Height="80"
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                  Style="{StaticResource MaterialDesignPaperLightButton}"
-                  ToolTip="Resource name: MaterialDesignPaperLightButton" Cursor="Hand">
+                  Style="{StaticResource MaterialDesignPaperLightButton}" Cursor="Hand">
                 <TextBlock Text="{Binding TotalPriceAllBookings}" FontSize="16" />
                 </Button>
             </materialDesign:Card>
@@ -122,8 +121,7 @@
                     Width="300"
                     Height="80"
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                  Style="{StaticResource MaterialDesignPaperLightButton}"
-                  ToolTip="Resource name: MaterialDesignPaperLightButton" Cursor="Hand">
+                  Style="{StaticResource MaterialDesignPaperLightButton}" Cursor="Hand">
                     <TextBlock Text="{Binding TotalPriceAcceptedBookings}" FontSize="16" />
                 </Button>
             </materialDesign:Card>
@@ -135,8 +133,7 @@
                     Width="300"
                     Height="80"
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                  Style="{StaticResource MaterialDesignPaperLightButton}"
-                  ToolTip="Resource name: MaterialDesignPaperLightButton" Cursor="Hand">
+                  Style="{StaticResource MaterialDesignPaperLightButton}" Cursor="Hand">
                     <TextBlock Text="{Binding TotalPriceNotAcceptedBookings}" FontSize="16" />
                 </Button>
             </materialDesign:Card>

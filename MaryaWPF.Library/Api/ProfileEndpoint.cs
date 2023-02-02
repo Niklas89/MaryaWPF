@@ -59,5 +59,25 @@ namespace MaryaWPF.Library.Api
 
             return true;
         }
+
+        public async Task<bool> ResetPassword(string email)
+        {
+            var data = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("email", email)
+            });
+
+            string uri = "auth/reset";
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsync(uri, data))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result.Replace("\"", ""));
+                }
+            }
+
+            return true;
+        }
     }
+
 }

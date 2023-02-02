@@ -25,7 +25,7 @@
           Padding="0,16"
           HorizontalAlignment="Center"
           Style="{StaticResource MaterialDesignTitleMediumTextBlock}"
-          Text="Inscription" />
+          Text="Inscription d'un administrateur Marya" Cursor="" />
 
         <ListBox Padding="10" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
             <StackPanel>
@@ -71,7 +71,7 @@
             </StackPanel>
         </ListBox>
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 20" Grid.ColumnSpan="3">
-            <Button x:Name="Register" Width="150" Margin="0 0 20 0">Envoyer</Button>
+            <Button x:Name="Register" Width="150" Margin="0 0 20 0">Inscrire</Button>
             <Button
                 x:Name="Close"
                   Content="Fermer"

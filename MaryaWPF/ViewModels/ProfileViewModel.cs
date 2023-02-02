@@ -23,17 +23,19 @@ namespace MaryaWPF.ViewModels
         private string _lastName;
         private string _createdAt;
         private readonly StatusInfoViewModel _status;
+        private RegistrationViewModel _registration;
         private readonly IMapper _mapper;
         private  IWindowManager _window;
         private  ILoggedInUserModel _loggedInUserModel;
         private IProfileEndpoint _profileEndpoint;
 
         public ProfileViewModel(IMapper mapper, StatusInfoViewModel status, IWindowManager window, ILoggedInUserModel loggedInUserModel,
-            IProfileEndpoint profileEndpoint)
+             RegistrationViewModel registration, IProfileEndpoint profileEndpoint)
         {
             _status = status;
             _window = window;
             _mapper = mapper;
+            _registration = registration;
             _loggedInUserModel = loggedInUserModel;
             _profileEndpoint = profileEndpoint;
 
@@ -199,6 +201,20 @@ namespace MaryaWPF.ViewModels
             LastName = _loggedInUserModel.LastName;
             CreatedAt = _loggedInUserModel.CreatedAt.ToString("dd/MM/yyyy");
             Email = _loggedInUserModel.Email;
+        }
+
+
+        public async Task Register()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.Height = 600;
+            settings.Width = 750;
+            settings.SizeToContent = SizeToContent.Manual;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.Title = "Inscription d'un nouveau membre chez Marya";
+
+            await _window.ShowDialogAsync(_registration, null, settings);
         }
 
         public async void Edit()

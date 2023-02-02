@@ -21,14 +21,15 @@ namespace MaryaWPF.ViewModels
         private readonly IWindowManager _window;
         private IAPIHelper _apiHelper;
         private IEventAggregator _events;
-        private RegistrationViewModel _registration;
+        private ResetPasswordViewModel _resetPassword;
 
-        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events, IWindowManager window, RegistrationViewModel registration)
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events, IWindowManager window,
+            ResetPasswordViewModel resetPassword)
         {
             _apiHelper = apiHelper;
             _events = events;
             _window = window;
-            _registration = registration;
+            _resetPassword = resetPassword;
         }
 
         public string Email 
@@ -118,7 +119,7 @@ namespace MaryaWPF.ViewModels
             }
         }
 
-        public async Task Register()
+        public async Task ResetPassword()
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -126,9 +127,9 @@ namespace MaryaWPF.ViewModels
             settings.Width = 750;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
-            settings.Title = "Inscription";
+            settings.Title = "Mot de passe oublié";
 
-            await _window.ShowDialogAsync(_registration, null, settings);
+            await _window.ShowDialogAsync(_resetPassword, null, settings);
         }
 
     }
