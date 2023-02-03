@@ -363,16 +363,7 @@ namespace MaryaWPF.ViewModels
 
             // Below lines are USEFUL for INotifyPropertyChange in UserPartnerDisplayModel
             // and in PartnerDisplayModel
-            SelectedPartner.FirstName = SelectedFirstName;
-            SelectedPartner.LastName = SelectedLastName;
-            SelectedPartner.Email = SelectedEmail;
-            SelectedPartner.Partner.Phone = SelectedPhone;
-            SelectedPartner.Partner.Address = SelectedAddress;
-            SelectedPartner.Partner.PostalCode = SelectedPostalCode;
-            SelectedPartner.Partner.City = SelectedCity;
-            SelectedPartner.Partner.Birthdate = SelectedBirthdate;
-            SelectedPartner.Partner.IdCategory = SelectedIdCategory;
-            SelectedPartner.Partner.CategoryName = SelectedCategoryName;
+            SelectedPartner.IsActive = false;
 
             await _partnerEndpoint.DeletePartner(partner);
             Close();
