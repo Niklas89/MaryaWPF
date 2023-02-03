@@ -22,7 +22,8 @@ namespace MaryaWPF.ViewModels
         private AddCategoryViewModel _addCategory;
         private AddServiceViewModel _addService;
         private readonly IWindowManager _window;
-        IServiceEndpoint _serviceEndpoint;
+        private IServiceEndpoint _serviceEndpoint;
+        private IPartnerEndpoint _partnerEndpoint;
         IMapper _mapper;
 
         private BindingList<ServiceDisplayModel> _services;
@@ -76,12 +77,13 @@ namespace MaryaWPF.ViewModels
         }
 
         public CategoryDisplayViewModel(ServiceDetailsViewModel serviceDetails, AddCategoryViewModel addCategory, AddServiceViewModel addService,
-            IMapper mapper, StatusInfoViewModel status, IWindowManager window, IServiceEndpoint serviceEndpoint)
+            IMapper mapper, StatusInfoViewModel status, IWindowManager window, IPartnerEndpoint partnerEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _status = status;
             _window = window;
             _mapper = mapper;
             _serviceEndpoint = serviceEndpoint;
+            _partnerEndpoint = partnerEndpoint;
             _serviceDetails = serviceDetails;
             _newCategory = new CategoryDisplayModel();
             _newService = new ServiceDisplayModel();
@@ -156,6 +158,10 @@ namespace MaryaWPF.ViewModels
                     }
                 }
             }
+
+            // check if a category can be deleted
+            if (SelectedCategory != null)
+                await CheckIfCategoryCanBeDeleted();
         }
 
         private ServiceDisplayModel _selectedService;
@@ -183,6 +189,18 @@ namespace MaryaWPF.ViewModels
             }
         }
 
+        private bool _selectedCategoryCanBeDeleted;
+
+        public bool SelectedCategoryCanBeDeleted
+        {
+            get { return _selectedCategoryCanBeDeleted; }
+            set
+            {
+                _selectedCategoryCanBeDeleted = value;
+                NotifyOfPropertyChange(() => SelectedCategoryCanBeDeleted);
+            }
+        }
+
         public bool IsSelectedCategory
         {
             get
@@ -205,7 +223,8 @@ namespace MaryaWPF.ViewModels
             set
             {
                 _selectedCategory = value;
-                SelectedCategoryId = value.Id;
+                if(value != null) 
+                    SelectedCategoryId = value.Id;
                 NotifyOfPropertyChange(() => IsSelectedCategory);
                 NotifyOfPropertyChange(() => SelectedCategory);
                 LoadServicesByCategory();
@@ -221,6 +240,33 @@ namespace MaryaWPF.ViewModels
             {
                 _selectedCategoryId = value;
                 NotifyOfPropertyChange(() => SelectedCategoryId);
+            }
+        }
+
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
             }
         }
 
@@ -272,6 +318,82 @@ namespace MaryaWPF.ViewModels
 
             _addService.AddService(NewService, Services);
             await _window.ShowDialogAsync(_addService, null, settings);
+        }
+
+        // check if a category can be deleted
+        public async Task CheckIfCategoryCanBeDeleted()
+        {
+            try
+            {
+                var serviceList = await _serviceEndpoint.GetAllServicesByCategory(SelectedCategoryId);
+                if(serviceList.Count > 0)
+                {
+                    throw new Exception();
+                } else
+                {
+                    var partnerList = await _partnerEndpoint.GetAll();
+
+                    foreach (var partner in partnerList)
+                    {
+                        if (partner.Partner.IdCategory == SelectedCategoryId)
+                        {
+                            throw new Exception();
+                        }
+                    }
+                }
+                SelectedCategoryCanBeDeleted = true;
+            }
+            catch (Exception ex)
+            {
+                SelectedCategoryCanBeDeleted = false;
+            }
+        }
+
+        public async void DeleteCategory()
+        {
+            ErrorMessage = "";
+            bool serviceListIsNotNull = false;
+            bool partnerHasCategory = false;
+            try
+            {
+                var serviceList = await _serviceEndpoint.GetAllServicesByCategory(SelectedCategoryId);
+                if (serviceList.Count > 0)
+                {
+                    serviceListIsNotNull = true;
+                    SelectedCategoryCanBeDeleted = false;
+                    throw new Exception();
+                }
+                else
+                {
+                    var partnerList = await _partnerEndpoint.GetAll();
+
+                    foreach (var partner in partnerList)
+                    {
+                        if (partner.Partner.IdCategory == SelectedCategoryId)
+                        {
+                            partnerHasCategory= true;
+                            SelectedCategoryCanBeDeleted = false;
+                            throw new Exception();
+                        }
+                    }
+                }
+
+
+                await _serviceEndpoint.DeleteCategory(SelectedCategoryId);
+                Categories.Remove(SelectedCategory);
+                SelectedCategory = null;
+                SelectedCategoryId = 0;
+                SelectedCategoryCanBeDeleted = false;
+            }
+            catch (Exception ex)
+            {
+                if (serviceListIsNotNull) 
+                    ErrorMessage = "Vous devez supprimer tous les services avant de supprimer une catégorie.";
+                else if (partnerHasCategory)
+                    ErrorMessage = "Vous ne pouvez pas supprimer une catégorie lorsqu'elle est liée à un partenaire.";
+                else
+                    ErrorMessage = ex.Message;
+            }
         }
 
     }

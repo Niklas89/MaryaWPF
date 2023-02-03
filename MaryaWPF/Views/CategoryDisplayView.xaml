@@ -27,6 +27,15 @@
             Liste des services
         </TextBlock>
 
+        <TextBlock x:Name="ErrorMessage" Visibility="{Binding IsErrorVisible, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"
+                       Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Padding="20 0 0 0"
+                       VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                       Style="{StaticResource MaterialDesignBodyMediumTextBlock}"
+                       Foreground="Red" MaxWidth="300"
+                       TextWrapping="Wrap" Margin="0 0 0 20"/>
+
         <!--SelectionChanged="Categories_SelectionChanged"-->
         <DataGrid x:Name="Categories"  Cursor="" Grid.Row="2" Grid.Column="0" AlternatingRowBackground = "LightBlue"  
                  AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedCategory">
@@ -36,6 +45,9 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="AddCategory" Width="150" Grid.Row="3" Grid.Column="0" Margin="10 20 0 0" Content="Ajouter catégorie" />
+        <Button x:Name="DeleteCategory" Width="170" Grid.Row="4" Grid.Column="0" Margin="10 20 0 0" Content="Supprimer catégorie"
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                Visibility="{Binding SelectedCategoryCanBeDeleted, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
 
         <!--SelectionChanged="Services_SelectionChanged"-->
         <DataGrid x:Name="Services"  Cursor="Hand" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" AlternatingRowBackground = "LightYellow"  
@@ -50,7 +62,6 @@
         <Button x:Name="AddService" Width="150" Grid.Row="3" Grid.Column="2" Margin="10 20 0 0" Content="Ajouter service"
                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                   Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
-                  ToolTip="Resource name: MaterialDesignPaperSecondaryLightButton"
                 Visibility="{Binding IsSelectedCategory, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" />
     </Grid>
 </UserControl>

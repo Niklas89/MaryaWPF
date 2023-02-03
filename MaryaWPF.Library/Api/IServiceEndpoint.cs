@@ -14,5 +14,6 @@ namespace MaryaWPF.Library.Api
         Task AddCategory(CategoryModel category);
         Task AddService(ServiceModel service);
         Task DeleteService(int id);
+        Task DeleteCategory(int id);
     }
 }

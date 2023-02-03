@@ -130,5 +130,17 @@ namespace MaryaWPF.Library.Api
                 }
             }
         }
+
+        public async Task DeleteCategory(int id)
+        {
+            string uri = "admin/category/" + id;
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync(uri))
+            {
+                if (response.IsSuccessStatusCode == false)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

@@ -70,8 +70,7 @@
                 Width="150"
                 Margin="20 0 0 0"
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
-                  ToolTip="Resource name: MaterialDesignPaperSecondaryLightButton" />
+                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}" />
 
             <!-- OLD DELETE BUTTON STYLE: IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
               Style="{StaticResource MaterialDesignFlatDarkButton}"
