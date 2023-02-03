@@ -60,7 +60,16 @@ namespace MaryaWPF.Models
             }
         }
 
-        public bool IsActive { get; set; }
+        private bool _isActive;
+        public bool IsActive {
+            get { return _isActive; }
+            set
+            {
+                _isActive = value;
+                CallPropertyChanged(nameof(IsActiveYesNo));
+                CallPropertyChanged(nameof(IsActive));
+            }
+        }
         public string IsActiveYesNo
         {
             get { return !IsActive ? "Non" : "Oui"; }

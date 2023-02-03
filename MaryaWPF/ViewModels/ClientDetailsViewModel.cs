@@ -189,13 +189,7 @@ namespace MaryaWPF.ViewModels
 
             // Below lines are USEFUL for INotifyPropertyChange in UserClientDisplayModel
             // and in ClientDisplayModel
-            SelectedClient.FirstName = SelectedFirstName;
-            SelectedClient.LastName = SelectedLastName;
-            SelectedClient.Email = SelectedEmail;
-            SelectedClient.Client.Phone = SelectedPhone;
-            SelectedClient.Client.Address = SelectedAddress;
-            SelectedClient.Client.PostalCode = SelectedPostalCode;
-            SelectedClient.Client.City = SelectedCity;
+            SelectedClient.IsActive = false;
 
             await _clientEndpoint.DeleteClient(client);
             Close();
