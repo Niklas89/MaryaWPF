@@ -50,7 +50,7 @@
 
         <TextBlock Grid.Row="2" Grid.Column="1" Margin=" 0 0 0 20"
                    HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Light">
-            Réservations en attente
+            Réservations en attente d'acceptation du partenaire
         </TextBlock>
 
         <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" 
@@ -62,16 +62,6 @@
                 <DataGridTextColumn Header = "Service" Binding = "{Binding ServiceName}" />
                 <DataGridTextColumn Header = "Client" Binding = "{Binding ClientFullName}" />
                 <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
-                <DataGridTextColumn Header = "Service réalisé" Binding = "{Binding ServiceDoneYesNo}" />
-                <DataGridTextColumn Header = "Service payé  " Binding = "{Binding IsPaidYesNo}" />
-
-                <!--<DataGridTemplateColumn Header="View">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Rembourser" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
         

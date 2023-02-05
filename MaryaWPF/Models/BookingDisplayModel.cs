@@ -17,7 +17,7 @@ namespace MaryaWPF.Models
         public bool Accepted { get; set; }
         public string AcceptedYesNo
         {
-            get { return !Accepted ? "Non" : "Oui"; }
+            get { return !Accepted ? "CheckboxBlankOutline" : "CheckboxMarkedOutline"; }
         }
 
         public float TotalPrice { get; set; }
@@ -49,19 +49,19 @@ namespace MaryaWPF.Models
 
         public string IsCancelledYesNo
         {
-            get { return !IsCancelled ? "Non" : "Oui"; }
+            get { return !IsCancelled ? "CheckboxBlankOutline" : "CheckboxMarkedOutline"; }
         }
 
         public bool ServiceDone { get; set; }
         public string ServiceDoneYesNo
         {
-            get { return !ServiceDone ? "Non" : "Oui"; }
+            get { return !ServiceDone ? "CheckboxBlankOutline" : "CheckboxMarkedOutline"; }
         }
         public bool IsPaid { get; set; }
 
         public string IsPaidYesNo
         {
-            get { return !IsPaid ? "Non" : "Oui"; }
+            get { return !IsPaid ? "CheckboxBlankOutline" : "CheckboxMarkedOutline"; }
         }
 
         public DateTime CreatedAt { get; set; }

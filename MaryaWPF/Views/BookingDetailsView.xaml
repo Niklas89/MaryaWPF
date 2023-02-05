@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaryaWPF.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Cursor="">
@@ -65,21 +66,17 @@
                             <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
                                 <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
                                     <TextBlock Text="Prestation acceptée : " FontSize="14"/>
-                                    <TextBlock Text="{Binding AcceptedYesNo}" FontSize="14"/>
+                                    <materialDesign:PackIcon Height="20" Width="20" Kind="{Binding AcceptedYesNo}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
                                     <TextBlock Text="Prestation annulée : " FontSize="14"/>
-                                    <TextBlock Text="{Binding IsCancelledYesNo}" FontSize="14"/>
+                                    <materialDesign:PackIcon Height="20" Width="20" Kind="{Binding IsCancelledYesNo}" />
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
                                 <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
                                     <TextBlock Text="Prestation réalisée : " FontSize="14"/>
-                                    <TextBlock Text="{Binding ServiceDoneYesNo}" FontSize="14"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
-                                    <TextBlock Text="Prestation payée : " FontSize="14"/>
-                                    <TextBlock Text="{Binding IsPaidYesNo}" FontSize="14"/>
+                                    <materialDesign:PackIcon Height="20" Width="20" Kind="{Binding ServiceDoneYesNo}" />
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -94,8 +91,7 @@
             <Button x:Name="Close" Width="150"
                 Margin="20 0 0 0"
                   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}"
-                  ToolTip="Resource name: MaterialDesignRaisedAccentButton" Cursor="Hand">Fermer</Button>
+                  Style="{StaticResource MaterialDesignPaperSecondaryLightButton}" Cursor="Hand">Fermer</Button>
         </StackPanel>
     </Grid>
 </UserControl>

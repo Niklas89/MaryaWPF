@@ -67,27 +67,66 @@
         </StackPanel> -->
 
 
-        <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue" 
-                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
+        <!--<DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" AlternatingRowBackground = "LightBlue" 
+                 AlternationCount = "2" AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">-->
+            <DataGrid Cursor="Hand"  x:Name="Bookings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" 
+                 AutoGenerateColumns = "False" IsReadOnly="True"  SelectedItem="SelectedBooking">
+                <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger  Binding="{Binding IsCancelledYesNo}" Value="CheckboxMarkedOutline">
+                            <Setter Property="Background" Value="#FF7F7F" />
+                        </DataTrigger>
+                        <DataTrigger  Binding="{Binding ServiceDoneYesNo}" Value="CheckboxMarkedOutline">
+                            <Setter Property="Background" Value="#90ee90" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                
+            </DataGrid.RowStyle>
+            <DataGrid.Resources>
+                <Style x:Key="tstyle" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCancelledYesNo}" Value="CheckboxMarkedOutline">
+                            <Setter Property="TextBlock.TextDecorations" Value="Strikethrough" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header = "Date" Binding = "{Binding AppointmentDate, StringFormat=g, ConverterCulture=fr-FR}" />
-                <DataGridTextColumn Header = "Nombre d'heures" Binding = "{Binding NbHours}" />
-                <!-- <DataGridTextColumn Header = "Description" Binding = "{Binding Description}" /> A mettre dans BookingDetailsView-->
-                <DataGridTextColumn Header = "Service" Binding = "{Binding ServiceName}" />
-                <DataGridTextColumn Header = "Client" Binding = "{Binding ClientFullName}" />
-                <DataGridTextColumn Header = "Partenaire" Binding = "{Binding PartnerFullName}" />
-                <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
-                <DataGridTextColumn Header = "Accepté" Binding = "{Binding AcceptedYesNo}" />
-                <DataGridTextColumn Header = "Annulé" Binding = "{Binding IsCancelledYesNo}" />
-                <DataGridTextColumn Header = "Réalisé" Binding = "{Binding ServiceDoneYesNo}" />
-                <DataGridTextColumn Header = "Payé" Binding = "{Binding IsPaidYesNo}" />
-                <!--<DataGridTemplateColumn Header="View">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button x:Name="ViewBookingDetails" Content="View" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
+                <DataGridTextColumn ElementStyle="{StaticResource tstyle}" Header = "Date" Binding = "{Binding AppointmentDate, StringFormat=g, ConverterCulture=fr-FR}" />
+                <DataGridTextColumn ElementStyle="{StaticResource tstyle}" Header = "Nombre d'heures" Binding = "{Binding NbHours}" />
+                <DataGridTextColumn ElementStyle="{StaticResource tstyle}" Header = "Service" Binding = "{Binding ServiceName}" />
+                <DataGridTextColumn ElementStyle="{StaticResource tstyle}" Header = "Client" Binding = "{Binding ClientFullName}" />
+                <DataGridTextColumn ElementStyle="{StaticResource tstyle}" Header = "Partenaire" Binding = "{Binding PartnerFullName}" />
+                <DataGridTextColumn ElementStyle="{StaticResource tstyle}" Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
+
+                <DataGridTemplateColumn Header="Accepté">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon Margin="0 5 0 0" Height="20" Width="20"  Kind="{Binding AcceptedYesNo}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Réalisé">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon Margin="0 5 0 0" Height="20" Width="20" Kind="{Binding ServiceDoneYesNo}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
         </DataGrid>
 

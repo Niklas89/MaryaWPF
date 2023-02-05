@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaryaWPF.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -31,10 +32,46 @@
                 <DataGridTextColumn Header = "Client" Binding = "{Binding ClientFullName}" />
                 <DataGridTextColumn Header = "Partenaire" Binding = "{Binding PartnerFullName}" />
                 <DataGridTextColumn Header = "Prix" Binding = "{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" />
-                <DataGridTextColumn Header = "Accepté" Binding = "{Binding AcceptedYesNo}" />
-                <DataGridTextColumn Header = "Annulé" Binding = "{Binding IsCancelledYesNo}" />
-                <DataGridTextColumn Header = "Réalisé" Binding = "{Binding ServiceDoneYesNo}" />
-                <DataGridTextColumn Header = "Payé" Binding = "{Binding IsPaidYesNo}" />
+
+                <DataGridTemplateColumn Header="Accepté">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon Margin="0 5 0 0" Height="20" Width="20"  Kind="{Binding AcceptedYesNo}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Annulé">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon Margin="0 5 0 0" Height="20" Width="20" Kind="{Binding IsCancelledYesNo}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Réalisé">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon Margin="0 5 0 0" Height="20" Width="20" Kind="{Binding ServiceDoneYesNo}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
         </DataGrid>
 
