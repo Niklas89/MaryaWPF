@@ -42,15 +42,27 @@
                                     <TextBlock Text="Prix : " FontSize="14"/>
                                     <TextBlock Text="{Binding TotalPrice, ConverterCulture='fr-FR', StringFormat='{}{0:C}'}" FontSize="14"/>
                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Nb d'heures : " FontSize="14"/>
+                                    <TextBlock Text="{Binding NbHours}" FontSize="14"/>
+                                </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
                                 <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
                                     <TextBlock Text="Description : " FontSize="14"/>
                                     <TextBlock Text="{Binding Description}" FontSize="14"/>
                                 </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
                                 <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
                                     <TextBlock Text="Date de la prestation : " FontSize="14"/>
                                     <TextBlock Text="{Binding AppointmentDate, StringFormat=g, ConverterCulture=fr-FR}" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                                <StackPanel Orientation="Horizontal" Margin="0 0 15 0">
+                                    <TextBlock Text="Date d'annulation : " FontSize="14"/>
+                                    <TextBlock Text="{Binding CancelDate, StringFormat=g, ConverterCulture=fr-FR}" FontSize="14"/>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 10 0 10">

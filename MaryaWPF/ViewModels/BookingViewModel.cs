@@ -219,7 +219,7 @@ namespace MaryaWPF.ViewModels
         {
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.Height = 450;
+            settings.Height = 500;
             settings.Width = 700;
             settings.SizeToContent = SizeToContent.Manual;
             settings.ResizeMode = ResizeMode.CanResize;
