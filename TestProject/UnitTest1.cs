@@ -16,7 +16,7 @@ namespace TestProject
             get { return _apiClient; }
         }
 
-        private const string _api = "http://localhost:8080/api/";
+        private const string _api = "http://api.marya.app/api/";
 
         [Theory]
         [InlineData("niklasedelstam@protonmail.com", "Niklas89")]
