@@ -9,6 +9,6 @@ namespace MaryaWPF.Library.Models
     public class AuthenticatedUser
     {
         public string AccessToken { get; set; }
-        public string Email { get; set; }
+        //public string Email { get; set; }
     }
 }

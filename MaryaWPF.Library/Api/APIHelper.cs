@@ -61,7 +61,7 @@ namespace MaryaWPF.Library.Api
                     var user = new AuthenticatedUser()
                     {
                         AccessToken = DynamicData.accessToken, // accessToken needed for GetLoggedInUserInfo() - passed in from LogIn() in LoginViewModel.cs
-                        Email = DynamicData.user.email
+                       //Email = DynamicData.user.email
                     };
                     return user;
                 }
